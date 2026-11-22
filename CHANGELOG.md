@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 — Restauração dos Quadrados de Atributos, Vontade e Corrupção (Foundry VTT v13 & v14)
+- Removido `height: auto` do seletor global `.application.egregora button` que achatava os quadrados clicáveis (`.eg-sq-box`) de Atributos, Força de Vontade e Corrupção.
+- Protegidas explicitamente as dimensões fixas de `.eg-sq-box` (`18×18px`), `.eg-mini-btn` (`26×26px`) e `.eg-icon-btn` (`22×22px`), mantendo os botões de ação em **Oculto & Magia** com altura `50px` e hover carmesim.
+- Alinhados os nomes das Perícias à esquerda (`justify-content: flex-start`), seguindo fielmente a ficha oficial.
+
 ## 0.1.3 — Efeito Hover Carmesim nos Botões (Foundry VTT v13 & v14)
 - Todos os botões de ação em **Oculto & Magia** mantêm o visual uniforme em pergaminho em repouso e assumem o vermelho carmesim característico de Egrégora no *mouse over* (`:hover`), com transição suave e sombra sutil.
 - Corrigida a especificidade de `.eg-btn-crimson` para botões principais de diálogo e chat.

@@ -55,9 +55,6 @@
 .application.egregora button {
   cursor: pointer;
   font-family: var(--eg-font-display);
-  height: auto;
-  min-height: 0;
-  line-height: 1.25;
   box-shadow: none;
 }
 
@@ -223,10 +220,14 @@
   gap: 4px;
 }
 
+.application.egregora button.eg-mini-btn,
 .eg-mini-btn {
   width: 26px;
   height: 26px;
+  min-width: 26px;
+  min-height: 26px;
   padding: 0;
+  line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -342,10 +343,14 @@
   gap: 4px;
 }
 
+.application.egregora button.eg-icon-btn,
 .eg-icon-btn {
   width: 22px;
   height: 22px;
+  min-width: 22px;
+  min-height: 22px;
   padding: 0;
+  line-height: 1;
   border: 1px solid var(--eg-border-soft);
   border-radius: 2px;
   background: rgba(243, 236, 218, 0.7);
@@ -414,10 +419,15 @@
   margin-bottom: 3px;
 }
 
+.application.egregora button.eg-attr-roll,
 .eg-attr-roll {
   background: transparent;
   border: none;
   padding: 0;
+  height: auto;
+  min-height: 0;
+  line-height: 1.2;
+  justify-content: flex-start;
   font-family: var(--eg-font-display);
   font-size: 13px;
   font-weight: 800;
@@ -456,19 +466,28 @@
   gap: 4px;
 }
 
+.application.egregora button.eg-sq-box,
 .eg-sq-box {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  flex: 0 0 18px;
   padding: 0;
+  line-height: 1;
   border: 1.5px solid var(--eg-border);
   background: rgba(250, 245, 232, 0.72);
   border-radius: 1px;
   transition: transform 0.1s ease, background 0.12s ease;
 }
 
+.application.egregora .eg-track-10 button.eg-sq-box,
 .eg-track-10 .eg-sq-box {
   width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
   height: 18px;
+  min-height: 18px;
 }
 
 .eg-sq-box:hover {
@@ -652,12 +671,17 @@
   background: rgba(139, 24, 24, 0.08);
 }
 
+.application.egregora button.eg-skill-name,
 .eg-skill-name {
   background: transparent;
   border: none;
   padding: 0;
+  height: auto;
+  min-height: 0;
+  line-height: 1.25;
   display: inline-flex;
   align-items: baseline;
+  justify-content: flex-start;
   gap: 4px;
   text-align: left;
   flex: 1 1 auto;
@@ -731,10 +755,15 @@
   flex: 0 0 auto;
 }
 
+.application.egregora button.eg-row-label,
 .eg-row-label {
   background: transparent;
   border: none;
   padding: 0;
+  height: auto;
+  min-height: 0;
+  line-height: 1.25;
+  justify-content: flex-start;
   text-align: left;
   color: var(--eg-ink);
   font-family: var(--eg-font-body);
@@ -767,10 +796,14 @@
   flex: 0 0 auto;
 }
 
+.application.egregora button.eg-row-ctrl,
 .eg-row-ctrl {
   width: 20px;
   height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   padding: 0;
+  line-height: 1;
   background: transparent;
   border: none;
   color: var(--eg-ink-muted);
@@ -929,10 +962,15 @@
   padding: 1px 0;
 }
 
+.application.egregora button.eg-path-cast,
 .eg-path-cast {
   background: transparent;
   border: none;
   padding: 0;
+  height: auto;
+  min-height: 0;
+  line-height: 1.25;
+  justify-content: flex-start;
   font-family: var(--eg-font-display);
   font-size: 11.5px;
   font-weight: 700;

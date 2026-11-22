@@ -1,0 +1,36 @@
+<div class="eg-dice-infos">
+  {{#if (gt roll.attackDamage 0)}}
+  <div class="eg-info-row">
+    <span class="label">{{localize "EGREGORA.Damage"}}:</span>
+    <span class="value"><strong>{{roll.attackDamage}}</strong></span>
+  </div>
+  {{/if}}
+
+  {{#if (gt roll.options.corruptionAdded 0)}}
+  <div class="eg-info-row eg-alert">
+    <span class="label">{{localize "EGREGORA.Corruption.Added"}}:</span>
+    <span class="value">+{{roll.options.corruptionAdded}} PC</span>
+  </div>
+  {{/if}}
+
+  {{#if roll.pushed}}
+    {{#if (gt roll.attributeTrauma 0)}}
+    <div class="eg-info-row eg-alert">
+      <span class="label">{{localize "EGREGORA.Chat.Banes"}}:</span>
+      <span class="value">{{roll.attributeTrauma}}</span>
+    </div>
+    {{/if}}
+    {{#if (gt roll.gearDamage 0)}}
+    <div class="eg-info-row eg-alert">
+      <span class="label">{{localize "EGREGORA.Chat.GearDamage"}}:</span>
+      <span class="value">{{roll.gearDamage}}</span>
+    </div>
+    {{/if}}
+    {{#if roll.options.pushCostSummary}}
+    <div class="eg-info-row eg-push-summary">
+      <span class="label">{{localize "EGREGORA.Chat.PushCost"}}:</span>
+      <span class="value">{{roll.options.pushCostSummary}}</span>
+    </div>
+    {{/if}}
+  {{/if}}
+</div>

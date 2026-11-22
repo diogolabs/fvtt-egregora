@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260">
+  <defs>
+    <radialGradient id="eg-core" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3a0a07"/>
+      <stop offset="68%" stop-color="#190504"/>
+      <stop offset="100%" stop-color="#0b0202"/>
+    </radialGradient>
+    <radialGradient id="eg-iris" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffd580"/>
+      <stop offset="35%" stop-color="#e3541c"/>
+      <stop offset="72%" stop-color="#9e1712"/>
+      <stop offset="100%" stop-color="#2a0504"/>
+    </radialGradient>
+    <linearGradient id="eg-fire" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff7a29"/>
+      <stop offset="50%" stop-color="#b81d18"/>
+      <stop offset="100%" stop-color="#5c0a08"/>
+    </linearGradient>
+    <filter id="eg-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Cardinal spear spikes (N, S, E, W) -->
+  <g fill="url(#eg-fire)" stroke="#240504" stroke-width="1.4" filter="url(#eg-glow)">
+    <polygon points="130,2 138,44 130,36 122,44"/>
+    <polygon points="130,258 138,216 130,224 122,216"/>
+    <polygon points="2,130 44,122 36,130 44,138"/>
+    <polygon points="258,130 216,122 224,130 216,138"/>
+  </g>
+
+  <!-- Main dark occult medallion -->
+  <circle cx="130" cy="130" r="96" fill="url(#eg-core)" stroke="#b81d18" stroke-width="3.2"/>
+  <circle cx="130" cy="130" r="90" fill="none" stroke="#ff8938" stroke-width="1" stroke-opacity="0.75"/>
+  <circle cx="130" cy="130" r="74" fill="none" stroke="#c72d1c" stroke-width="2.2"/>
+  <circle cx="130" cy="130" r="69" fill="none" stroke="#ff8938" stroke-width="0.9" stroke-dasharray="3 4"/>
+
+  <!-- Arcane runic notches around ring -->
+  <g stroke="#e06526" stroke-width="1.6" stroke-linecap="round" opacity="0.88">
+    <path d="M130 43 L130 51 M126 47 L134 47"/>
+    <path d="M130 209 L130 217 M126 213 L134 213"/>
+    <path d="M43 130 L51 130 M47 126 L47 134"/>
+    <path d="M209 130 L217 130 M213 126 L213 134"/>
+    <path d="M68 68 L74 74 M74 68 L68 74"/>
+    <path d="M186 68 L192 74 M192 68 L186 74"/>
+    <path d="M68 186 L74 192 M74 186 L68 192"/>
+    <path d="M186 186 L192 192 M192 186 L186 192"/>
+    <path d="M97 49 L101 56 M163 49 L159 56"/>
+    <path d="M97 211 L101 204 M163 211 L159 204"/>
+    <path d="M49 97 L56 101 M211 97 L204 101"/>
+    <path d="M49 163 L56 159 M211 163 L204 159"/>
+  </g>
+
+  <!-- Inner arcane diamond star -->
+  <g fill="none" stroke="url(#eg-fire)" stroke-width="2" filter="url(#eg-glow)">
+    <path d="M130 58 Q144 114 202 130 Q144 146 130 202 Q116 146 58 130 Q116 114 130 58 Z"/>
+    <polygon points="130,68 192,130 130,192 68,130" stroke="#ff9642" stroke-width="1" stroke-opacity="0.65"/>
+  </g>
+
+  <!-- All-seeing eye -->
+  <g filter="url(#eg-glow)">
+    <path d="M74 130 Q130 88 186 130 Q130 172 74 130 Z" fill="#180404" stroke="#e84b1f" stroke-width="2.6"/>
+    <path d="M84 130 Q130 97 176 130 Q130 163 84 130 Z" fill="none" stroke="#ff9f4d" stroke-width="1" stroke-opacity="0.8"/>
+    <circle cx="130" cy="130" r="24" fill="url(#eg-iris)" stroke="#ffb45c" stroke-width="1.5"/>
+    <circle cx="130" cy="130" r="14" fill="none" stroke="#300605" stroke-width="1.3" stroke-dasharray="2 3"/>
+    <!-- Vertical slit pupil -->
+    <ellipse cx="130" cy="130" rx="5.5" ry="14" fill="#0c0202"/>
+    <circle cx="124" cy="123" r="2.6" fill="#fff0c9" opacity="0.85"/>
+  </g>
+</svg>

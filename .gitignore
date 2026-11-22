@@ -1,0 +1,14 @@
+# Pastas locais de referência, documentação e capturas (não versionar)
+documentos/
+prints/
+repo de exemplo/
+solo10/
+
+# Artefatos de build/release e dependências
+dist-release/
+node_modules/
+
+# Arquivos de sistema operacional e editores
+.DS_Store
+Thumbs.db
+*.log

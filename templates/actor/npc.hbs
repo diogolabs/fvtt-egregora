@@ -1,0 +1,108 @@
+<section class="eg-parchment-page eg-npc-page">
+  <header class="eg-paper-header">
+    <div class="eg-title-banner">
+      <img class="eg-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img" />
+      <div class="eg-logo-wrap">
+        <input type="text" class="eg-npc-name-input" name="name" value="{{actor.name}}" />
+        <input type="text" class="eg-npc-role-input" name="system.role" value="{{system.role}}" placeholder="{{localize 'EGREGORA.NPC.RolePlaceholder'}}" />
+      </div>
+      <div class="eg-header-quick">
+        <button type="button" class="eg-mini-btn" data-action="rollCritTable" title="{{localize 'EGREGORA.Critical.Roll'}}"><i class="fa-solid fa-skull"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <div class="eg-npc-stats-grid">
+    <section class="eg-box eg-ornate">
+      <h2 class="eg-box-title">{{localize "EGREGORA.Attributes"}}</h2>
+      <div class="eg-npc-attr-row">
+        {{#each attributeEntries as |attr|}}
+        <div class="eg-npc-attr-cell">
+          <button type="button" class="eg-attr-roll" data-action="rollAttribute" data-attribute="{{attr.key}}">{{attr.label}}</button>
+          <input type="number" name="system.attributes.{{attr.key}}.value" value="{{attr.value}}" min="0" max="20" />
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <section class="eg-box eg-ornate">
+      <h2 class="eg-box-title">{{localize "EGREGORA.StatusAndConditions"}}</h2>
+      <div class="eg-npc-vitals">
+        <label>
+          <span>{{localize "EGREGORA.HealthShort"}}</span>
+          <input type="number" name="system.health.value" value="{{system.health.value}}" min="0" />
+          <small>/ {{system.health.max}}</small>
+        </label>
+        <label>
+          <span>{{localize "EGREGORA.MentalShort"}}</span>
+          <input type="number" name="system.mental.value" value="{{system.mental.value}}" min="0" />
+          <small>/ {{system.mental.max}}</small>
+        </label>
+        <label>
+          <span>{{localize "EGREGORA.NPC.FearRating"}}</span>
+          <input type="number" name="system.fearRating" value="{{system.fearRating}}" min="0" max="10" />
+        </label>
+        <label>
+          <span>{{localize "EGREGORA.ProtShort"}}</span>
+          <input type="number" name="system.armorRating" value="{{system.armorRating}}" min="0" />
+        </label>
+      </div>
+    </section>
+  </div>
+
+  <div class="eg-split-2">
+    <section class="eg-box eg-ornate">
+      <div class="eg-box-header">
+        <h2 class="eg-box-title">{{localize "EGREGORA.Skills"}}</h2>
+        <button type="button" class="eg-icon-btn" data-action="createItem" data-type="skill"><i class="fa-solid fa-plus"></i></button>
+      </div>
+      <div class="eg-npc-skills">
+        {{#each skills as |sk|}}
+        <div class="eg-skill-row" data-item-id="{{sk.id}}">
+          <button type="button" class="eg-skill-name" data-action="rollItem">{{sk.name}}</button>
+          <input type="number" class="eg-skill-sq" value="{{sk.system.level}}" min="0" max="10" data-item-field="system.level" data-dtype="Number" />
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <section class="eg-box eg-ornate">
+      <div class="eg-box-header">
+        <h2 class="eg-box-title">{{localize "EGREGORA.Weapons"}} & {{localize "EGREGORA.Talents"}}</h2>
+        <div class="eg-box-actions">
+          <button type="button" class="eg-mini-text-btn" data-action="createItem" data-type="weapon">+ {{localize "TYPES.Item.weapon"}}</button>
+          <button type="button" class="eg-mini-text-btn" data-action="createItem" data-type="talent">+ {{localize "TYPES.Item.talent"}}</button>
+        </div>
+      </div>
+      <ul class="eg-diamond-list">
+        {{#each weapons as |w|}}
+        <li class="eg-diamond-row" data-item-id="{{w.id}}">
+          <span class="eg-diamond">◇</span>
+          <button type="button" class="eg-row-label" data-action="rollItem">
+            <strong>{{w.name}}</strong> ({{localize "EGREGORA.DamageShort"}} {{w.system.damage}} / +{{w.system.bonus}})
+          </button>
+          <span class="eg-row-controls">
+            <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+            <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+          </span>
+        </li>
+        {{/each}}
+        {{#each talents as |t|}}
+        <li class="eg-diamond-row" data-item-id="{{t.id}}">
+          <span class="eg-diamond">◇</span>
+          <button type="button" class="eg-row-label" data-action="chatItem">{{t.name}}</button>
+          <span class="eg-row-controls">
+            <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+            <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+          </span>
+        </li>
+        {{/each}}
+      </ul>
+    </section>
+  </div>
+
+  <section class="eg-box eg-ornate">
+    <h2 class="eg-box-title">{{localize "EGREGORA.Notes"}}</h2>
+    <prose-mirror name="system.notes" value="{{system.notes}}" document-uuid="{{actor.uuid}}" toggled {{#if editable}}editable{{/if}}>{{{enrichedNotes}}}</prose-mirror>
+  </section>
+</section>

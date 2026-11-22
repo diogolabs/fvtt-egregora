@@ -1,0 +1,345 @@
+<div class="eg-parchment-page eg-item-sheet">
+  <header class="eg-item-header">
+    <img class="eg-item-img" src="{{item.img}}" alt="{{item.name}}" data-action="editImage" data-edit="img" />
+    <div class="eg-item-title-col">
+      <input type="text" class="eg-item-name" name="name" value="{{item.name}}" />
+      <span class="eg-item-type-tag">{{localize (concat "TYPES.Item." item.type)}}</span>
+    </div>
+    <div class="eg-item-header-actions">
+      {{#if item.actor}}
+      <button type="button" class="eg-mini-btn" data-action="rollItem" title="{{localize 'EGREGORA.Roll'}}">
+        <i class="fa-solid fa-dice-d6"></i>
+      </button>
+      {{/if}}
+      <button type="button" class="eg-mini-btn" data-action="chatItem" title="{{localize 'EGREGORA.SendToChat'}}">
+        <i class="fa-solid fa-comment"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="eg-item-body">
+    <section class="eg-box eg-ornate">
+      {{#if (eq item.type "skill")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Attribute.Label"}}</span>
+          <select name="system.attribute">
+            {{#each config.attributes as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.attribute key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Level"}}</span>
+          <input type="number" name="system.level" value="{{system.level}}" min="0" max="5" />
+        </label>
+        <label class="eg-field eg-check-field eg-span-2">
+          <input type="checkbox" name="system.isKeySkill" {{checked system.isKeySkill}} />
+          <span>{{localize "EGREGORA.KeySkill"}}</span>
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (eq item.type "talent")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Category"}}</span>
+          <select name="system.category">
+            {{#each config.talentCategories as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.category key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Rank"}}</span>
+          <input type="number" name="system.rank" value="{{system.rank}}" min="1" max="4" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.WillpowerCost"}}</span>
+          <input type="number" name="system.willpowerCost" value="{{system.willpowerCost}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.CorruptionCost"}}</span>
+          <input type="number" name="system.corruptionCost" value="{{system.corruptionCost}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Attribute.Label"}}</span>
+          <select name="system.attribute">
+            <option value="">—</option>
+            {{#each config.attributes as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.attribute key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Modifier"}}</span>
+          <input type="number" name="system.modifier" value="{{system.modifier}}" />
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.AssociatedSkill"}}</span>
+          <input type="text" name="system.associatedSkill" value="{{system.associatedSkill}}" />
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Summary"}}</span>
+          <input type="text" name="system.summary" value="{{system.summary}}" />
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (or (eq item.type "quality") (eq item.type "defect"))}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Category"}}</span>
+          <select name="system.category">
+            {{#each config.qualityCategories as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.category key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Points"}}</span>
+          <input type="number" name="system.points" value="{{system.points}}" min="1" max="5" />
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Summary"}}</span>
+          <input type="text" name="system.summary" value="{{system.summary}}" />
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (eq item.type "gear")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Bonus"}}</span>
+          <input type="number" name="system.bonus" value="{{system.bonus}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Durability"}} (DUR)</span>
+          <div class="eg-inline-input-btn">
+            <input type="number" name="system.durability" value="{{system.durability}}" min="0" />
+            <span>/</span>
+            <input type="number" name="system.maxDurability" value="{{system.maxDurability}}" min="0" />
+          </div>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Value"}}</span>
+          <input type="number" name="system.value" value="{{system.value}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Quantity"}}</span>
+          <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Usage"}}</span>
+          <input type="text" name="system.usage" value="{{system.usage}}" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.AssociatedSkill"}}</span>
+          <input type="text" name="system.associatedSkill" value="{{system.associatedSkill}}" />
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Effect"}}</span>
+          <input type="text" name="system.effect" value="{{system.effect}}" />
+        </label>
+        <label class="eg-field eg-check-field eg-span-2">
+          <input type="checkbox" name="system.isRelic" {{checked system.isRelic}} />
+          <span>{{localize "EGREGORA.IsRelic"}}</span>
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (eq item.type "weapon")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Damage"}}</span>
+          <input type="number" name="system.damage" value="{{system.damage}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Bonus"}}</span>
+          <input type="number" name="system.bonus" value="{{system.bonus}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Attribute.Label"}}</span>
+          <select name="system.attribute">
+            {{#each config.attributes as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.attribute key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.AssociatedSkill"}}</span>
+          <input type="text" name="system.skill" value="{{system.skill}}" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Range.Label"}}</span>
+          <select name="system.range">
+            {{#each config.ranges as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.range key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Durability"}} (DUR)</span>
+          <input type="number" name="system.durability" value="{{system.durability}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Ammo"}}</span>
+          <div class="eg-inline-input-btn">
+            <input type="number" name="system.ammo.value" value="{{system.ammo.value}}" min="0" />
+            <span>/</span>
+            <input type="number" name="system.ammo.max" value="{{system.ammo.max}}" min="0" />
+          </div>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Value"}}</span>
+          <input type="number" name="system.value" value="{{system.value}}" min="0" />
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Effect"}}</span>
+          <input type="text" name="system.effect" value="{{system.effect}}" />
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (eq item.type "armor")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Armor.Protection"}}</span>
+          <input type="number" name="system.protection" value="{{system.protection}}" min="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Armor.Penalty"}}</span>
+          <input type="number" name="system.agilityPenalty" value="{{system.agilityPenalty}}" max="0" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Value"}}</span>
+          <input type="number" name="system.value" value="{{system.value}}" min="0" />
+        </label>
+        <label class="eg-field eg-check-field">
+          <input type="checkbox" name="system.equipped" {{checked system.equipped}} />
+          <span>{{localize "EGREGORA.Equipped"}}</span>
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Effect"}}</span>
+          <input type="text" name="system.effect" value="{{system.effect}}" />
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (eq item.type "spell")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Magic.PrimaryPath"}}</span>
+          <select name="system.primaryPath">
+            {{#each config.magicPaths as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.primaryPath key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Magic.SecondaryPath"}}</span>
+          <select name="system.secondaryPath">
+            <option value="">—</option>
+            {{#each config.magicPaths as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.secondaryPath key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Attribute.Label"}}</span>
+          <select name="system.defaultAttribute">
+            {{#each config.attributes as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.defaultAttribute key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Magic.RequiredFocus"}}</span>
+          <input type="number" name="system.requiredFocus" value="{{system.requiredFocus}}" min="1" max="5" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.WillpowerCost"}}</span>
+          <input type="number" name="system.willpowerCost" value="{{system.willpowerCost}}" min="1" max="10" />
+        </label>
+        <label class="eg-field eg-check-field">
+          <input type="checkbox" name="system.inGrimoire" {{checked system.inGrimoire}} />
+          <span>{{localize "EGREGORA.Magic.InGrimoire"}}</span>
+        </label>
+        <label class="eg-field eg-check-field eg-span-2">
+          <input type="checkbox" name="system.directDamage" {{checked system.directDamage}} />
+          <span>{{localize "EGREGORA.Magic.DirectDamage"}}</span>
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (eq item.type "mutation")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Mutation.TierLabel"}}</span>
+          <select name="system.tier">
+            {{#each config.mutationTiers as |labelKey key|}}
+              <option value="{{key}}" {{#if (eq ../system.tier key)}}selected{{/if}}>{{localize labelKey}}</option>
+            {{/each}}
+          </select>
+        </label>
+        <label class="eg-field">
+          <span>D66</span>
+          <input type="text" name="system.d66" value="{{system.d66}}" />
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Effect"}}</span>
+          <input type="text" name="system.effect" value="{{system.effect}}" />
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Cost"}}</span>
+          <input type="text" name="system.cost" value="{{system.cost}}" />
+        </label>
+      </div>
+      {{/if}}
+
+      {{#if (eq item.type "critical")}}
+      <div class="eg-form-grid-2">
+        <label class="eg-field">
+          <span>D66</span>
+          <input type="text" name="system.d66" value="{{system.d66}}" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Critical.TimeLimit"}}</span>
+          <input type="text" name="system.timeLimit" value="{{system.timeLimit}}" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Critical.HealingTime"}}</span>
+          <input type="text" name="system.healingTime" value="{{system.healingTime}}" />
+        </label>
+        <label class="eg-field">
+          <span>{{localize "EGREGORA.Critical.HealMod"}}</span>
+          <input type="number" name="system.healMod" value="{{system.healMod}}" />
+        </label>
+        <label class="eg-field eg-check-field">
+          <input type="checkbox" name="system.lethal" {{checked system.lethal}} />
+          <span>{{localize "EGREGORA.Critical.Lethal"}}</span>
+        </label>
+        <label class="eg-field eg-check-field">
+          <input type="checkbox" name="system.stabilized" {{checked system.stabilized}} />
+          <span>{{localize "EGREGORA.Critical.Stabilized"}}</span>
+        </label>
+        <label class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Effect"}}</span>
+          <input type="text" name="system.effect" value="{{system.effect}}" />
+        </label>
+      </div>
+      {{/if}}
+    </section>
+
+    <section class="eg-box eg-ornate">
+      <h2 class="eg-box-title">{{localize "EGREGORA.Description"}}</h2>
+      <prose-mirror
+        name="system.description"
+        value="{{system.description}}"
+        document-uuid="{{item.uuid}}"
+        toggled
+        {{#if editable}}editable{{/if}}
+      >{{{enrichedDescription}}}</prose-mirror>
+    </section>
+  </div>
+</div>

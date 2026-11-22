@@ -1,0 +1,29 @@
+<div class="eg-chat-card eg-spell-card">
+  <header class="eg-chat-card-header">
+    <img src="{{#if spell}}{{spell.img}}{{else}}systems/fvtt-egregora/assets/icons/spell.svg{{/if}}" alt="{{spellTitle}}" />
+    <div>
+      <h3>{{spellTitle}}</h3>
+      <span class="eg-chat-sub">{{pathsDisplay}} • {{attributeLabel}} • {{costPoolLabel}}: −{{totalCost}}</span>
+    </div>
+  </header>
+
+  {{{rollHtml}}}
+
+  {{#if (gt successes 0)}}
+  <div class="eg-spell-quality">
+    <strong>{{qualityTitle}}</strong>
+    <p>{{qualityDesc}}</p>
+    {{#if (gt calculatedDamage 0)}}
+    <p class="eg-spell-dmg"><strong>{{localize "EGREGORA.Damage"}}:</strong> {{calculatedDamage}} ({{localize "EGREGORA.Magic.IgnoresArmor"}})</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if contaminationTriggered}}
+  <div class="dice-buttons eg-btn-row">
+    <button type="button" class="eg-btn eg-btn-crimson" data-action="rollContamination">
+      <i class="fa-solid fa-biohazard"></i> {{localize "EGREGORA.Corruption.ContaminationTest"}}
+    </button>
+  </div>
+  {{/if}}
+</div>

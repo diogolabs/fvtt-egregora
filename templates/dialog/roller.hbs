@@ -1,0 +1,108 @@
+<div class="eg-dialog-body">
+  <div class="eg-roll-preview">
+    <span class="eg-preview-label">{{localize "EGREGORA.RollDialog.DicePool"}}</span>
+    <strong class="eg-preview-formula">{{previewText}}</strong>
+  </div>
+
+  <div class="eg-form-grid-2">
+    <label class="eg-field">
+      <span>{{localize "EGREGORA.Attribute.Label"}} ({{attrScore}})</span>
+      <select name="attribute">
+        {{#each config.attributes as |labelKey key|}}
+          <option value="{{key}}" {{#if (eq ../attribute key)}}selected{{/if}}>{{localize labelKey}}</option>
+        {{/each}}
+      </select>
+    </label>
+
+    <label class="eg-field">
+      <span>{{localize "TYPES.Item.skill"}} ({{skillScore}})</span>
+      <select name="skillId">
+        <option value="">—</option>
+        {{#each skills as |sk|}}
+          <option value="{{sk.id}}" {{#if (eq ../skillId sk.id)}}selected{{/if}}>{{sk.name}} ({{sk.system.level}})</option>
+        {{/each}}
+      </select>
+    </label>
+
+    <label class="eg-field">
+      <span>{{localize "EGREGORA.Equipment"}} (+{{gearBonus}})</span>
+      <select name="gearId">
+        <option value="">—</option>
+        {{#each gears as |g|}}
+          <option value="{{g.id}}" {{#if (eq ../gearId g.id)}}selected{{/if}}>{{g.name}} (+{{g.system.bonus}})</option>
+        {{/each}}
+      </select>
+    </label>
+
+    <label class="eg-field">
+      <span>{{localize "TYPES.Item.talent"}}</span>
+      <select name="talentId">
+        <option value="">—</option>
+        {{#each talents as |t|}}
+          <option value="{{t.id}}" {{#if (eq ../talentId t.id)}}selected{{/if}}>{{t.name}}</option>
+        {{/each}}
+      </select>
+    </label>
+
+    <label class="eg-field">
+      <span>{{localize "EGREGORA.Difficulty.Label"}}</span>
+      <select name="difficultyMod">
+        {{#each config.difficulties as |d|}}
+          <option value="{{d.mod}}" {{#if (eq ../difficultyMod d.mod)}}selected{{/if}}>{{localize d.label}} ({{d.mod}})</option>
+        {{/each}}
+      </select>
+    </label>
+
+    <label class="eg-field">
+      <span>{{localize "EGREGORA.Help"}} (0–3)</span>
+      <input type="number" name="helpDice" value="{{helpDice}}" min="0" max="3" />
+    </label>
+
+    <label class="eg-field">
+      <span>{{localize "EGREGORA.Modifier"}}</span>
+      <div class="eg-inline-input-btn">
+        <button type="button" class="eg-mini-text-btn" data-action="adjustMod" data-delta="-1">−1</button>
+        <input type="number" name="customMod" value="{{customMod}}" />
+        <button type="button" class="eg-mini-text-btn" data-action="adjustMod" data-delta="1">+1</button>
+      </div>
+    </label>
+
+    <label class="eg-field eg-corr-field">
+      <span>{{localize "EGREGORA.RollDialog.CorruptionDice"}} (0–{{maxCorruptionDice}})</span>
+      <input type="number" name="corruptionDice" value="{{corruptionDice}}" min="0" max="{{maxCorruptionDice}}" />
+    </label>
+  </div>
+
+  <div class="eg-checkbox-strip">
+    <label class="eg-check-field">
+      <input type="checkbox" name="aimedShot" {{checked aimedShot}} />
+      <span>{{localize "EGREGORA.AimedShot"}} (+2)</span>
+    </label>
+    {{#if canUsePride}}
+    <label class="eg-check-field">
+      <input type="checkbox" name="usePride" {{checked usePride}} />
+      <span>{{localize "EGREGORA.Traits.UsePride"}} (+1 {{localize "EGREGORA.Success"}})</span>
+    </label>
+    {{/if}}
+    <label class="eg-check-field">
+      <input type="checkbox" name="passiveRoll" {{checked passiveRoll}} />
+      <span>{{localize "EGREGORA.RollDialog.NoPush"}}</span>
+    </label>
+  </div>
+
+  {{#if (or (ne armorPenalty 0) (ne corruptionSocialPenalty 0))}}
+  <div class="eg-auto-mods">
+    {{#if (ne armorPenalty 0)}}<span>{{localize "EGREGORA.Armor.Penalty"}}: {{armorPenalty}}</span>{{/if}}
+    {{#if (ne corruptionSocialPenalty 0)}}<span>{{localize "EGREGORA.Corruption.Label"}}: {{corruptionSocialPenalty}}</span>{{/if}}
+  </div>
+  {{/if}}
+
+  <footer class="eg-dialog-footer">
+    <button type="submit" class="eg-btn eg-btn-crimson" data-roll-mode="public">
+      <i class="fa-solid fa-dice-d6"></i> {{localize "EGREGORA.Roll"}}
+    </button>
+    <button type="submit" class="eg-btn" data-roll-mode="gm">
+      <i class="fa-solid fa-user-secret"></i> {{localize "EGREGORA.RollGM"}}
+    </button>
+  </footer>
+</div>

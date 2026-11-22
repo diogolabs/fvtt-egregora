@@ -1,0 +1,13 @@
+<div class="eg-chat-card">
+  <header class="eg-chat-card-header">
+    <img src="{{item.img}}" alt="{{item.name}}" />
+    <div>
+      <h3>{{item.name}}</h3>
+      <span class="eg-chat-sub">{{localize (concat "TYPES.Item." item.type)}}</span>
+    </div>
+  </header>
+  {{#if system.summary}}<p class="eg-chat-summary">{{system.summary}}</p>{{/if}}
+  {{#if system.effect}}<p class="eg-chat-summary"><strong>{{localize "EGREGORA.Effect"}}:</strong> {{system.effect}}</p>{{/if}}
+  {{#if system.cost}}<p class="eg-chat-summary"><strong>{{localize "EGREGORA.Cost"}}:</strong> {{system.cost}}</p>{{/if}}
+  {{#if system.description}}<div class="eg-chat-desc">{{{system.description}}}</div>{{/if}}
+</div>

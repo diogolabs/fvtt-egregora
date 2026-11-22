@@ -1,0 +1,480 @@
+<section class="eg-tab-panel eg-parchment-page {{#if (eq activeTab 'main')}}active{{/if}}" data-tab="main">
+  <!-- Cabeçalho Oficial: Logo + Nome / Jogador / Arquétipo -->
+  <header class="eg-paper-header">
+    <div class="eg-title-banner">
+      <img
+        class="eg-portrait"
+        src="{{actor.img}}"
+        alt="{{actor.name}}"
+        data-action="editImage"
+        data-edit="img"
+        title="{{localize 'EGREGORA.EditPortrait'}}"
+      />
+      <div class="eg-logo-wrap">
+        <h1 class="eg-logo-title">EGRÉGORA</h1>
+        <div class="eg-logo-subtitle">— {{localize "EGREGORA.Subtitle"}} —</div>
+      </div>
+      <div class="eg-header-quick">
+        <button type="button" class="eg-mini-btn" data-action="rollFear" data-attribute="intelligence" title="{{localize 'EGREGORA.FearTest'}}">
+          <i class="fa-solid fa-ghost"></i>
+        </button>
+        <button type="button" class="eg-mini-btn" data-action="rollPanic" title="{{localize 'EGREGORA.Panic.TableTitle'}}">
+          <i class="fa-solid fa-brain"></i>
+        </button>
+        <button type="button" class="eg-mini-btn" data-action="rollCritTable" title="{{localize 'EGREGORA.Critical.Roll'}}">
+          <i class="fa-solid fa-skull"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="eg-identity-row">
+      <label class="eg-line-field eg-id-name">
+        <span>{{localize "EGREGORA.Name"}}:</span>
+        <input type="text" name="name" value="{{actor.name}}" />
+      </label>
+      <label class="eg-line-field eg-id-player">
+        <span>{{localize "EGREGORA.Player"}}:</span>
+        <input type="text" name="system.playerName" value="{{system.playerName}}" />
+      </label>
+      <label class="eg-line-field eg-id-archetype">
+        <span>{{localize "EGREGORA.Archetype.Label"}}:</span>
+        <input type="text" name="system.archetype" value="{{system.archetype}}" list="eg-archetypes-list" />
+        <datalist id="eg-archetypes-list">
+          {{#each config.archetypes as |labelKey key|}}
+            <option value="{{localize labelKey}}"></option>
+          {{/each}}
+        </datalist>
+      </label>
+    </div>
+  </header>
+
+  <!-- Faixa Superior: Atributos | Emblema Central | Status & Condições -->
+  <div class="eg-top-grid">
+    <!-- ATRIBUTOS -->
+    <section class="eg-box eg-ornate eg-attributes-box">
+      <h2 class="eg-box-title">{{localize "EGREGORA.Attributes"}}</h2>
+      <div class="eg-attr-list">
+        {{#each attributeEntries as |attr|}}
+        <div class="eg-attr-card">
+          <div class="eg-attr-top">
+            <button type="button" class="eg-attr-roll" data-action="rollAttribute" data-attribute="{{attr.key}}" title="{{localize 'EGREGORA.RollAttribute'}}">
+              {{attr.label}}
+            </button>
+            <input
+              type="number"
+              class="eg-attr-num"
+              name="system.attributes.{{attr.key}}.value"
+              value="{{attr.value}}"
+              min="0"
+              max="6"
+            />
+          </div>
+          <div class="eg-box-track">
+            {{#each attr.boxes as |box|}}
+            <button
+              type="button"
+              class="eg-sq-box {{#if box.filled}}filled{{/if}}"
+              data-action="setAttributeBox"
+              data-attribute="{{attr.key}}"
+              data-index="{{box.index}}"
+              title="{{attr.label}}: {{box.index}}"
+            ></button>
+            {{/each}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <!-- EMBLEMA ARCANO CENTRAL -->
+    <div class="eg-emblem-col">
+      <img
+        class="eg-emblem-img"
+        src="systems/fvtt-egregora/assets/emblem.svg"
+        alt="Egrégora"
+        data-action="rollContamination"
+        title="{{localize 'EGREGORA.Corruption.ContaminationTest'}}"
+      />
+    </div>
+
+    <!-- STATUS & CONDIÇÕES -->
+    <section class="eg-box eg-ornate eg-status-box">
+      <h2 class="eg-box-title">{{localize "EGREGORA.StatusAndConditions"}}</h2>
+
+      <div class="eg-stat-row">
+        <span class="eg-stat-label">{{localize "EGREGORA.Health"}}</span>
+        <div class="eg-stat-val-wrap">
+          <input type="number" class="eg-stat-sq" name="system.health.value" value="{{system.health.value}}" min="0" />
+          <span class="eg-stat-max">/ {{system.health.max}}</span>
+        </div>
+      </div>
+
+      <div class="eg-stat-row">
+        <span class="eg-stat-label">{{localize "EGREGORA.Mental"}}</span>
+        <div class="eg-stat-val-wrap">
+          <input type="number" class="eg-stat-sq" name="system.mental.value" value="{{system.mental.value}}" min="0" />
+          <span class="eg-stat-max">/ {{system.mental.max}}</span>
+        </div>
+      </div>
+
+      <div class="eg-track-block">
+        <div class="eg-track-header">
+          <span class="eg-stat-label">{{localize "EGREGORA.Willpower"}}</span>
+          <span class="eg-track-count">{{system.willpower.value}} / 10</span>
+        </div>
+        <div class="eg-box-track eg-track-10">
+          {{#each willpowerBoxes as |box|}}
+          <button
+            type="button"
+            class="eg-sq-box {{#if box.filled}}filled{{/if}}"
+            data-action="setTrackBox"
+            data-field="system.willpower.value"
+            data-index="{{box.index}}"
+            title="{{localize 'EGREGORA.Willpower'}}: {{box.index}}"
+          ></button>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="eg-track-block">
+        <div class="eg-track-header">
+          <span class="eg-stat-label">{{localize "EGREGORA.Corruption.Label"}}</span>
+          <span class="eg-corruption-stage stage-{{system.corruptionStage.id}}" title="{{localize 'EGREGORA.Corruption.ContaminationTest'}}">
+            {{corruptionStageLabel}} ({{system.corruption.value}})
+          </span>
+        </div>
+        <div class="eg-box-track eg-track-10 eg-corruption-track">
+          {{#each corruptionBoxes as |box|}}
+          <button
+            type="button"
+            class="eg-sq-box eg-corr-box {{#if box.filled}}filled{{/if}} {{#if box.milestone}}milestone{{/if}}"
+            data-action="setTrackBox"
+            data-field="system.corruption.value"
+            data-index="{{box.index}}"
+            title="{{localize 'EGREGORA.Corruption.Label'}}: {{box.index}}"
+          ></button>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Corpo Principal em 2 Colunas (Fiel à Ficha Oficial) -->
+  <div class="eg-main-columns">
+    <!-- COLUNA ESQUERDA: PERÍCIAS + TALENTOS -->
+    <div class="eg-col-left">
+      <section class="eg-box eg-ornate eg-skills-box">
+        <div class="eg-box-header">
+          <h2 class="eg-box-title">{{localize "EGREGORA.Skills"}}</h2>
+          <div class="eg-box-actions">
+            <button type="button" class="eg-icon-btn" data-action="seedCoreSkills" title="{{localize 'EGREGORA.SeedCoreSkills'}}">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </button>
+            <button type="button" class="eg-icon-btn" data-action="createItem" data-type="skill" title="{{localize 'EGREGORA.AddSkill'}}">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="eg-skill-groups">
+          {{#each skillGroups as |grp|}}
+          <div class="eg-skill-group">
+            {{#each grp.skills as |skill|}}
+            <div class="eg-skill-row" data-item-id="{{skill.id}}">
+              <button type="button" class="eg-skill-name" data-action="rollItem" title="{{localize 'EGREGORA.RollSkill'}}">
+                <span class="eg-skill-title">{{skill.name}}</span>
+                <span class="eg-skill-attr">({{grp.attributeLabel}})</span>
+              </button>
+              <div class="eg-skill-right">
+                <button type="button" class="eg-row-ctrl" data-action="editItem" title="{{localize 'EGREGORA.Edit'}}">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button type="button" class="eg-row-ctrl" data-action="deleteItem" title="{{localize 'EGREGORA.Delete'}}">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+                <input
+                  type="number"
+                  class="eg-skill-sq"
+                  value="{{skill.system.level}}"
+                  min="0"
+                  max="5"
+                  data-item-field="system.level"
+                  data-dtype="Number"
+                />
+              </div>
+            </div>
+            {{/each}}
+          </div>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="eg-box eg-ornate eg-talents-box">
+        <div class="eg-box-header">
+          <h2 class="eg-box-title">{{localize "EGREGORA.Talents"}}</h2>
+          <button type="button" class="eg-icon-btn" data-action="createItem" data-type="talent" title="{{localize 'EGREGORA.AddTalent'}}">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+
+        <ul class="eg-diamond-list">
+          {{#each talents as |talent|}}
+          <li class="eg-diamond-row" data-item-id="{{talent.id}}">
+            <span class="eg-diamond">◇</span>
+            <button type="button" class="eg-row-label" data-action="rollItem" title="{{talent.system.summary}}">
+              <strong>{{talent.name}}</strong>
+              {{#if (gt talent.system.rank 1)}}<span class="eg-inline-meta">(Nv. {{talent.system.rank}})</span>{{/if}}
+              {{#if talent.system.summary}}<span class="eg-inline-summary">— {{talent.system.summary}}</span>{{/if}}
+            </button>
+            <span class="eg-row-controls">
+              <button type="button" class="eg-row-ctrl" data-action="chatItem" title="{{localize 'EGREGORA.SendToChat'}}"><i class="fa-solid fa-comment"></i></button>
+              <button type="button" class="eg-row-ctrl" data-action="editItem" title="{{localize 'EGREGORA.Edit'}}"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" class="eg-row-ctrl" data-action="deleteItem" title="{{localize 'EGREGORA.Delete'}}"><i class="fa-solid fa-trash"></i></button>
+            </span>
+          </li>
+          {{else}}
+          <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+          <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+          <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+          {{/each}}
+        </ul>
+      </section>
+    </div>
+
+    <!-- COLUNA DIREITA: TRAÇOS & MAGIA | ÂNCORA | QUALIDADES/DEFEITOS | ITEM ÚTIL | ARMAS/ARMADURAS -->
+    <div class="eg-col-right">
+      <!-- TRAÇOS E MAGIA -->
+      <section class="eg-box eg-traits-magic-box">
+        <h2 class="eg-box-title">{{localize "EGREGORA.TraitsAndMagic"}}</h2>
+        <div class="eg-traits-magic-grid">
+          <div class="eg-traits-subcol">
+            <div class="eg-trait-entry">
+              <div class="eg-trait-label-row">
+                <label>{{localize "EGREGORA.Traits.Pride"}}:</label>
+                <label class="eg-used-check" title="{{localize 'EGREGORA.Traits.PrideUsed'}}">
+                  <input type="checkbox" name="system.traits.pride.used" {{checked system.traits.pride.used}} />
+                  <span>{{localize "EGREGORA.Used"}}</span>
+                </label>
+              </div>
+              <input type="text" class="eg-ruled-input" name="system.traits.pride.text" value="{{system.traits.pride.text}}" />
+            </div>
+
+            <div class="eg-trait-entry">
+              <label>{{localize "EGREGORA.Traits.DarkSecret"}}:</label>
+              <input type="text" class="eg-ruled-input" name="system.traits.darkSecret" value="{{system.traits.darkSecret}}" />
+            </div>
+
+            <div class="eg-trait-entry">
+              <label>{{localize "EGREGORA.Traits.BigDream"}}:</label>
+              <input type="text" class="eg-ruled-input" name="system.traits.bigDream" value="{{system.traits.bigDream}}" />
+            </div>
+
+            <div class="eg-trait-entry">
+              <label>{{localize "EGREGORA.Traits.Weakness"}}:</label>
+              <input type="text" class="eg-ruled-input" name="system.traits.weakness" value="{{system.traits.weakness}}" />
+            </div>
+          </div>
+
+          <div class="eg-magic-subcol">
+            <div class="eg-sub-title">{{localize "EGREGORA.Magic.PathsTitle"}}</div>
+            <div class="eg-aptitude-line">
+              <span>{{localize "EGREGORA.Magic.AptitudeShort"}}:</span>
+              <select name="system.magic.aptitude" data-dtype="Number">
+                <option value="0" {{#if (eq system.magic.aptitude 0)}}selected{{/if}}>0</option>
+                <option value="1" {{#if (eq system.magic.aptitude 1)}}selected{{/if}}>1 (2)</option>
+                <option value="2" {{#if (eq system.magic.aptitude 2)}}selected{{/if}}>2 (4)</option>
+                <option value="3" {{#if (eq system.magic.aptitude 3)}}selected{{/if}}>3 (6)</option>
+              </select>
+              <span class="eg-focus-pill" title="{{localize 'EGREGORA.Magic.FocusPoints'}}">
+                F: {{system.magic.focusSpent}}/{{system.magic.focusMax}}
+              </span>
+            </div>
+
+            <div class="eg-paths-list">
+              {{#each magicPaths as |mp|}}
+              <div class="eg-path-row">
+                <button type="button" class="eg-path-cast" data-action="castMagicPath" data-path="{{mp.key}}" title="{{localize 'EGREGORA.Magic.Cast'}}">
+                  {{mp.label}}
+                </button>
+                <input
+                  type="number"
+                  class="eg-path-input"
+                  name="system.magic.paths.{{mp.key}}"
+                  value="{{mp.value}}"
+                  min="0"
+                  max="5"
+                />
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ÂNCORA -->
+      <section class="eg-box eg-anchor-box">
+        <label class="eg-anchor-row">
+          <span class="eg-anchor-title">{{localize "EGREGORA.Anchor"}}</span>
+          <input type="text" class="eg-ruled-input" name="system.anchor" value="{{system.anchor}}" placeholder="{{localize 'EGREGORA.AnchorPlaceholder'}}" />
+        </label>
+      </section>
+
+      <!-- QUALIDADES & DEFEITOS -->
+      <div class="eg-split-2">
+        <section class="eg-box eg-qd-box">
+          <div class="eg-box-header">
+            <h2 class="eg-box-title">{{localize "EGREGORA.Qualities"}} <small>({{system.qualityPoints}})</small></h2>
+            <button type="button" class="eg-icon-btn" data-action="createItem" data-type="quality" title="{{localize 'EGREGORA.AddQuality'}}">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <ul class="eg-diamond-list eg-compact-list">
+            {{#each qualities as |q|}}
+            <li class="eg-diamond-row" data-item-id="{{q.id}}">
+              <span class="eg-diamond">◇</span>
+              <button type="button" class="eg-row-label" data-action="chatItem">
+                {{q.name}} <span class="eg-inline-meta">({{q.system.points}})</span>
+              </button>
+              <span class="eg-row-controls">
+                <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+                <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+              </span>
+            </li>
+            {{else}}
+            <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+            <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+            {{/each}}
+          </ul>
+        </section>
+
+        <section class="eg-box eg-qd-box">
+          <div class="eg-box-header">
+            <h2 class="eg-box-title">{{localize "EGREGORA.Defects"}} <small>({{system.defectPoints}})</small></h2>
+            <button type="button" class="eg-icon-btn" data-action="createItem" data-type="defect" title="{{localize 'EGREGORA.AddDefect'}}">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <ul class="eg-diamond-list eg-compact-list">
+            {{#each defects as |d|}}
+            <li class="eg-diamond-row" data-item-id="{{d.id}}">
+              <span class="eg-diamond">◇</span>
+              <button type="button" class="eg-row-label" data-action="chatItem">
+                {{d.name}} <span class="eg-inline-meta">({{d.system.points}})</span>
+              </button>
+              <span class="eg-row-controls">
+                <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+                <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+              </span>
+            </li>
+            {{else}}
+            <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+            <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+            {{/each}}
+          </ul>
+        </section>
+      </div>
+
+      <!-- ITEM ÚTIL -->
+      <section class="eg-box eg-gear-box">
+        <div class="eg-box-header">
+          <h2 class="eg-box-title">{{localize "EGREGORA.UsefulItems"}}</h2>
+          <button type="button" class="eg-icon-btn" data-action="createItem" data-type="gear" title="{{localize 'EGREGORA.AddGear'}}">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+        <ul class="eg-diamond-list eg-compact-list">
+          {{#each gear as |g|}}
+          <li class="eg-diamond-row" data-item-id="{{g.id}}">
+            <span class="eg-diamond">◇</span>
+            <button type="button" class="eg-row-label" data-action="rollItem">
+              {{g.name}}
+              {{#if (gt g.system.bonus 0)}}<span class="eg-inline-meta">+{{g.system.bonus}}</span>{{/if}}
+              <span class="eg-inline-meta">DUR {{g.system.durability}}</span>
+            </button>
+            <span class="eg-row-controls">
+              <button type="button" class="eg-row-ctrl" data-action="chatItem"><i class="fa-solid fa-comment"></i></button>
+              <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+              <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+            </span>
+          </li>
+          {{else}}
+          <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+          <li class="eg-empty-ruled"><span class="eg-diamond">◇</span><span class="eg-ruled-line"></span></li>
+          {{/each}}
+        </ul>
+      </section>
+
+      <!-- ARMAS & ARMADURAS -->
+      <section class="eg-box eg-combat-gear-box">
+        <div class="eg-weapons-armors-grid">
+          <div class="eg-weapons-col">
+            <div class="eg-sub-header">
+              <h3 class="eg-sub-title">{{localize "EGREGORA.Weapons"}}</h3>
+              <button type="button" class="eg-icon-btn" data-action="createItem" data-type="weapon" title="{{localize 'EGREGORA.AddWeapon'}}">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+            <div class="eg-mini-table-head eg-weapon-cols">
+              <span>{{localize "EGREGORA.Name"}}</span>
+              <span>{{localize "EGREGORA.DamageShort"}}</span>
+              <span>{{localize "EGREGORA.BonusShort"}}</span>
+            </div>
+            {{#each weapons as |w|}}
+            <div class="eg-mini-table-row eg-weapon-cols" data-item-id="{{w.id}}">
+              <div class="eg-table-name-cell">
+                <button type="button" class="eg-row-label" data-action="rollItem" title="{{localize 'EGREGORA.AttackRoll'}}">{{w.name}}</button>
+                <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+                <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+              </div>
+              <input type="number" class="eg-mini-sq" value="{{w.system.damage}}" min="0" data-item-field="system.damage" data-dtype="Number" />
+              <input type="number" class="eg-mini-sq" value="{{w.system.bonus}}" min="0" data-item-field="system.bonus" data-dtype="Number" />
+            </div>
+            {{else}}
+            <div class="eg-mini-table-row eg-weapon-cols eg-empty-mini">
+              <span class="eg-ruled-line"></span><span class="eg-mini-sq-empty"></span><span class="eg-mini-sq-empty"></span>
+            </div>
+            <div class="eg-mini-table-row eg-weapon-cols eg-empty-mini">
+              <span class="eg-ruled-line"></span><span class="eg-mini-sq-empty"></span><span class="eg-mini-sq-empty"></span>
+            </div>
+            {{/each}}
+          </div>
+
+          <div class="eg-armors-col">
+            <div class="eg-sub-header">
+              <h3 class="eg-sub-title">{{localize "EGREGORA.Armors"}}</h3>
+              <button type="button" class="eg-icon-btn" data-action="createItem" data-type="armor" title="{{localize 'EGREGORA.AddArmor'}}">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+            <div class="eg-mini-table-head eg-armor-cols">
+              <span>{{localize "EGREGORA.Name"}}</span>
+              <span>{{localize "EGREGORA.ProtShort"}}</span>
+              <span>{{localize "EGREGORA.AgiShort"}}</span>
+            </div>
+            {{#each armors as |a|}}
+            <div class="eg-mini-table-row eg-armor-cols" data-item-id="{{a.id}}">
+              <div class="eg-table-name-cell">
+                <button type="button" class="eg-row-label" data-action="rollItem" title="{{localize 'EGREGORA.Armor.Roll'}}">{{a.name}}</button>
+                <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+                <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+              </div>
+              <input type="number" class="eg-mini-sq" value="{{a.system.protection}}" min="0" data-item-field="system.protection" data-dtype="Number" />
+              <input type="number" class="eg-mini-sq" value="{{a.system.agilityPenalty}}" max="0" data-item-field="system.agilityPenalty" data-dtype="Number" />
+            </div>
+            {{else}}
+            <div class="eg-mini-table-row eg-armor-cols eg-empty-mini">
+              <span class="eg-ruled-line"></span><span class="eg-mini-sq-empty"></span><span class="eg-mini-sq-empty"></span>
+            </div>
+            <div class="eg-mini-table-row eg-armor-cols eg-empty-mini">
+              <span class="eg-ruled-line"></span><span class="eg-mini-sq-empty"></span><span class="eg-mini-sq-empty"></span>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Silhueta Gótica Inferior -->
+  <div class="eg-skyline-footer" aria-hidden="true"></div>
+</section>

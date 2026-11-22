@@ -1,0 +1,13 @@
+# Changelog
+
+## 0.1.0 — Base Inicial (Foundry VTT v13 & v14)
+- Estrutura inicial do sistema **Egrégora: O Mundo Oculto (YZE)** compatível diretamente com **Foundry VTT v13 e v14** (`minimum: "13"`, `verified: "14"`).
+- Ficha do Desperto (`character`) construída com `ActorSheetV2` seguindo fielmente o layout, paleta (pergaminho envelhecido, carmesim, molduras ornamentais, emblema arcano central e silhueta gótica) e organização em duas colunas da ficha oficial de Egrégora.
+- Fichas dedicadas para **PNJ / Criatura** (`npc`) e **Veículo** (`vehicle`).
+- 10 tipos de itens (`skill`, `talent`, `quality`, `defect`, `gear`, `weapon`, `armor`, `spell`, `mutation`, `critical`) com criação automática das **12 Perícias oficiais de Egrégora**.
+- Motor de rolagem **Year Zero Engine (Pilha de Dados D6)** via YZUR com:
+  - **Forçar (Push)** no chat aplicando dano em **Saúde Física (PV)** ou **Poder Mental (PM)** e concedendo **+1 Força de Vontade** por falha crítica (e opcionalmente **+1 Ponto de Perdição** para o Narrador).
+  - **Dados de Corrupção (+1 PC por dado extra)**, **Teste de Contaminação**, estágios automáticos (*Puro / Manchado / Corrompido / Deformado / Besta das Sombras*) e **Tabelas D66 de Mutações** (*Leves, Notáveis e Aberrantes*).
+  - **Sistema de Magia** com os **6 Caminhos** (*Matéria, Fluxo, Mente, Vida, Ecos, Abismo*), combinação de Atributo + Caminhos (usando o menor nível em caminhos mistos), gasto de FV/PV/PM e **Qualidade de Sucessos (1 a 5+)**.
+  - **Teste de Medo**, **Tabela de Pânico (`1D6 + Corrupção`)**, **Trauma Mental Permanente**, **Tabela de Ferimentos Críticos (D66)** e **Danos Críticos em Veículos (D66)**.
+- Localização completa em **Português (Brasil)** (`pt-BR`) e **English** (`en`), com scripts de verificação (`scripts/check-i18n.mjs`) e empacotamento (`scripts/package-release.mjs`).

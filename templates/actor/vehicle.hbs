@@ -1,0 +1,65 @@
+<section class="eg-parchment-page eg-vehicle-page">
+  <header class="eg-paper-header">
+    <div class="eg-title-banner">
+      <img class="eg-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-action="editImage" data-edit="img" />
+      <div class="eg-logo-wrap">
+        <input type="text" class="eg-npc-name-input" name="name" value="{{actor.name}}" />
+        <input type="text" class="eg-npc-role-input" name="system.vehicleType" value="{{system.vehicleType}}" placeholder="{{localize 'EGREGORA.Vehicle.TypePlaceholder'}}" />
+      </div>
+    </div>
+  </header>
+
+  <section class="eg-box eg-ornate">
+    <h2 class="eg-box-title">{{localize "EGREGORA.Vehicle.Stats"}}</h2>
+    <div class="eg-form-grid-3">
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Vehicle.Hull"}}</span>
+        <div class="eg-inline-input-btn">
+          <input type="number" name="system.hull.value" value="{{system.hull.value}}" min="0" />
+          <span>/</span>
+          <input type="number" name="system.hull.max" value="{{system.hull.max}}" min="1" />
+        </div>
+      </label>
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Vehicle.Armor"}}</span>
+        <input type="number" name="system.armor" value="{{system.armor}}" min="0" />
+      </label>
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Vehicle.Maneuverability"}}</span>
+        <input type="number" name="system.maneuverability" value="{{system.maneuverability}}" />
+      </label>
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Vehicle.Damage"}}</span>
+        <input type="number" name="system.damage" value="{{system.damage}}" min="0" />
+      </label>
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Vehicle.Passengers"}}</span>
+        <input type="number" name="system.passengers" value="{{system.passengers}}" min="0" />
+      </label>
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Vehicle.Speed"}}</span>
+        <input type="text" name="system.speed" value="{{system.speed}}" />
+      </label>
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Vehicle.Altitude"}}</span>
+        <input type="number" name="system.altitude" value="{{system.altitude}}" min="0" />
+      </label>
+      <label class="eg-field eg-check-field">
+        <input type="checkbox" name="system.wrecked" {{checked system.wrecked}} />
+        <span>{{localize "EGREGORA.Vehicle.Wrecked"}}</span>
+      </label>
+    </div>
+
+    <div class="eg-action-grid" style="margin-top: 10px;">
+      <button type="button" class="eg-btn" data-action="rollVehicleDrive"><i class="fa-solid fa-steering-wheel"></i> {{localize "EGREGORA.Vehicle.Maneuver"}}</button>
+      <button type="button" class="eg-btn" data-action="rollVehicleRam"><i class="fa-solid fa-car-burst"></i> {{localize "EGREGORA.Vehicle.Ram"}}</button>
+      <button type="button" class="eg-btn" data-action="rollVehicleArmor"><i class="fa-solid fa-shield"></i> {{localize "EGREGORA.Vehicle.ArmorRoll"}}</button>
+      <button type="button" class="eg-btn eg-btn-crimson" data-action="rollVehicleCrit"><i class="fa-solid fa-wrench"></i> {{localize "EGREGORA.Vehicle.CritRoll"}}</button>
+    </div>
+  </section>
+
+  <section class="eg-box eg-ornate">
+    <h2 class="eg-box-title">{{localize "EGREGORA.Notes"}}</h2>
+    <prose-mirror name="system.notes" value="{{system.notes}}" document-uuid="{{actor.uuid}}" toggled {{#if editable}}editable{{/if}}>{{{enrichedNotes}}}</prose-mirror>
+  </section>
+</section>

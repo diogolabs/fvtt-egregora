@@ -1,0 +1,100 @@
+<section class="eg-tab-panel eg-parchment-page {{#if (eq activeTab 'biography')}}active{{/if}}" data-tab="biography">
+  <section class="eg-box eg-ornate">
+    <h2 class="eg-box-title">{{localize "EGREGORA.CharacterDetails"}}</h2>
+    <div class="eg-form-grid-2">
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Group.Label"}}</span>
+        <select name="system.groupType">
+          <option value="">—</option>
+          {{#each config.groupTypes as |labelKey key|}}
+            <option value="{{key}}" {{#if (eq ../system.groupType key)}}selected{{/if}}>{{localize labelKey}}</option>
+          {{/each}}
+        </select>
+      </label>
+
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Sect.Label"}}</span>
+        <select name="system.sect">
+          {{#each config.sects as |labelKey key|}}
+            <option value="{{key}}" {{#if (eq ../system.sect key)}}selected{{/if}}>{{localize labelKey}}</option>
+          {{/each}}
+        </select>
+      </label>
+
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Age.Label"}}</span>
+        <select name="system.ageBracket">
+          {{#each config.ageBrackets as |age key|}}
+            <option value="{{key}}" {{#if (eq ../system.ageBracket key)}}selected{{/if}}>{{localize age.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Age.Years"}}</span>
+        <input type="text" name="system.ageYears" value="{{system.ageYears}}" />
+      </label>
+
+      <label class="eg-field eg-span-2">
+        <span>{{localize "EGREGORA.Concept"}}</span>
+        <input type="text" name="system.concept" value="{{system.concept}}" placeholder="{{localize 'EGREGORA.ConceptPlaceholder'}}" />
+      </label>
+
+      <label class="eg-field eg-span-2">
+        <span>{{localize "EGREGORA.Tension"}}</span>
+        <input type="text" name="system.tension" value="{{system.tension}}" placeholder="{{localize 'EGREGORA.TensionPlaceholder'}}" />
+      </label>
+
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Resources"}}</span>
+        <div class="eg-inline-input-btn">
+          <input type="number" name="system.resources" value="{{system.resources}}" min="0" max="10" />
+          <button type="button" class="eg-mini-text-btn" data-action="rollResources">
+            <i class="fa-solid fa-dice"></i> {{localize "EGREGORA.Roll"}}
+          </button>
+        </div>
+      </label>
+
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Experience"}} (XP)</span>
+        <div class="eg-inline-input-btn">
+          <input type="number" name="system.experience.value" value="{{system.experience.value}}" min="0" title="{{localize 'EGREGORA.Available'}}" />
+          <span>/</span>
+          <input type="number" name="system.experience.total" value="{{system.experience.total}}" min="0" title="{{localize 'EGREGORA.Total'}}" />
+        </div>
+      </label>
+
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Trauma.PermanentTrauma"}}</span>
+        <input type="number" name="system.mental.permanentTrauma" value="{{system.mental.permanentTrauma}}" min="0" />
+      </label>
+
+      <label class="eg-field">
+        <span>{{localize "EGREGORA.Appearance"}}</span>
+        <input type="text" name="system.appearance" value="{{system.appearance}}" />
+      </label>
+    </div>
+  </section>
+
+  <section class="eg-box eg-ornate">
+    <h2 class="eg-box-title">{{localize "EGREGORA.Biography"}}</h2>
+    <prose-mirror
+      name="system.biography"
+      value="{{system.biography}}"
+      document-uuid="{{actor.uuid}}"
+      toggled
+      {{#if editable}}editable{{/if}}
+    >{{{enrichedBiography}}}</prose-mirror>
+  </section>
+
+  <section class="eg-box eg-ornate">
+    <h2 class="eg-box-title">{{localize "EGREGORA.Notes"}}</h2>
+    <prose-mirror
+      name="system.notes"
+      value="{{system.notes}}"
+      document-uuid="{{actor.uuid}}"
+      toggled
+      {{#if editable}}editable{{/if}}
+    >{{{enrichedNotes}}}</prose-mirror>
+  </section>
+</section>

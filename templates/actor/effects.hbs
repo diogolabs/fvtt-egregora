@@ -1,0 +1,26 @@
+<section class="eg-tab-panel eg-parchment-page {{#if (eq activeTab 'effects')}}active{{/if}}" data-tab="effects">
+  <section class="eg-box eg-ornate">
+    <div class="eg-box-header">
+      <h2 class="eg-box-title">{{localize "EGREGORA.Tabs.Effects"}}</h2>
+      <button type="button" class="eg-icon-btn" data-action="createEffect" title="{{localize 'EGREGORA.ActiveEffect.New'}}">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+
+    <ul class="eg-diamond-list">
+      {{#each effects as |eff|}}
+      <li class="eg-diamond-row {{#if eff.disabled}}is-disabled{{/if}}" data-effect-id="{{eff.id}}">
+        <img class="eg-effect-icon" src="{{eff.img}}" alt="{{eff.name}}" />
+        <span class="eg-row-label">{{eff.name}} {{#if eff.duration}}<small>({{eff.duration}})</small>{{/if}}</span>
+        <span class="eg-row-controls">
+          <button type="button" class="eg-row-ctrl" data-action="toggleEffect"><i class="fa-solid fa-power-off"></i></button>
+          <button type="button" class="eg-row-ctrl" data-action="editEffect"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" class="eg-row-ctrl" data-action="deleteEffect"><i class="fa-solid fa-trash"></i></button>
+        </span>
+      </li>
+      {{else}}
+      <li class="eg-empty-note">{{localize "EGREGORA.ActiveEffect.None"}}</li>
+      {{/each}}
+    </ul>
+  </section>
+</section>

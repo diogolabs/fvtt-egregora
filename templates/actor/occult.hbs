@@ -1,0 +1,125 @@
+<section class="eg-tab-panel eg-parchment-page {{#if (eq activeTab 'occult')}}active{{/if}}" data-tab="occult">
+  <!-- Ações Rápidas do Oculto, Horror e Corrupção -->
+  <section class="eg-box eg-ornate">
+    <h2 class="eg-box-title">{{localize "EGREGORA.OccultActions"}}</h2>
+    <div class="eg-action-grid">
+      <button type="button" class="eg-btn eg-btn-crimson" data-action="castMagicPath" data-path="echoes">
+        <i class="fa-solid fa-wand-sparkles"></i> {{localize "EGREGORA.Magic.Cast"}}
+      </button>
+      <button type="button" class="eg-btn" data-action="rollContamination">
+        <i class="fa-solid fa-biohazard"></i> {{localize "EGREGORA.Corruption.ContaminationTest"}}
+      </button>
+      <button type="button" class="eg-btn" data-action="rollHibernation">
+        <i class="fa-solid fa-moon"></i> {{localize "EGREGORA.Corruption.HibernationTest"}}
+      </button>
+      <button type="button" class="eg-btn" data-action="rollFear" data-attribute="intelligence">
+        <i class="fa-solid fa-ghost"></i> {{localize "EGREGORA.FearTestInt"}}
+      </button>
+      <button type="button" class="eg-btn" data-action="rollFear" data-attribute="empathy">
+        <i class="fa-solid fa-eye"></i> {{localize "EGREGORA.FearTestEmp"}}
+      </button>
+      <button type="button" class="eg-btn eg-btn-crimson" data-action="rollPanic">
+        <i class="fa-solid fa-brain"></i> {{localize "EGREGORA.Panic.TableTitle"}}
+      </button>
+      <button type="button" class="eg-btn" data-action="rollPermanentTrauma">
+        <i class="fa-solid fa-bolt"></i> {{localize "EGREGORA.Trauma.TraumaCheckShort"}}
+      </button>
+      <button type="button" class="eg-btn eg-btn-crimson" data-action="rollCritTable">
+        <i class="fa-solid fa-skull"></i> {{localize "EGREGORA.Critical.Roll"}}
+      </button>
+    </div>
+  </section>
+
+  <!-- Grimório / Feitiços -->
+  <section class="eg-box eg-ornate">
+    <div class="eg-box-header">
+      <h2 class="eg-box-title">{{localize "EGREGORA.Magic.Spells"}}</h2>
+      <button type="button" class="eg-icon-btn" data-action="createItem" data-type="spell" title="{{localize 'EGREGORA.AddSpell'}}">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+    <ul class="eg-diamond-list">
+      {{#each spells as |sp|}}
+      <li class="eg-diamond-row" data-item-id="{{sp.id}}">
+        <span class="eg-diamond">◇</span>
+        <button type="button" class="eg-row-label" data-action="rollItem">
+          <strong>{{sp.name}}</strong>
+          <span class="eg-inline-meta">
+            [{{localize (lookup ../config.magicPaths sp.system.primaryPath)}}{{#if sp.system.secondaryPath}} + {{localize (lookup ../config.magicPaths sp.system.secondaryPath)}}{{/if}} | Foco {{sp.system.requiredFocus}}]
+          </span>
+        </button>
+        <span class="eg-row-controls">
+          <button type="button" class="eg-row-ctrl" data-action="chatItem"><i class="fa-solid fa-comment"></i></button>
+          <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+        </span>
+      </li>
+      {{else}}
+      <li class="eg-empty-note">{{localize "EGREGORA.Magic.NoSpells"}}</li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <!-- Mutações da Corrupção -->
+  <section class="eg-box eg-ornate">
+    <div class="eg-box-header">
+      <h2 class="eg-box-title">{{localize "EGREGORA.Mutations"}}</h2>
+      <div class="eg-box-actions">
+        <button type="button" class="eg-mini-text-btn" data-action="rollMutation" data-tier="minor">4 PC</button>
+        <button type="button" class="eg-mini-text-btn" data-action="rollMutation" data-tier="notable">6 PC</button>
+        <button type="button" class="eg-mini-text-btn" data-action="rollMutation" data-tier="aberrant">8 PC</button>
+        <button type="button" class="eg-icon-btn" data-action="createItem" data-type="mutation"><i class="fa-solid fa-plus"></i></button>
+      </div>
+    </div>
+    <ul class="eg-diamond-list">
+      {{#each mutations as |m|}}
+      <li class="eg-diamond-row" data-item-id="{{m.id}}">
+        <span class="eg-diamond">◇</span>
+        <button type="button" class="eg-row-label" data-action="chatItem">
+          <strong>{{m.name}}</strong>
+          <span class="eg-inline-meta">({{localize (lookup ../config.mutationTiers m.system.tier)}})</span>
+          {{#if m.system.effect}}<span class="eg-inline-summary">— {{m.system.effect}}</span>{{/if}}
+        </button>
+        <span class="eg-row-controls">
+          <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+        </span>
+      </li>
+      {{else}}
+      <li class="eg-empty-note">{{localize "EGREGORA.Mutation.None"}}</li>
+      {{/each}}
+    </ul>
+  </section>
+
+  <!-- Ferimentos Críticos -->
+  <section class="eg-box eg-ornate">
+    <div class="eg-box-header">
+      <h2 class="eg-box-title">{{localize "EGREGORA.CriticalInjuries"}}</h2>
+      <div class="eg-box-actions">
+        <button type="button" class="eg-mini-text-btn" data-action="rollCritTable">D66</button>
+        <button type="button" class="eg-icon-btn" data-action="createItem" data-type="critical"><i class="fa-solid fa-plus"></i></button>
+      </div>
+    </div>
+    <ul class="eg-diamond-list">
+      {{#each criticals as |c|}}
+      <li class="eg-diamond-row" data-item-id="{{c.id}}">
+        <span class="eg-diamond">◇</span>
+        <button type="button" class="eg-row-label" data-action="chatItem">
+          <strong>{{c.name}}</strong>
+          {{#if c.system.lethal}}<span class="eg-tag-danger">{{localize "EGREGORA.Critical.Lethal"}} ({{c.system.timeLimit}})</span>{{/if}}
+          {{#if c.system.effect}}<span class="eg-inline-summary">— {{c.system.effect}}</span>{{/if}}
+        </button>
+        <span class="eg-row-controls">
+          <button type="button" class="eg-row-ctrl" data-action="toggleItemBool" data-field="system.stabilized" title="{{localize 'EGREGORA.Critical.Stabilized'}}">
+            <i class="fa-solid {{#if c.system.stabilized}}fa-check-double{{else}}fa-kit-medical{{/if}}"></i>
+          </button>
+          <button type="button" class="eg-row-ctrl" data-action="editItem"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" class="eg-row-ctrl" data-action="deleteItem"><i class="fa-solid fa-trash"></i></button>
+        </span>
+      </li>
+      {{else}}
+      <li class="eg-empty-note">{{localize "EGREGORA.Critical.None"}}</li>
+      {{/each}}
+    </ul>
+  </section>
+</section>

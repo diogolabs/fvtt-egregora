@@ -1,0 +1,545 @@
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Desperto",
+      "npc": "PNJ / Criatura",
+      "vehicle": "Veículo"
+    },
+    "Item": {
+      "skill": "Perícia",
+      "talent": "Talento",
+      "quality": "Qualidade",
+      "defect": "Defeito",
+      "gear": "Item Útil",
+      "weapon": "Arma",
+      "armor": "Armadura",
+      "spell": "Feitiço",
+      "mutation": "Mutação",
+      "critical": "Ferimento Crítico"
+    }
+  },
+  "YZUR": {
+    "DIETERMS": {
+      "BaseDie": "Dados Base",
+      "SkillDie": "Dados de Perícia",
+      "GearDie": "Dados de Equipamento",
+      "CorruptionDie": "Dados de Corrupção",
+      "NegativeDie": "Dados Negativos"
+    }
+  },
+  "EGREGORA": {
+    "Subtitle": "O Mundo Oculto",
+    "Sheet": {
+      "Actor": "Ficha de Egrégora",
+      "Item": "Ficha de Item de Egrégora"
+    },
+    "Tabs": {
+      "Sheet": "Ficha",
+      "Occult": "Oculto & Magia",
+      "Biography": "Biografia",
+      "Effects": "Efeitos"
+    },
+    "Settings": {
+      "autoSeedCoreSkills": {
+        "name": "Criar automaticamente as 12 Perícias de Egrégora",
+        "hint": "Adiciona automaticamente as 12 perícias oficiais de Egrégora ao criar novos Despertos e PNJs."
+      },
+      "enableDoomPoints": {
+        "name": "Usar Pontos de Perdição (Regra Opcional)",
+        "hint": "Quando ativado, cada rolagem forçada concede +1 Ponto de Perdição para o Narrador."
+      },
+      "doomPoints": {
+        "name": "Pontos de Perdição Atuais",
+        "hint": "Reserva atual de Pontos de Perdição do Narrador."
+      }
+    },
+    "Status": {
+      "broken": "Quebrado",
+      "collapse": "Em Colapso",
+      "terrified": "Aterrorizado",
+      "stunned": "Atordoado",
+      "prone": "Caído",
+      "grappled": "Imobilizado"
+    },
+    "Name": "Nome",
+    "Player": "Jogador",
+    "Attributes": "Atributos",
+    "Attribute": {
+      "Label": "Atributo",
+      "strength": "Força",
+      "agility": "Agilidade",
+      "intelligence": "Inteligência",
+      "empathy": "Empatia"
+    },
+    "AttributeAbbr": {
+      "strength": "FOR",
+      "agility": "AGI",
+      "intelligence": "INT",
+      "empathy": "EMP"
+    },
+    "StatusAndConditions": "Status & Condições",
+    "Health": "Saúde Física",
+    "HealthShort": "PV",
+    "Mental": "Poder Mental",
+    "MentalShort": "PM",
+    "Willpower": "Força de Vontade",
+    "WillpowerShort": "FV",
+    "Skills": "Perícias",
+    "Skill": {
+      "potency": "Potência",
+      "melee": "Combate Corpo a Corpo",
+      "endurance": "Resistência",
+      "ranged": "Combate à Distância",
+      "movement": "Movimento",
+      "stealth": "Furtividade",
+      "erudition": "Erudição",
+      "observation": "Observação",
+      "survival": "Sobrevivência",
+      "healing": "Cura",
+      "intuition": "Intuição",
+      "persuasion": "Persuasão"
+    },
+    "Talents": "Talentos",
+    "TraitsAndMagic": "Traços e Magia",
+    "Traits": {
+      "Pride": "Orgulho",
+      "PrideUsed": "Orgulho já usado nesta sessão",
+      "UsePride": "Usar Orgulho",
+      "DarkSecret": "Segredo Sombrio",
+      "BigDream": "Grande Sonho",
+      "Weakness": "Fraqueza"
+    },
+    "Anchor": "Âncora",
+    "AnchorPlaceholder": "Objeto, pessoa, lugar, crença ou pacto que te liga à realidade...",
+    "Tension": "Tensão",
+    "TensionPlaceholder": "Ex: Instinto vs Controle, Fé vs Liberdade...",
+    "Qualities": "Qualidades",
+    "Defects": "Defeitos",
+    "UsefulItems": "Item Útil",
+    "Weapons": "Armas",
+    "Armors": "Armaduras",
+    "Equipment": "Equipamento",
+    "Damage": "Dano",
+    "DamageShort": "Dano",
+    "Bonus": "Bônus",
+    "BonusShort": "Bônus",
+    "ProtShort": "Prot",
+    "AgiShort": "Agi",
+    "Durability": "Durabilidade",
+    "DurabilityShort": "DUR",
+    "Value": "Valor",
+    "Quantity": "Quantidade",
+    "Usage": "Uso",
+    "Ammo": "Munição",
+    "IsRelic": "Relíquia Mágica",
+    "Equipped": "Equipada",
+    "Effect": "Efeito",
+    "Cost": "Custo",
+    "Summary": "Resumo",
+    "Description": "Descrição",
+    "Category": "Categoria",
+    "Points": "Pontos",
+    "Level": "Nível",
+    "Rank": "Grau",
+    "KeySkill": "Perícia-Chave",
+    "WillpowerCost": "Custo de FV",
+    "CorruptionCost": "Corrupção Gerada (PC)",
+    "AssociatedSkill": "Perícia Associada",
+    "Modifier": "Modificador",
+    "Help": "Ajuda",
+    "Allies": "Aliados",
+    "AimedShot": "Mirar",
+    "Success": "Sucesso",
+    "Used": "Usado",
+    "Yes": "Sim",
+    "New": "Novo",
+    "Edit": "Editar",
+    "Delete": "Excluir",
+    "Roll": "Rolar",
+    "RollGM": "Rolar p/ Narrador",
+    "RollAttribute": "Rolar Atributo",
+    "RollSkill": "Rolar Perícia",
+    "AttackRoll": "Rolar Ataque",
+    "SendToChat": "Enviar ao Chat",
+    "EditPortrait": "Alterar Imagem",
+    "SeedCoreSkills": "Preencher as 12 Perícias Oficiais",
+    "AddSkill": "Adicionar Perícia",
+    "AddTalent": "Adicionar Talento",
+    "AddQuality": "Adicionar Qualidade",
+    "AddDefect": "Adicionar Defeito",
+    "AddGear": "Adicionar Item Útil",
+    "AddWeapon": "Adicionar Arma",
+    "AddArmor": "Adicionar Armadura",
+    "AddSpell": "Adicionar Feitiço",
+    "Broken": "Quebrado",
+    "DoomPoint": "Ponto de Perdição",
+    "DoomPointsShort": "Perdição",
+    "OccultActions": "Ações do Oculto, Horror e Sobrevivência",
+    "CharacterDetails": "Identidade do Desperto",
+    "Concept": "Conceito",
+    "ConceptPlaceholder": "Sou um ___ que busca ___, mas está preso a ___.",
+    "Resources": "Recursos",
+    "ResourcesRoll": "Teste de Recursos",
+    "Experience": "Experiência",
+    "Available": "Disponível",
+    "Total": "Total",
+    "Appearance": "Aparência & Manifestação",
+    "Biography": "Biografia",
+    "Notes": "Anotações",
+    "FearTest": "Teste de Medo",
+    "FearTestInt": "Teste de Medo (INT)",
+    "FearTestEmp": "Teste de Medo (EMP)",
+    "Mutations": "Mutações da Corrupção",
+    "CriticalInjuries": "Ferimentos Críticos",
+    "Archetype": {
+      "Label": "Arquétipo",
+      "religiousLeader": "Líder Religioso",
+      "artist": "Artista",
+      "combatant": "Combatente",
+      "occultist": "Ocultista / Sacerdote Pagão",
+      "academic": "Acadêmico",
+      "investigator": "Investigador Profissional",
+      "politician": "Político",
+      "beggar": "Mendigo",
+      "medic": "Médico / Enfermeiro",
+      "criminal": "Criminoso"
+    },
+    "Group": {
+      "Label": "Grupo",
+      "veilOperatives": "Operativos do Véu",
+      "contractHunters": "Caçadores do Contrato",
+      "occultCartographers": "Cartógrafos do Oculto",
+      "cultists": "Cultistas",
+      "veilRenegades": "Renegados do Véu",
+      "underworldMerchants": "Mercadores do Submundo",
+      "dormantLegacy": "Legado Adormecido"
+    },
+    "Sect": {
+      "Label": "Seita / Ordem",
+      "none": "Independente",
+      "veiledDawn": "Aurora Velada",
+      "brotherhoodSaintVictor": "Confraria de São Vitor",
+      "saltAndIron": "Irmandade do Sal e Ferro",
+      "blackRoseCircle": "Círculo da Rosa Negra",
+      "greenConsortium": "Consórcio Verde",
+      "brokenAxisOrder": "Ordem do Eixo Quebrado"
+    },
+    "Age": {
+      "Label": "Faixa Etária",
+      "Years": "Idade (Anos)",
+      "young": "Jovem (14–25) • 14 Atrib / 10 Per",
+      "adult": "Adulto (26–50) • 12 Atrib / 12 Per",
+      "elder": "Velho (51+) • 10 Atrib / 14 Per"
+    },
+    "Talent": {
+      "Category": {
+        "archetype": "Arquétipo",
+        "group": "Grupo",
+        "general": "Geral",
+        "exclusive": "Exclusivo (Egrégora)",
+        "supernatural": "Poder Sobrenatural"
+      }
+    },
+    "TraitCategory": {
+      "supernatural": "Sobrenatural",
+      "physical": "Física",
+      "mental": "Mental",
+      "occult": "Oculta",
+      "social": "Social"
+    },
+    "Range": {
+      "Label": "Alcance",
+      "engaged": "Corpo a Corpo",
+      "short": "Curto",
+      "medium": "Médio",
+      "long": "Longo",
+      "extreme": "Extremo"
+    },
+    "Difficulty": {
+      "Label": "Dificuldade",
+      "easy": "Fácil",
+      "average": "Normal",
+      "demanding": "Exigente",
+      "hard": "Difícil",
+      "formidable": "Formidável"
+    },
+    "Armor": {
+      "Protection": "Proteção",
+      "Penalty": "Penalidade de Agilidade",
+      "Roll": "Rolagem de Proteção"
+    },
+    "Corruption": {
+      "Label": "Corrupção",
+      "Added": "Corrupção Adquirida",
+      "ContaminationTest": "Teste de Contaminação",
+      "ContaminationFailTitle": "Contaminação Manifestada!",
+      "ContaminationFailText": "A mácula astral irrompe: o personagem perde uma ação, age de forma agressiva por uma cena ou manifesta um fenômeno sobrenatural instável.",
+      "ContaminationSafeTitle": "Controle Mantido",
+      "ContaminationSafeText": "Você consegue conter o avanço da corrupção por enquanto.",
+      "HibernationTest": "Teste de Hibernação (INT + EMP)",
+      "Stage": {
+        "pure": "Puro",
+        "tainted": "Manchado",
+        "corrupted": "Corrompido",
+        "deformed": "Deformado",
+        "shadowBeast": "Besta das Sombras"
+      }
+    },
+    "Magic": {
+      "PathsTitle": "Caminhos de Magia",
+      "AptitudeShort": "Aptidão",
+      "FocusPoints": "Pontos de Focus distribuídos / máximo",
+      "Cast": "Conjurar Magia",
+      "Spells": "Grimório & Feitiços",
+      "NoSpells": "Nenhum feitiço registrado no grimório.",
+      "SpellName": "Nome / Intenção do Feitiço",
+      "FreeformPlaceholder": "Conjuração livre ou ritual...",
+      "PrimaryPath": "Caminho Principal",
+      "SecondaryPath": "Caminho Secundário (Misto)",
+      "EffectivePath": "Caminho Efetivo",
+      "RequiredFocus": "Foco Necessário",
+      "InGrimoire": "No Grimório (−1 FV, mín. 1)",
+      "DirectDamage": "Magia de Dano Direto",
+      "IgnoresArmor": "Ignora armadura comum",
+      "CostSource": "Custo Pago Com",
+      "CostAmount": "Pontos Gastos",
+      "FetishBonus": "Bônus de Foco / Fetiche",
+      "TotalDice": "Pilha de Conjuração",
+      "CostPool": {
+        "willpower": "Força de Vontade (FV)",
+        "mental": "Poder Mental (PM)",
+        "health": "Saúde Física (PV)"
+      },
+      "Aptitude": {
+        "0": "Sem Aptidão",
+        "1": "Nível 1 — Sensível ao Véu",
+        "2": "Nível 2 — Condutor do Invisível",
+        "3": "Nível 3 — Impositor de Realidade"
+      },
+      "Path": {
+        "matter": "Matéria",
+        "flux": "Fluxo",
+        "mind": "Mente",
+        "life": "Vida",
+        "echoes": "Ecos",
+        "abyss": "Abismo"
+      },
+      "Quality": {
+        "s1": {
+          "title": "1 Sucesso — Manifestação Instável",
+          "desc": "A magia ocorre no limite mínimo. Alcance curto, efeito fugaz ou deixa rastros óbvios."
+        },
+        "s2": {
+          "title": "2 Sucessos — Efeito Refinado",
+          "desc": "Controle sólido. Escolha: +1 Dano, dobrar a Duração ou atingir 1 Alvo Adicional."
+        },
+        "s3": {
+          "title": "3 Sucessos — Potência Significativa",
+          "desc": "A magia se impõe à realidade imediatamente; pode causar efeitos críticos ou alterar a matéria de forma estável."
+        },
+        "s4": {
+          "title": "4 Sucessos — Feito Dramático",
+          "desc": "O efeito é assustador, pode cobrir toda a zona e provocar Teste de Medo em observadores."
+        },
+        "s5": {
+          "title": "5+ Sucessos — Transposição de Limite",
+          "desc": "O efeito reescreve as leis locais de forma quase permanente ou em escala massiva."
+        }
+      }
+    },
+    "Trauma": {
+      "PermanentTrauma": "Trauma Mental Permanente (−PM Máx)",
+      "TraumaCheckTitle": "Teste de Trauma Mental Permanente",
+      "TraumaCheckShort": "Trauma Permanente",
+      "TraumaSufferedTitle": "Trauma Permanente Sofrido!",
+      "TraumaSufferedText": "Resultado 1: seu Poder Mental máximo foi reduzido permanentemente em 1. Se chegar a 0, o personagem sucumbe à Loucura.",
+      "TraumaAvoidedTitle": "Mente Preservada",
+      "TraumaAvoidedText": "Você sobrevive ao colapso sem reduzir seu Poder Mental máximo."
+    },
+    "Panic": {
+      "TableTitle": "Tabela de Pânico"
+    },
+    "Mutation": {
+      "TableTitle": "Mutação da Corrupção",
+      "TierLabel": "Estágio da Mutação",
+      "None": "Nenhuma mutação manifestada.",
+      "Tier": {
+        "minor": "Leve (4 PC)",
+        "notable": "Notável (6 PC)",
+        "aberrant": "Aberrante (8 PC)"
+      }
+    },
+    "Critical": {
+      "TableTitle": "Tabela de Ferimentos Críticos",
+      "Roll": "Ferimento Crítico (D66)",
+      "Lethal": "Letal",
+      "Stabilized": "Estabilizado",
+      "TimeLimit": "Limite de Tempo",
+      "HealingTime": "Tempo de Cura",
+      "HealMod": "Mod. de Cura",
+      "None": "Nenhum ferimento crítico ativo."
+    },
+    "NPC": {
+      "RolePlaceholder": "Tipo de criatura ou papel (ex: Cultista, Fantasma, Egrégora)...",
+      "FearRating": "Valor de Medo"
+    },
+    "Vehicle": {
+      "TypePlaceholder": "Tipo de veículo (ex: Carro, Blindado, Helicóptero)...",
+      "Stats": "Atributos do Veículo",
+      "Hull": "Casco",
+      "Armor": "Blindagem",
+      "Maneuverability": "Manobrabilidade",
+      "Damage": "Dano de Impacto",
+      "Passengers": "Passageiros",
+      "Speed": "Velocidade",
+      "Altitude": "Altitude (Zonas)",
+      "Wrecked": "Destruído / Inoperante",
+      "Maneuver": "Manobra",
+      "Ram": "Abalroamento",
+      "ArmorRoll": "Rolar Blindagem",
+      "CritRoll": "Dano Crítico (D66)",
+      "CritTableTitle": "Danos Críticos em Veículos"
+    },
+    "ActiveEffect": {
+      "New": "Novo Efeito",
+      "None": "Nenhum efeito ativo."
+    },
+    "RollDialog": {
+      "Title": "Teste de Egrégora",
+      "DicePool": "Pilha de Dados",
+      "Base": "Base",
+      "Skill": "Perícia",
+      "Gear": "Equip.",
+      "CorruptionDice": "Dados de Corrupção (+1 PC cada)",
+      "NoPush": "Rolagem Passiva (Sem Forçar)",
+      "ActorBrokenConfirm": "{name} está Quebrado (0 PV ou 0 PM). Deseja rolar mesmo assim?"
+    },
+    "Chat": {
+      "Successes": "Sucessos",
+      "CriticalFailure": "Falha Crítica!",
+      "Push": "Forçar Teste",
+      "Accept": "Aceitar",
+      "ApplyDamage": "Aplicar Dano",
+      "Banes": "Falhas Críticas (1s Base)",
+      "GearDamage": "Desgaste de Equipamento",
+      "PushCost": "Custo de Forçar"
+    },
+    "Notifications": {
+      "NoDiceToRoll": "Não há dados disponíveis para esta rolagem.",
+      "NotEnoughWillpower": "Força de Vontade insuficiente.",
+      "NoCorruption": "Este personagem possui 0 Pontos de Corrupção.",
+      "SelectTargetToken": "Selecione ao menos um token alvo no mapa.",
+      "AppliedDamage": "Dano aplicado: {dmg}.",
+      "MacroOwnedItemsOnly": "Apenas itens pertencentes a um personagem podem virar macro.",
+      "CorruptionMutationMilestone": "Corrupção atingiu {pc} PC! Role uma Mutação da Corrupção.",
+      "ShadowBeastReached": "10 PC — BESTA DAS SOMBRAS! O personagem foi completamente consumido pela Corrupção."
+    },
+    "Tables": {
+      "Panic": {
+        "r6": { "title": "Manter o Controle", "effect": "Você segura os nervos, mas sente o peso do Véu. Sem efeito extra." },
+        "r7": { "title": "Tique Nervoso", "effect": "A ansiedade é contagiante. Todos os aliados em alcance Perto perdem 1 PM imediatamente." },
+        "r8": { "title": "Tremor Astral", "effect": "Suas mãos tremem ao sentir a ressonância. Todos os testes de Agilidade e Combate sofrem −2 dados." },
+        "r9": { "title": "Derrubar Relíquia / Item", "effect": "No susto, você deixa cair sua arma ou Âncora. O Narrador decide qual." },
+        "r10": { "title": "Congelar (Estase)", "effect": "Você fica paralisado pelo horror, perdendo seu próximo turno." },
+        "r11": { "title": "Buscar Refúgio", "effect": "Você deve usar sua próxima ação para fugir do perigo ou se esconder." },
+        "r12": { "title": "Grito de Ressonância", "effect": "Você perde 1 PM extra e cada aliado que ouvir deve fazer um Teste de Medo imediato." },
+        "r13": { "title": "Fuga Alucinada", "effect": "Você foge para um local seguro e se recusa a sair. Perde 1 PM." },
+        "r14": { "title": "Surto Violento (Berserk)", "effect": "Você deve atacar a pessoa ou criatura mais próxima (aliada ou não) até alguém ficar Quebrado." },
+        "r15": { "title": "Colapso Catatônico", "effect": "Você desaba quebrado mentalmente. Role imediatamente o Teste de Trauma Mental Permanente." }
+      },
+      "Mutations": {
+        "minor": {
+          "m11": { "name": "Vozes Sussurrantes", "effect": "Recebe pistas ocasionais do Narrador", "cost": "Pode se distrair" },
+          "m14": { "name": "Respiração Profana", "effect": "+1 Intimidação", "cost": "Animais reagem mal a você" },
+          "m22": { "name": "Passo Silencioso", "effect": "+1 Furtividade", "cost": "Assusta aliados sem querer" },
+          "m24": { "name": "Pulso Instável", "effect": "+1 Iniciativa", "cost": "Tremores em movimentos calmos" },
+          "m31": { "name": "Sombra Autônoma", "effect": "+1 Furtividade em sombras", "cost": "Pode denunciar sua presença" },
+          "m34": { "name": "Antipatia", "effect": "+1 Resistência Mental", "cost": "−2 Empatia" },
+          "m41": { "name": "Sangue Escuro", "effect": "+1 contra venenos e doenças", "cost": "Cura no dobro do tempo" },
+          "m44": { "name": "Olhos Brancos", "effect": "+1 Percepção Espiritual", "cost": "Assusta pessoas automaticamente" },
+          "m51": { "name": "Reflexos Afiados", "effect": "+1 Esquiva", "cost": "Dificuldade em ações de precisão" },
+          "m61": { "name": "Toque Frio", "effect": "+1 Intimidação", "cost": "Contato físico desconfortável" },
+          "m64": { "name": "Veias Escuras Visíveis", "effect": "+1 em testes de magia", "cost": "Facilmente identificado como corrompido" },
+          "m65": { "name": "Obsessão Latente", "effect": "+2 em um foco específico", "cost": "Ignora outros assuntos" },
+          "m66": { "name": "Olhar do Abismo", "effect": "+1 Percepção Sobrenatural", "cost": "Às vezes vê coisas que não existem" }
+        },
+        "notable": {
+          "n11": { "name": "Instinto Predador", "effect": "+1 ataque contra alvos feridos", "cost": "Impulso de matar vítimas indefesas" },
+          "n14": { "name": "Aura Densa", "effect": "+1 Intimidação", "cost": "Aliados ficam desconfortáveis" },
+          "n22": { "name": "Memórias Fragmentadas", "effect": "+1 Erudição", "cost": "Confusão ocasional" },
+          "n24": { "name": "Olhos do Tempo", "effect": "+1 Reação", "cost": "Visões temporais confusas" },
+          "n31": { "name": "Fome do Vazio", "effect": "+1 recuperação ao agir", "cost": "Necessidade constante de satisfazer impulsos" },
+          "n34": { "name": "Garras Ocultas", "effect": "+1 dano desarmado", "cost": "Surgem involuntariamente (par/ímpar por cena)" },
+          "n41": { "name": "Voz Ecoante", "effect": "+1 Persuasão ou Intimidação", "cost": "Voz inumana" },
+          "n44": { "name": "Olfato Aguçado", "effect": "+1 Rastreamento", "cost": "Cheiros intensos incomodam" },
+          "n51": { "name": "Cheiro Horrível", "effect": "+1 Resistência", "cost": "Afasta pessoas" },
+          "n61": { "name": "Flexibilidade Anormal", "effect": "+1 Acrobacia e Fuga", "cost": "Aparência perturbadora (−1 Empatia)" },
+          "n64": { "name": "Cicatrização Estranha", "effect": "Recupera-se na metade do tempo", "cost": "Marcas grotescas (−2 Empatia)" },
+          "n65": { "name": "Pele de Cinza", "effect": "+1 Resistência", "cost": "Aparência cadavérica (−2 Empatia)" }
+        },
+        "aberrant": {
+          "a11": { "name": "Aura de Frio", "effect": "+1 Controle Emocional", "cost": "Plantas murcham ao redor" },
+          "a14": { "name": "Olhar Hipnótico", "effect": "+1 Persuasão", "cost": "Atrai atenção indesejada" },
+          "a22": { "name": "Presença Antinatural", "effect": "+1 Intimidação", "cost": "PNJs evitam você" },
+          "a24": { "name": "Energia Instável", "effect": "+1 Foco", "cost": "Poderes ativam sem controle" },
+          "a31": { "name": "Bocarra com Presas", "effect": "+2 Dano", "cost": "A face age sozinha (−3 Empatia)" },
+          "a34": { "name": "Atração Sombria", "effect": "+1 Invocação e interação com entidades", "cost": "Entidades se aproximam espontaneamente" },
+          "a41": { "name": "Corpo Etéreo Parcial", "effect": "+1 Evasão", "cost": "Perde controle da própria materialidade" },
+          "a44": { "name": "Chifres", "effect": "+2 Dano em cabeçadas", "cost": "Pessoas fogem de você" },
+          "a51": { "name": "Voz de Comando", "effect": "+1 Liderança", "cost": "Torna-se excessivamente autoritário" },
+          "a61": { "name": "Forma Instável", "effect": "+1 Adaptação", "cost": "Corpo se deforma constantemente" },
+          "a64": { "name": "Cabeça Nasce no Ombro", "effect": "+1 Inteligência", "cost": "Todos fogem (−3 Furtividade)" },
+          "a66": { "name": "Avatar da Fenda", "effect": "+2 ações sobrenaturais", "cost": "Teste Inteligência ou perde completamente o controle" }
+        }
+      },
+      "Critical": {
+        "11": { "name": "Desmaio por Falta de Ar", "effect": "Atordoado por um turno." },
+        "12": { "name": "Desorientado", "effect": "Atordoado por um turno." },
+        "13": { "name": "Torção no Pulso", "effect": "Solta o item que segura. −1 em Combate à Distância e Corpo a Corpo." },
+        "14": { "name": "Torção no Tornozelo", "effect": "Cai no chão; −1 em Agilidade e Furtividade." },
+        "15": { "name": "Concussão", "effect": "Atordoado por um turno. −1 em todas as perícias." },
+        "16": { "name": "Perna Machucada", "effect": "Cai no chão; −1 em Agilidade e Furtividade." },
+        "21": { "name": "Nariz Quebrado", "effect": "Atordoado por um turno. −2 em Persuasão." },
+        "22": { "name": "Dedos Quebrados", "effect": "Solta o item que segura. −2 em Combate à Distância e Corpo a Corpo." },
+        "23": { "name": "Dedos do Pé Quebrados", "effect": "Atordoado por um turno. −2 em Agilidade e Furtividade." },
+        "24": { "name": "Dentes Arrancados", "effect": "Atordoado por um turno. −2 em Persuasão." },
+        "25": { "name": "Golpe na Virilha", "effect": "Atordoado por dois turnos. 1 ponto de dano por teste de Força, Agilidade ou Corpo a Corpo." },
+        "26": { "name": "Ombro Deslocado", "effect": "Atordoado por um turno. −3 em Força e Combate Corpo a Corpo." },
+        "31": { "name": "Costelas Quebradas", "effect": "Atordoado por um turno. −2 em Agilidade e Combate Corpo a Corpo." },
+        "32": { "name": "Braço Quebrado", "effect": "Atordoado por um turno. −3 em Combate à Distância e Corpo a Corpo." },
+        "33": { "name": "Perna Quebrada", "effect": "Cai; movimento reduzido pela metade e −2 em Agilidade e Furtividade." },
+        "34": { "name": "Orelha Dilacerada", "effect": "Atordoado por um turno e −2 em Observação. Cicatriz permanente." },
+        "35": { "name": "Rótula Quebrada", "effect": "O movimento torna-se uma ação lenta." },
+        "36": { "name": "Pulmão Perfurado", "effect": "Letal (D6 dias). Atordoado por um turno. −3 em Agilidade." },
+        "41": { "name": "Rim Lacerado", "effect": "Letal (D6 dias). Atordoado por dois turnos. 1 de dano por teste de Força, Agilidade ou Corpo a Corpo." },
+        "42": { "name": "Pé Esmagado", "effect": "Letal (D6 dias). Cai no chão, movimento pela metade e −3 em Agilidade e Furtividade." },
+        "43": { "name": "Cotovelo Esmagado", "effect": "Letal (D6 dias). Atordoado 1 turno, −2 Força/Corpo a Corpo; não usa armas de 2 mãos." },
+        "44": { "name": "Joelho Esmagado", "effect": "Letal (D6 horas). Cai, movimento pela metade e −3 em Agilidade e Furtividade." },
+        "45": { "name": "Rosto Esmagado", "effect": "Letal (D6 horas). Inconsciente por D6 horas. −2 em Persuasão." },
+        "46": { "name": "Intestinos Perfurados", "effect": "Letal (D6 horas). 1 ponto de dano por hora até primeiros socorros." },
+        "51": { "name": "Coluna Quebrada", "effect": "Letal (D6 horas). Inconsciente D6 horas; paralisia da cintura para baixo." },
+        "52": { "name": "Pescoço Quebrado", "effect": "Letal (D6 horas). Inconsciente D6 horas; paralisia do pescoço para baixo." },
+        "53": { "name": "Intestino Sangrando", "effect": "Letal (D6 minutos). 1 ponto de dano por turno até primeiros socorros." },
+        "54": { "name": "Hemorragia Interna", "effect": "Letal (−1 Cura, D6 minutos). Inconsciente D6 horas; 1 de dano por teste físico." },
+        "55": { "name": "Artéria Rompida (Braço)", "effect": "Letal (−1 Cura, D6 minutos). Inconsciente D6 horas. −1 em Agilidade." },
+        "56": { "name": "Artéria Rompida (Perna)", "effect": "Letal (−1 Cura, D6 minutos). Inconsciente 6 horas. −2 em Agilidade." },
+        "61": { "name": "Braço Destruído", "effect": "Letal (−1 Cura, D6 minutos). Braço perdido permanentemente; −2 Agilidade; sem armas de 2 mãos." },
+        "65": { "name": "Morte Instantânea", "effect": "A Entidade da morte veio buscá-lo. É hora de criar um novo personagem." }
+      },
+      "VehicleCrit": {
+        "v11": { "name": "Ricochete", "effect": "O ataque ricocheteia no veículo e atinge outro alvo aleatório na mesma zona com o mesmo dano." },
+        "v14": { "name": "Derrapagem", "effect": "Motorista testa Movimento imediatamente; falha perde a próxima ação lenta." },
+        "v21": { "name": "Para-brisa Estilhaçado", "effect": "Visibilidade comprometida: Manobrabilidade reduzida em −1." },
+        "v24": { "name": "Motorista Atingido", "effect": "O motorista sofre dano igual ao dano infligido ao veículo." },
+        "v31": { "name": "Passageiro Atingido", "effect": "Um passageiro aleatório sofre o mesmo dano que o veículo e um ferimento crítico." },
+        "v34": { "name": "Pneu / Roda Destruída", "effect": "Penalidade de −2 em todos os testes de condução." },
+        "v41": { "name": "Giro Severo", "effect": "Motorista testa Movimento; falha capota/destrói o veículo (aéreos caem sofrendo D3 + altitude)." },
+        "v44": { "name": "Incêndio no Combustível", "effect": "Todos no interior sofrem Fogo de Intensidade 6 a cada rodada." },
+        "v51": { "name": "Armamento Desativado", "effect": "Uma arma montada é destruída (ou role novamente se não houver)." },
+        "v54": { "name": "Colisão Massiva", "effect": "Veículo destruído; ocupantes sofrem D6 + altitude em dano." },
+        "v61": { "name": "Motor Desativado", "effect": "O veículo não pode mais se mover (aeronaves podem tentar pouso controlado)." },
+        "v64": { "name": "Explosão", "effect": "O veículo explode: todos no interior sofrem Explosão de Poder 9 e a máquina é irrecuperável." }
+      }
+    }
+  }
+}

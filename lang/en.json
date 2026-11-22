@@ -1,0 +1,545 @@
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Awakened",
+      "npc": "NPC / Creature",
+      "vehicle": "Vehicle"
+    },
+    "Item": {
+      "skill": "Skill",
+      "talent": "Talent",
+      "quality": "Quality",
+      "defect": "Defect",
+      "gear": "Useful Item",
+      "weapon": "Weapon",
+      "armor": "Armor",
+      "spell": "Spell",
+      "mutation": "Mutation",
+      "critical": "Critical Injury"
+    }
+  },
+  "YZUR": {
+    "DIETERMS": {
+      "BaseDie": "Base Dice",
+      "SkillDie": "Skill Dice",
+      "GearDie": "Gear Dice",
+      "CorruptionDie": "Corruption Dice",
+      "NegativeDie": "Negative Dice"
+    }
+  },
+  "EGREGORA": {
+    "Subtitle": "The Occult World",
+    "Sheet": {
+      "Actor": "Egrégora Actor Sheet",
+      "Item": "Egrégora Item Sheet"
+    },
+    "Tabs": {
+      "Sheet": "Sheet",
+      "Occult": "Occult & Magic",
+      "Biography": "Biography",
+      "Effects": "Effects"
+    },
+    "Settings": {
+      "autoSeedCoreSkills": {
+        "name": "Auto-seed the 12 Official Egrégora Skills",
+        "hint": "Automatically adds the 12 core Egrégora skills when creating new Awakened characters and NPCs."
+      },
+      "enableDoomPoints": {
+        "name": "Enable Doom Points (Optional Rule)",
+        "hint": "When enabled, pushing a roll grants +1 Doom Point to the Narrator."
+      },
+      "doomPoints": {
+        "name": "Current Doom Points",
+        "hint": "Current Narrator Doom Points pool."
+      }
+    },
+    "Status": {
+      "broken": "Broken",
+      "collapse": "Collapsed",
+      "terrified": "Terrified",
+      "stunned": "Stunned",
+      "prone": "Prone",
+      "grappled": "Grappled"
+    },
+    "Name": "Name",
+    "Player": "Player",
+    "Attributes": "Attributes",
+    "Attribute": {
+      "Label": "Attribute",
+      "strength": "Strength",
+      "agility": "Agility",
+      "intelligence": "Intelligence",
+      "empathy": "Empathy"
+    },
+    "AttributeAbbr": {
+      "strength": "STR",
+      "agility": "AGI",
+      "intelligence": "INT",
+      "empathy": "EMP"
+    },
+    "StatusAndConditions": "Status & Conditions",
+    "Health": "Physical Health",
+    "HealthShort": "HP",
+    "Mental": "Mental Power",
+    "MentalShort": "MP",
+    "Willpower": "Willpower",
+    "WillpowerShort": "WP",
+    "Skills": "Skills",
+    "Skill": {
+      "potency": "Potency",
+      "melee": "Melee Combat",
+      "endurance": "Endurance",
+      "ranged": "Ranged Combat",
+      "movement": "Movement",
+      "stealth": "Stealth",
+      "erudition": "Erudition",
+      "observation": "Observation",
+      "survival": "Survival",
+      "healing": "Healing",
+      "intuition": "Intuition",
+      "persuasion": "Persuasion"
+    },
+    "Talents": "Talents",
+    "TraitsAndMagic": "Traits & Magic",
+    "Traits": {
+      "Pride": "Pride",
+      "PrideUsed": "Pride already used this session",
+      "UsePride": "Use Pride",
+      "DarkSecret": "Dark Secret",
+      "BigDream": "Big Dream",
+      "Weakness": "Weakness"
+    },
+    "Anchor": "Anchor",
+    "AnchorPlaceholder": "Object, person, place, belief, or pact keeping you tethered to reality...",
+    "Tension": "Tension",
+    "TensionPlaceholder": "e.g. Instinct vs Control, Faith vs Freedom...",
+    "Qualities": "Qualities",
+    "Defects": "Defects",
+    "UsefulItems": "Useful Items",
+    "Weapons": "Weapons",
+    "Armors": "Armors",
+    "Equipment": "Equipment",
+    "Damage": "Damage",
+    "DamageShort": "Dmg",
+    "Bonus": "Bonus",
+    "BonusShort": "Bon",
+    "ProtShort": "Prot",
+    "AgiShort": "Agi",
+    "Durability": "Durability",
+    "DurabilityShort": "DUR",
+    "Value": "Value",
+    "Quantity": "Quantity",
+    "Usage": "Usage",
+    "Ammo": "Ammo",
+    "IsRelic": "Magic Relic",
+    "Equipped": "Equipped",
+    "Effect": "Effect",
+    "Cost": "Cost",
+    "Summary": "Summary",
+    "Description": "Description",
+    "Category": "Category",
+    "Points": "Points",
+    "Level": "Level",
+    "Rank": "Rank",
+    "KeySkill": "Key Skill",
+    "WillpowerCost": "WP Cost",
+    "CorruptionCost": "Corruption Generated (PC)",
+    "AssociatedSkill": "Associated Skill",
+    "Modifier": "Modifier",
+    "Help": "Help",
+    "Allies": "Allies",
+    "AimedShot": "Aimed Shot",
+    "Success": "Success",
+    "Used": "Used",
+    "Yes": "Yes",
+    "New": "New",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "Roll": "Roll",
+    "RollGM": "GM Roll",
+    "RollAttribute": "Roll Attribute",
+    "RollSkill": "Roll Skill",
+    "AttackRoll": "Attack Roll",
+    "SendToChat": "Send to Chat",
+    "EditPortrait": "Change Portrait",
+    "SeedCoreSkills": "Seed 12 Core Skills",
+    "AddSkill": "Add Skill",
+    "AddTalent": "Add Talent",
+    "AddQuality": "Add Quality",
+    "AddDefect": "Add Defect",
+    "AddGear": "Add Useful Item",
+    "AddWeapon": "Add Weapon",
+    "AddArmor": "Add Armor",
+    "AddSpell": "Add Spell",
+    "Broken": "Broken",
+    "DoomPoint": "Doom Point",
+    "DoomPointsShort": "Doom",
+    "OccultActions": "Occult, Horror & Survival Actions",
+    "CharacterDetails": "Awakened Details",
+    "Concept": "Concept",
+    "ConceptPlaceholder": "I am a ___ seeking ___, yet bound to ___.",
+    "Resources": "Resources",
+    "ResourcesRoll": "Resources Roll",
+    "Experience": "Experience",
+    "Available": "Available",
+    "Total": "Total",
+    "Appearance": "Appearance & Manifestation",
+    "Biography": "Biography",
+    "Notes": "Notes",
+    "FearTest": "Fear Test",
+    "FearTestInt": "Fear Test (INT)",
+    "FearTestEmp": "Fear Test (EMP)",
+    "Mutations": "Corruption Mutations",
+    "CriticalInjuries": "Critical Injuries",
+    "Archetype": {
+      "Label": "Archetype",
+      "religiousLeader": "Religious Leader",
+      "artist": "Artist",
+      "combatant": "Combatant",
+      "occultist": "Occultist / Pagan Priest",
+      "academic": "Academic",
+      "investigator": "Professional Investigator",
+      "politician": "Politician",
+      "beggar": "Beggar",
+      "medic": "Doctor / Nurse",
+      "criminal": "Criminal"
+    },
+    "Group": {
+      "Label": "Group",
+      "veilOperatives": "Veil Operatives",
+      "contractHunters": "Contract Hunters",
+      "occultCartographers": "Occult Cartographers",
+      "cultists": "Cultists",
+      "veilRenegades": "Veil Renegades",
+      "underworldMerchants": "Underworld Merchants",
+      "dormantLegacy": "Dormant Legacy"
+    },
+    "Sect": {
+      "Label": "Sect / Order",
+      "none": "Independent",
+      "veiledDawn": "Veiled Dawn",
+      "brotherhoodSaintVictor": "Brotherhood of Saint Victor",
+      "saltAndIron": "Order of Salt and Iron",
+      "blackRoseCircle": "Circle of the Black Rose",
+      "greenConsortium": "Green Consortium",
+      "brokenAxisOrder": "Order of the Broken Axis"
+    },
+    "Age": {
+      "Label": "Age Bracket",
+      "Years": "Age (Years)",
+      "young": "Young (14–25) • 14 Attr / 10 Skill",
+      "adult": "Adult (26–50) • 12 Attr / 12 Skill",
+      "elder": "Elder (51+) • 10 Attr / 14 Skill"
+    },
+    "Talent": {
+      "Category": {
+        "archetype": "Archetype",
+        "group": "Group",
+        "general": "General",
+        "exclusive": "Exclusive (Egrégora)",
+        "supernatural": "Supernatural Power"
+      }
+    },
+    "TraitCategory": {
+      "supernatural": "Supernatural",
+      "physical": "Physical",
+      "mental": "Mental",
+      "occult": "Occult",
+      "social": "Social"
+    },
+    "Range": {
+      "Label": "Range",
+      "engaged": "Engaged",
+      "short": "Short",
+      "medium": "Medium",
+      "long": "Long",
+      "extreme": "Extreme"
+    },
+    "Difficulty": {
+      "Label": "Difficulty",
+      "easy": "Easy",
+      "average": "Normal",
+      "demanding": "Demanding",
+      "hard": "Hard",
+      "formidable": "Formidable"
+    },
+    "Armor": {
+      "Protection": "Protection",
+      "Penalty": "Agility Penalty",
+      "Roll": "Armor Protection Roll"
+    },
+    "Corruption": {
+      "Label": "Corruption",
+      "Added": "Corruption Gained",
+      "ContaminationTest": "Contamination Test",
+      "ContaminationFailTitle": "Contamination Manifested!",
+      "ContaminationFailText": "Astral taint erupts: lose an action, act aggressively for a scene, or trigger an unstable supernatural manifestation.",
+      "ContaminationSafeTitle": "Control Maintained",
+      "ContaminationSafeText": "You contain the advancing corruption for now.",
+      "HibernationTest": "Hibernation Test (INT + EMP)",
+      "Stage": {
+        "pure": "Pure",
+        "tainted": "Tainted",
+        "corrupted": "Corrupted",
+        "deformed": "Deformed",
+        "shadowBeast": "Shadow Beast"
+      }
+    },
+    "Magic": {
+      "PathsTitle": "Paths of Magic",
+      "AptitudeShort": "Aptitude",
+      "FocusPoints": "Distributed / Maximum Focus Points",
+      "Cast": "Cast Spell",
+      "Spells": "Grimoire & Spells",
+      "NoSpells": "No spells recorded in the grimoire.",
+      "SpellName": "Spell Name / Intent",
+      "FreeformPlaceholder": "Freeform spell or ritual...",
+      "PrimaryPath": "Primary Path",
+      "SecondaryPath": "Secondary Path (Mixed)",
+      "EffectivePath": "Effective Path",
+      "RequiredFocus": "Required Focus",
+      "InGrimoire": "In Grimoire (−1 WP, min 1)",
+      "DirectDamage": "Direct Damage Spell",
+      "IgnoresArmor": "Ignores mundane armor",
+      "CostSource": "Cost Paid From",
+      "CostAmount": "Points Spent",
+      "FetishBonus": "Focus / Fetish Bonus",
+      "TotalDice": "Casting Dice Pool",
+      "CostPool": {
+        "willpower": "Willpower (WP)",
+        "mental": "Mental Power (MP)",
+        "health": "Physical Health (HP)"
+      },
+      "Aptitude": {
+        "0": "No Aptitude",
+        "1": "Level 1 — Veil Sensitive",
+        "2": "Level 2 — Conduit of the Unseen",
+        "3": "Level 3 — Reality Imposer"
+      },
+      "Path": {
+        "matter": "Matter",
+        "flux": "Flux",
+        "mind": "Mind",
+        "life": "Life",
+        "echoes": "Echoes",
+        "abyss": "Abyss"
+      },
+      "Quality": {
+        "s1": {
+          "title": "1 Success — Unstable Manifestation",
+          "desc": "The spell manifests at its minimum threshold. Short range, fleeting duration, or obvious traces."
+        },
+        "s2": {
+          "title": "2 Successes — Refined Effect",
+          "desc": "Solid control. Choose: +1 Damage, double Duration, or affect 1 Additional Target."
+        },
+        "s3": {
+          "title": "3 Successes — Significant Potency",
+          "desc": "The spell imposes itself immediately; may trigger critical effects or stable physical alterations."
+        },
+        "s4": {
+          "title": "4 Successes — Dramatic Feat",
+          "desc": "Terrifying display; can cover an entire zone and trigger a Fear Test in witnesses."
+        },
+        "s5": {
+          "title": "5+ Successes — Threshold Breach",
+          "desc": "Rewrites local reality almost permanently or on a massive scale."
+        }
+      }
+    },
+    "Trauma": {
+      "PermanentTrauma": "Permanent Mental Trauma (−Max MP)",
+      "TraumaCheckTitle": "Permanent Mental Trauma Check",
+      "TraumaCheckShort": "Permanent Trauma",
+      "TraumaSufferedTitle": "Permanent Trauma Suffered!",
+      "TraumaSufferedText": "Rolled 1: your maximum Mental Power is permanently reduced by 1. At 0 max MP, the character succumbs to madness.",
+      "TraumaAvoidedTitle": "Mind Intact",
+      "TraumaAvoidedText": "You endure the breakdown without losing maximum Mental Power."
+    },
+    "Panic": {
+      "TableTitle": "Panic Table"
+    },
+    "Mutation": {
+      "TableTitle": "Corruption Mutation",
+      "TierLabel": "Mutation Tier",
+      "None": "No mutations manifested.",
+      "Tier": {
+        "minor": "Minor (4 PC)",
+        "notable": "Notable (6 PC)",
+        "aberrant": "Aberrant (8 PC)"
+      }
+    },
+    "Critical": {
+      "TableTitle": "Critical Injuries Table",
+      "Roll": "Critical Injury (D66)",
+      "Lethal": "Lethal",
+      "Stabilized": "Stabilized",
+      "TimeLimit": "Time Limit",
+      "HealingTime": "Healing Time",
+      "HealMod": "Healing Mod",
+      "None": "No active critical injuries."
+    },
+    "NPC": {
+      "RolePlaceholder": "Creature type or role (e.g. Cultist, Ghost, Egregora)...",
+      "FearRating": "Fear Rating"
+    },
+    "Vehicle": {
+      "TypePlaceholder": "Vehicle type (e.g. Car, APC, Helicopter)...",
+      "Stats": "Vehicle Statistics",
+      "Hull": "Hull",
+      "Armor": "Armor",
+      "Maneuverability": "Maneuverability",
+      "Damage": "Ramming Damage",
+      "Passengers": "Passengers",
+      "Speed": "Speed",
+      "Altitude": "Altitude (Zones)",
+      "Wrecked": "Wrecked / Disabled",
+      "Maneuver": "Maneuver",
+      "Ram": "Ramming Attack",
+      "ArmorRoll": "Armor Roll",
+      "CritRoll": "Critical Damage (D66)",
+      "CritTableTitle": "Vehicle Critical Damage"
+    },
+    "ActiveEffect": {
+      "New": "New Effect",
+      "None": "No active effects."
+    },
+    "RollDialog": {
+      "Title": "Egrégora Roll",
+      "DicePool": "Dice Pool",
+      "Base": "Base",
+      "Skill": "Skill",
+      "Gear": "Gear",
+      "CorruptionDice": "Corruption Dice (+1 PC each)",
+      "NoPush": "Passive Roll (Cannot Push)",
+      "ActorBrokenConfirm": "{name} is Broken (0 HP or 0 MP). Roll anyway?"
+    },
+    "Chat": {
+      "Successes": "Successes",
+      "CriticalFailure": "Critical Failure!",
+      "Push": "Push Roll",
+      "Accept": "Accept",
+      "ApplyDamage": "Apply Damage",
+      "Banes": "Critical Banes (Base 1s)",
+      "GearDamage": "Gear Wear",
+      "PushCost": "Push Cost"
+    },
+    "Notifications": {
+      "NoDiceToRoll": "No dice available to roll.",
+      "NotEnoughWillpower": "Not enough Willpower.",
+      "NoCorruption": "This character has 0 Corruption Points.",
+      "SelectTargetToken": "Select at least one target token on the canvas.",
+      "AppliedDamage": "Applied damage: {dmg}.",
+      "MacroOwnedItemsOnly": "Only owned items can be turned into hotbar macros.",
+      "CorruptionMutationMilestone": "Corruption reached {pc} PC! Roll a Corruption Mutation.",
+      "ShadowBeastReached": "10 PC — SHADOW BEAST! The character has been completely consumed by Corruption."
+    },
+    "Tables": {
+      "Panic": {
+        "r6": { "title": "Keep It Together", "effect": "You hold your nerve, feeling the weight of the Veil. No extra effect." },
+        "r7": { "title": "Nervous Tic", "effect": "Anxiety spreads. All nearby allies immediately lose 1 MP." },
+        "r8": { "title": "Astral Tremor", "effect": "Your hands shake from resonance. −2 dice to Agility and Combat rolls." },
+        "r9": { "title": "Drop Relic / Item", "effect": "Startled, you drop your weapon or Anchor. The Narrator chooses which." },
+        "r10": { "title": "Freeze (Stasis)", "effect": "Paralyzed by horror, you lose your next turn." },
+        "r11": { "title": "Seek Cover", "effect": "You must spend your next action fleeing danger or hiding." },
+        "r12": { "title": "Resonance Scream", "effect": "Lose 1 extra MP, and every ally who hears you must immediately make a Fear Test." },
+        "r13": { "title": "Hallucinated Flight", "effect": "You flee to safety and refuse to leave. Lose 1 MP." },
+        "r14": { "title": "Violent Outburst (Berserk)", "effect": "You must attack the nearest creature or ally until someone is Broken." },
+        "r15": { "title": "Catatonic Collapse", "effect": "You collapse mentally broken. Immediately roll a Permanent Mental Trauma check." }
+      },
+      "Mutations": {
+        "minor": {
+          "m11": { "name": "Whispering Voices", "effect": "Occasional clues from the Narrator", "cost": "Can become distracted" },
+          "m14": { "name": "Profane Breath", "effect": "+1 Intimidation", "cost": "Animals react poorly to you" },
+          "m22": { "name": "Silent Step", "effect": "+1 Stealth", "cost": "Unintentionally startles allies" },
+          "m24": { "name": "Unstable Pulse", "effect": "+1 Initiative", "cost": "Tremors during calm actions" },
+          "m31": { "name": "Autonomous Shadow", "effect": "+1 Stealth in shadows", "cost": "May betray your presence" },
+          "m34": { "name": "Antipathy", "effect": "+1 Mental Resistance", "cost": "−2 Empathy" },
+          "m41": { "name": "Dark Blood", "effect": "+1 vs poisons and diseases", "cost": "Heals twice as slowly" },
+          "m44": { "name": "White Eyes", "effect": "+1 Spiritual Perception", "cost": "Automatically frightens mundane people" },
+          "m51": { "name": "Keen Reflexes", "effect": "+1 Dodge", "cost": "Difficulty with fine precision" },
+          "m61": { "name": "Cold Touch", "effect": "+1 Intimidation", "cost": "Unsettling physical contact" },
+          "m64": { "name": "Visible Dark Veins", "effect": "+1 to magic rolls", "cost": "Easily identified as corrupted" },
+          "m65": { "name": "Latent Obsession", "effect": "+2 on one specific focus", "cost": "Ignores other matters" },
+          "m66": { "name": "Gaze of the Abyss", "effect": "+1 Supernatural Perception", "cost": "Sometimes sees things that are not there" }
+        },
+        "notable": {
+          "n11": { "name": "Predator Instinct", "effect": "+1 attack vs wounded targets", "cost": "Urge to finish off helpless victims" },
+          "n14": { "name": "Dense Aura", "effect": "+1 Intimidation", "cost": "Makes allies uneasy" },
+          "n22": { "name": "Fragmented Memories", "effect": "+1 Erudition", "cost": "Occasional confusion" },
+          "n24": { "name": "Eyes of Time", "effect": "+1 Reaction", "cost": "Confusing temporal visions" },
+          "n31": { "name": "Hunger of the Void", "effect": "+1 recovery when acting", "cost": "Constant need to satisfy impulses" },
+          "n34": { "name": "Hidden Claws", "effect": "+1 unarmed damage", "cost": "Emerge involuntarily (odd/even per scene)" },
+          "n41": { "name": "Echoing Voice", "effect": "+1 Persuasion or Intimidation", "cost": "Inhuman voice" },
+          "n44": { "name": "Acute Scent", "effect": "+1 Tracking", "cost": "Overwhelmed by strong odors" },
+          "n51": { "name": "Foul Stench", "effect": "+1 Endurance", "cost": "Drives people away" },
+          "n61": { "name": "Unnatural Flexibility", "effect": "+1 Acrobatics and Escape", "cost": "Disturbing appearance (−1 Empathy)" },
+          "n64": { "name": "Strange Scarring", "effect": "Recovers in half the time", "cost": "Grotesque scars (−2 Empathy)" },
+          "n65": { "name": "Ash Skin", "effect": "+1 Endurance", "cost": "Cadaveric appearance (−2 Empathy)" }
+        },
+        "aberrant": {
+          "a11": { "name": "Aura of Cold", "effect": "+1 Emotional Control", "cost": "Plants wither nearby" },
+          "a14": { "name": "Hypnotic Gaze", "effect": "+1 Persuasion", "cost": "Attracts unwanted attention" },
+          "a22": { "name": "Unnatural Presence", "effect": "+1 Intimidation", "cost": "NPCs avoid you" },
+          "a24": { "name": "Unstable Energy", "effect": "+1 Focus", "cost": "Powers trigger uncontrollably" },
+          "a31": { "name": "Fanged Maw", "effect": "+2 Damage", "cost": "Face moves on its own (−3 Empathy)" },
+          "a34": { "name": "Dark Attraction", "effect": "+1 Summoning & entity interaction", "cost": "Entities approach spontaneously" },
+          "a41": { "name": "Partially Ethereal Body", "effect": "+1 Evasion", "cost": "Loses control of physical solidity" },
+          "a44": { "name": "Horns", "effect": "+2 headbutt damage", "cost": "People flee from you" },
+          "a51": { "name": "Voice of Command", "effect": "+1 Leadership", "cost": "Becomes excessively authoritarian" },
+          "a61": { "name": "Unstable Form", "effect": "+1 Adaptation", "cost": "Body constantly shifts and warps" },
+          "a64": { "name": "Shoulder Head", "effect": "+1 Intelligence", "cost": "Everyone flees (−3 Stealth)" },
+          "a66": { "name": "Avatar of the Rift", "effect": "+2 supernatural actions", "cost": "Test Intelligence or completely lose control" }
+        }
+      },
+      "Critical": {
+        "11": { "name": "Winded Faint", "effect": "Stunned for one turn." },
+        "12": { "name": "Disoriented", "effect": "Stunned for one turn." },
+        "13": { "name": "Sprained Wrist", "effect": "Drop held item. −1 to Ranged and Melee Combat." },
+        "14": { "name": "Sprained Ankle", "effect": "Fall prone; −1 to Agility and Stealth." },
+        "15": { "name": "Concussion", "effect": "Stunned for one turn. −1 to all skills." },
+        "16": { "name": "Bruised Leg", "effect": "Fall prone; −1 to Agility and Stealth." },
+        "21": { "name": "Broken Nose", "effect": "Stunned for one turn. −2 to Persuasion." },
+        "22": { "name": "Broken Fingers", "effect": "Drop held item. −2 to Ranged and Melee Combat." },
+        "23": { "name": "Broken Toes", "effect": "Stunned for one turn. −2 to Agility and Stealth." },
+        "24": { "name": "Teeth Knocked Out", "effect": "Stunned for one turn. −2 to Persuasion." },
+        "25": { "name": "Groin Strike", "effect": "Stunned 2 turns. 1 damage per Strength, Agility, or Melee roll." },
+        "26": { "name": "Dislocated Shoulder", "effect": "Stunned for one turn. −3 to Strength and Melee Combat." },
+        "31": { "name": "Broken Ribs", "effect": "Stunned for one turn. −2 to Agility and Melee Combat." },
+        "32": { "name": "Broken Arm", "effect": "Stunned for one turn. −3 to Ranged and Melee Combat." },
+        "33": { "name": "Broken Leg", "effect": "Fall prone; movement halved and −2 to Agility and Stealth." },
+        "34": { "name": "Torn Ear", "effect": "Stunned 1 turn, −2 Observation. Permanent ugly scar." },
+        "35": { "name": "Shattered Kneecap", "effect": "Movement becomes a slow action." },
+        "36": { "name": "Punctured Lung", "effect": "Lethal (D6 days). Stunned 1 turn. −3 to Agility." },
+        "41": { "name": "Lacerated Kidney", "effect": "Lethal (D6 days). Stunned 2 turns. 1 damage per Strength, Agility, or Melee roll." },
+        "42": { "name": "Crushed Foot", "effect": "Lethal (D6 days). Prone, movement halved, −3 Agility and Stealth." },
+        "43": { "name": "Crushed Elbow", "effect": "Lethal (D6 days). Stunned 1 turn, −2 Strength/Melee; cannot use 2H weapons." },
+        "44": { "name": "Crushed Knee", "effect": "Lethal (D6 hours). Prone, movement halved, −3 Agility and Stealth." },
+        "45": { "name": "Crushed Face", "effect": "Lethal (D6 hours). Unconscious D6 hours. −2 to Persuasion." },
+        "46": { "name": "Pierced Intestines", "effect": "Lethal (D6 hours). 1 damage per hour until first aid." },
+        "51": { "name": "Broken Spine", "effect": "Lethal (D6 hours). Unconscious D6 hours; paralyzed from the waist down." },
+        "52": { "name": "Broken Neck", "effect": "Lethal (D6 hours). Unconscious D6 hours; paralyzed from the neck down." },
+        "53": { "name": "Bleeding Gut", "effect": "Lethal (D6 minutes). 1 damage per turn until first aid." },
+        "54": { "name": "Internal Bleeding", "effect": "Lethal (−1 Healing, D6 minutes). Unconscious D6 hours; 1 damage per physical roll." },
+        "55": { "name": "Severed Artery (Arm)", "effect": "Lethal (−1 Healing, D6 minutes). Unconscious D6 hours. −1 Agility." },
+        "56": { "name": "Severed Artery (Leg)", "effect": "Lethal (−1 Healing, D6 minutes). Unconscious 6 hours. −2 Agility." },
+        "61": { "name": "Mangled Arm", "effect": "Lethal (−1 Healing, D6 minutes). Arm permanently lost; −2 Agility; no 2H weapons." },
+        "65": { "name": "Instant Death", "effect": "The Entity of Death has come to claim you. Create a new character." }
+      },
+      "VehicleCrit": {
+        "v11": { "name": "Ricochet", "effect": "Attack ricochets off the vehicle and hits another random target in the same zone." },
+        "v14": { "name": "Skid", "effect": "Driver tests Movement immediately; failure loses the next slow action." },
+        "v21": { "name": "Shattered Windshield", "effect": "Visibility impaired: Maneuverability reduced by −1." },
+        "v24": { "name": "Driver Hit", "effect": "The driver takes damage equal to the damage inflicted on the vehicle." },
+        "v31": { "name": "Passenger Hit", "effect": "A random passenger takes the same damage plus a personal critical injury." },
+        "v34": { "name": "Wheel / Tire Destroyed", "effect": "−2 penalty to all driving rolls." },
+        "v41": { "name": "Severe Spin", "effect": "Driver tests Movement; failure flips/wrecks the vehicle (aircraft crash for D3 + altitude)." },
+        "v44": { "name": "Fuel Fire", "effect": "Everyone inside suffers Intensity 6 Fire every round." },
+        "v51": { "name": "Weapon Disabled", "effect": "One mounted weapon is destroyed (or re-roll if none)." },
+        "v54": { "name": "Massive Crash", "effect": "Vehicle is wrecked; occupants suffer D6 + altitude damage." },
+        "v61": { "name": "Engine Disabled", "effect": "Vehicle cannot move (aircraft may attempt controlled landing)." },
+        "v64": { "name": "Explosion", "effect": "Vehicle explodes: everyone inside suffers Power 9 Explosion and the vehicle is destroyed." }
+      }
+    }
+  }
+}

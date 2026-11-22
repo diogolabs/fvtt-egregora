@@ -1,0 +1,68 @@
+<div class="eg-chat-roll">
+  <div class="dice-roll flexcol" data-action="expandRoll">
+    {{#if flavor}}
+    <div class="dice-flavor">{{flavor}}</div>
+    {{/if}}
+
+    <div class="dice-result">
+      <div class="dice-formula">{{formula}}</div>
+      {{{tooltip}}}
+
+      {{#if roll.isSimpleRoll}}
+        <h4 class="dice-total">{{total}}</h4>
+      {{else}}
+        {{#if (gt (add success roll.options.prideBonus) 0)}}
+          <h4 class="dice-total eg-success">
+            <i class="fa-solid fa-eye"></i>
+            {{localize "EGREGORA.Chat.Successes"}}: {{add success roll.options.prideBonus}}
+            {{#if roll.options.prideBonus}}
+              <span class="eg-tag">+1 {{localize "EGREGORA.Traits.Pride"}}</span>
+            {{/if}}
+          </h4>
+        {{else}}
+          <h4 class="dice-total eg-failure">
+            {{#if roll.isCriticalFailure}}
+              <i class="fa-solid fa-skull"></i> {{localize "EGREGORA.Chat.CriticalFailure"}}
+            {{else}}
+              {{localize "EGREGORA.Chat.Successes"}}: 0
+            {{/if}}
+          </h4>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if showInfos}}
+    {{{infos}}}
+  {{/if}}
+
+  {{#if pushable}}
+  <div class="dice-buttons eg-btn-row">
+    <button type="button" class="eg-btn eg-btn-crimson dice-button push" data-action="pushRoll">
+      <i class="fa-solid fa-rotate-right"></i> {{localize "EGREGORA.Chat.Push"}}
+    </button>
+    <button type="button" class="eg-btn dice-button accept" data-action="acceptRoll">
+      <i class="fa-solid fa-check"></i> {{localize "EGREGORA.Chat.Accept"}}
+    </button>
+  </div>
+  {{/if}}
+
+  {{#if (and (not pushable) (gt roll.attackDamage 0))}}
+  <div class="dice-buttons eg-btn-row">
+    <button type="button" class="eg-btn eg-btn-crimson" data-action="applyTargetDamage">
+      <i class="fa-solid fa-crosshairs"></i> {{localize "EGREGORA.Chat.ApplyDamage"}} ({{roll.attackDamage}})
+    </button>
+    <button type="button" class="eg-btn" data-action="rollCritTable">
+      <i class="fa-solid fa-skull"></i> {{localize "EGREGORA.Critical.Roll"}}
+    </button>
+  </div>
+  {{/if}}
+
+  {{#if roll.options.contaminationTriggered}}
+  <div class="dice-buttons eg-btn-row">
+    <button type="button" class="eg-btn eg-btn-crimson" data-action="rollContamination">
+      <i class="fa-solid fa-biohazard"></i> {{localize "EGREGORA.Corruption.ContaminationTest"}}
+    </button>
+  </div>
+  {{/if}}
+</div>

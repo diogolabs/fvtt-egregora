@@ -1,0 +1,98 @@
+{
+  "id": "fvtt-egregora",
+  "title": "Egrégora: O Mundo Oculto (YZE)",
+  "description": "Sistema não-oficial de Egrégora: O Mundo Oculto baseado no Year Zero Engine (Pilha de Dados D6) para Foundry VTT v13 e v14, com ficha temática oficial, Corrupção, Mutações, Caminhos de Magia, Medo, Pânico e Ferimentos Críticos.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "diogolabs",
+      "url": "https://github.com/diogolabs"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": ["biography", "notes"]
+      },
+      "npc": {
+        "htmlFields": ["notes"]
+      },
+      "vehicle": {
+        "htmlFields": ["notes"]
+      }
+    },
+    "Item": {
+      "skill": {
+        "htmlFields": ["description"]
+      },
+      "talent": {
+        "htmlFields": ["description"]
+      },
+      "quality": {
+        "htmlFields": ["description"]
+      },
+      "defect": {
+        "htmlFields": ["description"]
+      },
+      "gear": {
+        "htmlFields": ["description"]
+      },
+      "weapon": {
+        "htmlFields": ["description"]
+      },
+      "armor": {
+        "htmlFields": ["description"]
+      },
+      "spell": {
+        "htmlFields": ["description"]
+      },
+      "mutation": {
+        "htmlFields": ["description"]
+      },
+      "critical": {
+        "htmlFields": ["description"]
+      }
+    }
+  },
+  "flags": {},
+  "url": "https://github.com/diogolabs/fvtt-egregora",
+  "license": "https://github.com/diogolabs/fvtt-egregora/blob/main/LICENSE.txt",
+  "readme": "https://github.com/diogolabs/fvtt-egregora/blob/main/README.md",
+  "bugs": "https://github.com/diogolabs/fvtt-egregora/issues",
+  "changelog": "https://github.com/diogolabs/fvtt-egregora/blob/main/CHANGELOG.md",
+  "esmodules": [
+    "module/fvtt-egregora.mjs"
+  ],
+  "styles": [
+    "css/fvtt-egregora.css"
+  ],
+  "languages": [
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "packs": [],
+  "packFolders": [],
+  "socket": false,
+  "manifest": "https://github.com/diogolabs/fvtt-egregora/releases/latest/download/system.json",
+  "download": "https://github.com/diogolabs/fvtt-egregora/releases/download/v0.1.0/system.zip",
+  "grid": {
+    "type": 1,
+    "distance": 1,
+    "units": "m",
+    "diagonals": 0
+  },
+  "primaryTokenAttribute": "health",
+  "secondaryTokenAttribute": "mental"
+}

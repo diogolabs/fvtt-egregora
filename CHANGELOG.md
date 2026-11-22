@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3 — Efeito Hover Carmesim nos Botões (Foundry VTT v13 & v14)
+- Todos os botões de ação em **Oculto & Magia** mantêm o visual uniforme em pergaminho em repouso e assumem o vermelho carmesim característico de Egrégora no *mouse over* (`:hover`), com transição suave e sombra sutil.
+- Corrigida a especificidade de `.eg-btn-crimson` para botões principais de diálogo e chat.
+
 ## 0.1.2 — Ajuste Definitivo da Altura dos Botões em Oculto & Magia (Foundry VTT v13 & v14)
 - Aumentada a altura mínima dos botões de ação (`.eg-action-grid button.eg-btn`) para `50px` com `height: auto !important`, `max-height: none !important` e `line-height: 1.25 !important`, vencendo o estilo padrão de `<button>` do Foundry VTT v13/v14.
 - Fixada a grade `.eg-action-grid` em 4 colunas equilibradas (`repeat(4, minmax(0, 1fr))`) com `<span>` nos rótulos de [occult.hbs](templates/actor/occult.hbs).

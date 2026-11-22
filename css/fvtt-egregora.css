@@ -1108,6 +1108,7 @@ button.eg-btn,
   align-items: center;
   justify-content: center;
   gap: 7px;
+  transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
 }
 
 .application.egregora .eg-action-grid button.eg-btn {
@@ -1127,20 +1128,29 @@ button.eg-btn span,
   line-height: 1.25;
 }
 
+.application.egregora button.eg-btn:hover,
+button.eg-btn:hover,
 .eg-btn:hover {
-  background: #2b1d17;
+  background: linear-gradient(180deg, var(--eg-crimson-bright) 0%, var(--eg-crimson) 100%);
   color: #fff6e6;
+  border-color: var(--eg-crimson-dark);
+  box-shadow: 0 2px 6px rgba(139, 24, 24, 0.38);
 }
 
+.application.egregora button.eg-btn.eg-btn-crimson,
+button.eg-btn.eg-btn-crimson,
 .eg-btn-crimson {
   background: linear-gradient(180deg, var(--eg-crimson-bright) 0%, var(--eg-crimson) 100%);
   color: #fff6e6;
   border-color: var(--eg-crimson-dark);
 }
 
+.application.egregora button.eg-btn.eg-btn-crimson:hover,
+button.eg-btn.eg-btn-crimson:hover,
 .eg-btn-crimson:hover {
   background: var(--eg-crimson-dark);
   color: #fff;
+  border-color: #2c0404;
 }
 
 .eg-form-grid-2 {

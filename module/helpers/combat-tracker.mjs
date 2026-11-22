@@ -127,6 +127,17 @@ export async function openInitiativeCardDialog(combat, combatant) {
 }
 
 /**
+ * Safely resolve the currently active/viewed Combat document, ensuring it still exists in `game.combats`.
+ * @param {CombatTracker} [app]
+ * @returns {EgregoraCombat|null}
+ */
+function getLiveCombat(app) {
+  const candidate = app?.viewed ?? game.combat;
+  if (!candidate?.id) return null;
+  return game.combats?.get(candidate.id) ?? null;
+}
+
+/**
  * Refresh the deck status bar inside the Combat Tracker header.
  * Always removes stale bars first so Foundry v13/v14 ApplicationV2 partial renders,
  * encounter switches, or combat deletion never leave outdated counts or stale listeners.
@@ -139,7 +150,7 @@ function refreshDeckBar(app, root) {
 
   if (!EgregoraCombat.isCardInitiativeEnabled()) return;
 
-  const combat = app?.viewed ?? game.combat;
+  const combat = getLiveCombat(app);
   if (!combat) return;
 
   const headerEl = root.querySelector("header.combat-tracker-header")
@@ -173,7 +184,7 @@ function refreshDeckBar(app, root) {
     recallBtn.addEventListener("click", async ev => {
       ev.preventDefault();
       ev.stopPropagation();
-      const liveCombat = app?.viewed ?? game.combat;
+      const liveCombat = getLiveCombat(app);
       if (!liveCombat) return;
       await liveCombat.resetAll();
       ui.notifications.info(game.i18n.localize("EGREGORA.Combat.DeckRecalled"));
@@ -185,7 +196,7 @@ function refreshDeckBar(app, root) {
     shuffleBtn.addEventListener("click", async ev => {
       ev.preventDefault();
       ev.stopPropagation();
-      const liveCombat = app?.viewed ?? game.combat;
+      const liveCombat = getLiveCombat(app);
       if (!liveCombat) return;
       await liveCombat.redealAll();
     });
@@ -210,7 +221,7 @@ export function registerCombatTrackerHooks() {
 
     if (!EgregoraCombat.isCardInitiativeEnabled()) return;
 
-    const combat = app?.viewed ?? game.combat;
+    const combat = getLiveCombat(app);
     if (!combat) return;
 
     const ID = EGREGORA_CONFIG.ID;
@@ -244,7 +255,7 @@ export function registerCombatTrackerHooks() {
         cardBtn.addEventListener("click", async ev => {
           ev.preventDefault();
           ev.stopPropagation();
-          const liveCombat = app?.viewed ?? game.combat;
+          const liveCombat = getLiveCombat(app);
           const liveCombatant = liveCombat?.combatants.get(combatantId);
           if (!liveCombat || !liveCombatant) return;
           if (isOwner) {
@@ -286,7 +297,7 @@ export function registerCombatTrackerHooks() {
         slowBtn.addEventListener("click", async ev => {
           ev.preventDefault();
           ev.stopPropagation();
-          const liveCombat = app?.viewed ?? game.combat;
+          const liveCombat = getLiveCombat(app);
           if (isOwner && liveCombat) await liveCombat.toggleAction(combatantId, "slowAction");
         });
 
@@ -301,7 +312,7 @@ export function registerCombatTrackerHooks() {
         fastBtn.addEventListener("click", async ev => {
           ev.preventDefault();
           ev.stopPropagation();
-          const liveCombat = app?.viewed ?? game.combat;
+          const liveCombat = getLiveCombat(app);
           if (isOwner && liveCombat) await liveCombat.toggleAction(combatantId, "fastAction");
         });
 
@@ -317,7 +328,7 @@ export function registerCombatTrackerHooks() {
           swapBtn.addEventListener("click", async ev => {
             ev.preventDefault();
             ev.stopPropagation();
-            const liveCombat = app?.viewed ?? game.combat;
+            const liveCombat = getLiveCombat(app);
             const liveCombatant = liveCombat?.combatants.get(combatantId);
             if (liveCombat && liveCombatant) {
               await openInitiativeCardDialog(liveCombat, liveCombatant);

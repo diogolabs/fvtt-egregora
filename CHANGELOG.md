@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.2 — Blindagem contra Combates Excluídos + Alinhamento dos Controles no Combat Tracker (Foundry VTT v13 & v14)
+- **Blindagem contra `Combat does not exist in combats`:** validação explícita via `game.combats.get(id)` antes de qualquer ação nos botões do Combat Tracker (Recolher, Distribuir, Trocar Carta e Ações Rápida/Lenta), impedindo erros mesmo em transições rápidas ao encerrar ou alternar encontros.
+- **Alinhamento horizontal no Combat Tracker:** corrigido o empilhamento vertical dos ícones de **Ação Lenta (`⏳`)**, **Ação Rápida (`⚡`)** e **Trocar Carta (`⇄`)** na linha de cada combatente, além do espaçamento responsivo da barra do baralho no cabeçalho.
+
 ## 0.3.1 — Correção da Barra do Baralho de Iniciativa e Saque por Jogadores (Foundry VTT v13 & v14)
 - **Correção do contador de cartas e reembaralhamento travados entre encontros:**
   - A barra de status do baralho (`Baralho: X/10`) agora é sempre recriada/sincronizada dentro do cabeçalho do Combat Tracker a cada atualização (`createCombat`, `deleteCombat`, `updateCombat`, `create/update/deleteCombatant`), resolvendo o problema em que as cartas sacadas pareciam continuar fora ao encerrar um encontro ou criar um novo no `ApplicationV2` (Foundry v13/v14).

@@ -44,10 +44,6 @@ export class EgregoraActorSheet extends api.HandlebarsApplicationMixin(sheets.Ac
       rollVehicleRam: EgregoraActorSheet.#onRollVehicleRam,
       rollVehicleArmor: EgregoraActorSheet.#onRollVehicleArmor,
       rollVehicleCrit: EgregoraActorSheet.#onRollVehicleCrit,
-      createEffect: EgregoraActorSheet.#onCreateEffect,
-      editEffect: EgregoraActorSheet.#onEditEffect,
-      toggleEffect: EgregoraActorSheet.#onToggleEffect,
-      deleteEffect: EgregoraActorSheet.#onDeleteEffect,
     },
   };
 
@@ -65,10 +61,6 @@ export class EgregoraActorSheet extends api.HandlebarsApplicationMixin(sheets.Ac
     },
     biography: {
       template: "systems/fvtt-egregora/templates/actor/biography.hbs",
-      scrollable: [""],
-    },
-    effects: {
-      template: "systems/fvtt-egregora/templates/actor/effects.hbs",
       scrollable: [""],
     },
     npc: {
@@ -94,7 +86,7 @@ export class EgregoraActorSheet extends api.HandlebarsApplicationMixin(sheets.Ac
     } else if (this.document.type === "vehicle") {
       options.parts = ["vehicle"];
     } else {
-      options.parts = ["nav", "main", "occult", "biography", "effects"];
+      options.parts = ["nav", "main", "occult", "biography"];
     }
   }
 
@@ -433,31 +425,5 @@ export class EgregoraActorSheet extends api.HandlebarsApplicationMixin(sheets.Ac
 
   static async #onRollVehicleCrit() {
     await this.actor.rollVehicleCritical();
-  }
-
-  static async #onCreateEffect() {
-    await this.actor.createEmbeddedDocuments("ActiveEffect", [
-      {
-        name: game.i18n.localize("EGREGORA.ActiveEffect.New"),
-        img: "icons/svg/aura.svg",
-        origin: this.actor.uuid,
-      },
-    ]);
-  }
-
-  static #onEditEffect(event, target) {
-    const id = target.closest("[data-effect-id]")?.dataset?.effectId;
-    this.actor.effects.get(id)?.sheet?.render(true);
-  }
-
-  static async #onToggleEffect(event, target) {
-    const id = target.closest("[data-effect-id]")?.dataset?.effectId;
-    const eff = this.actor.effects.get(id);
-    if (eff) await eff.update({ disabled: !eff.disabled });
-  }
-
-  static async #onDeleteEffect(event, target) {
-    const id = target.closest("[data-effect-id]")?.dataset?.effectId;
-    await this.actor.effects.get(id)?.delete();
   }
 }

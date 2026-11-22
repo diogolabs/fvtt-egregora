@@ -2,7 +2,7 @@
   "id": "fvtt-egregora",
   "title": "Egrégora: O Mundo Oculto (YZE)",
   "description": "Sistema não-oficial de Egrégora: O Mundo Oculto baseado no Year Zero Engine (Pilha de Dados D6) para Foundry VTT v13 e v14, com ficha temática oficial, Corrupção, Mutações, Caminhos de Magia, Medo, Pânico e Ferimentos Críticos.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "compatibility": {
     "minimum": "13",
     "verified": "14"
@@ -86,7 +86,7 @@
   "packFolders": [],
   "socket": false,
   "manifest": "https://github.com/diogolabs/fvtt-egregora/releases/latest/download/system.json",
-  "download": "https://github.com/diogolabs/fvtt-egregora/releases/download/v0.1.7/system.zip",
+  "download": "https://github.com/diogolabs/fvtt-egregora/releases/download/v0.1.8/system.zip",
   "grid": {
     "type": 1,
     "distance": 1,

@@ -447,9 +447,10 @@
 .eg-attr-card {
   position: relative;
   border: 1.2px solid var(--eg-border);
+  border-left: 3px solid var(--eg-crimson);
+  border-radius: 2px;
   background: rgba(235, 224, 198, 0.55);
-  padding: 4px 8px 5px 14px;
-  clip-path: polygon(9px 0, 100% 0, 100% 100%, 9px 100%, 0 50%);
+  padding: 5px 8px 6px 10px;
 }
 
 .eg-attr-top {

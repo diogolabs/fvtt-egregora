@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.8 — Correção da Borda dos Atributos, Remoção da Aba Efeitos e Validação de Feitiços (Foundry VTT v13 & v14)
+- Removido o `clip-path` que cortava o lado esquerdo dos cartões de **Atributos** (`.eg-attr-card`), aplicando borda completa nos 4 lados com filete carmesim à esquerda.
+- Removida a aba **Efeitos** da ficha do Desperto (`sheet-nav.hbs`, `actor-sheet.mjs` e `effects.hbs`), mantendo apenas **Ficha**, **Oculto & Magia** e **Biografia**.
+- Removido `choices` do `StringField` opcional `secondaryPath` em Feitiços (`blank: true`), garantindo 100% de compatibilidade sem erro de string vazia no Foundry v13 e v14.
+
 ## 0.1.7 — Correção de Feitiços e Logo/Glifo Oficiais (Foundry VTT v13 & v14)
 - Corrigido erro de validação ao criar Feitiços (`system: secondaryPath: may not be a blank string`) adicionando `blank: true` ao `StringField` de `secondaryPath` em [items.mjs](module/data/items.mjs).
 - Substituída a tipografia do cabeçalho pela logo oficial em PNG ([assets/logo.png](assets/logo.png)) e o emblema central pelo glifo oficial ([assets/glyph.png](assets/glyph.png)), preservando exatamente as dimensões e o alinhamento das divs da ficha.

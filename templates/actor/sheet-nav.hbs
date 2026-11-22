@@ -8,9 +8,6 @@
   <button type="button" class="eg-nav-tab {{#if (eq activeTab 'biography')}}active{{/if}}" data-action="switchTab" data-tab="biography">
     <i class="fa-solid fa-book-open"></i> {{localize "EGREGORA.Tabs.Biography"}}
   </button>
-  <button type="button" class="eg-nav-tab {{#if (eq activeTab 'effects')}}active{{/if}}" data-action="switchTab" data-tab="effects">
-    <i class="fa-solid fa-bolt"></i> {{localize "EGREGORA.Tabs.Effects"}}
-  </button>
   {{#if isBroken}}
     <span class="eg-broken-pill"><i class="fa-solid fa-heart-crack"></i> {{localize "EGREGORA.Broken"}}</span>
   {{/if}}

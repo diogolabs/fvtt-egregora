@@ -138,7 +138,6 @@ export class EgregoraSpellData extends foundry.abstract.TypeDataModel {
       secondaryPath: new fields.StringField({
         initial: "",
         blank: true,
-        choices: ["", "matter", "flux", "mind", "life", "echoes", "abyss"],
       }),
       requiredFocus: new fields.NumberField({ required: true, integer: true, initial: 1, min: 1, max: 5 }),
       defaultAttribute: new fields.StringField({

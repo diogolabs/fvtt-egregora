@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 — Ajuste Definitivo da Altura dos Botões em Oculto & Magia (Foundry VTT v13 & v14)
+- Aumentada a altura mínima dos botões de ação (`.eg-action-grid button.eg-btn`) para `50px` com `height: auto !important`, `max-height: none !important` e `line-height: 1.25 !important`, vencendo o estilo padrão de `<button>` do Foundry VTT v13/v14.
+- Fixada a grade `.eg-action-grid` em 4 colunas equilibradas (`repeat(4, minmax(0, 1fr))`) com `<span>` nos rótulos de [occult.hbs](templates/actor/occult.hbs).
+
 ## 0.1.1 — Correção de Layout de Botões (Foundry VTT v13 & v14)
 - Corrigido vazamento vertical de texto em botões com múltiplas linhas (como a grade de ações em *Oculto & Magia*, botões de diálogo e cartões de chat) ao sobrescrever a altura fixa padrão (`--button-size`) do Foundry VTT com `height: auto`, `line-height: 1.25` e `white-space: normal`.
 - Ajustado `.eg-action-grid` para colunas mais confortáveis (`minmax(180px, 1fr)`) e altura uniforme (`align-items: stretch`).

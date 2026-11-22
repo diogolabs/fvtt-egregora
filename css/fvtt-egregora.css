@@ -1073,22 +1073,27 @@
 }
 
 /* ---------- Formulários, Abas Secundárias, NPC, Veículo e Item Sheet ---------- */
+.application.egregora .eg-action-grid,
 .eg-action-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: minmax(50px, auto);
   gap: 8px;
   align-items: stretch;
 }
 
+.application.egregora button.eg-btn,
 button.eg-btn,
 .eg-btn {
-  padding: 7px 10px;
-  height: auto;
-  min-height: 36px;
-  line-height: 1.25;
-  white-space: normal;
+  padding: 8px 10px !important;
+  height: auto !important;
+  min-height: 44px !important;
+  max-height: none !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
   text-align: center;
   word-break: break-word;
+  overflow: visible;
   box-sizing: border-box;
   border: 1.5px solid var(--eg-border);
   border-radius: 3px;
@@ -1099,15 +1104,27 @@ button.eg-btn,
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  display: inline-flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
+}
+
+.application.egregora .eg-action-grid button.eg-btn {
+  width: 100%;
+  min-height: 50px !important;
 }
 
 button.eg-btn i,
 .eg-btn i {
   flex: 0 0 auto;
+  line-height: 1;
+}
+
+button.eg-btn span,
+.eg-btn span {
+  display: inline-block;
+  line-height: 1.25;
 }
 
 .eg-btn:hover {
@@ -1482,11 +1499,12 @@ button.eg-btn i,
 .eg-chat-card button.eg-btn,
 .eg-btn-row .eg-btn {
   flex: 1 1 auto;
-  height: auto;
-  min-height: 28px;
-  line-height: 1.25;
-  white-space: normal;
-  padding: 5px 8px;
+  height: auto !important;
+  min-height: 30px !important;
+  max-height: none !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+  padding: 5px 8px !important;
   font-size: 11px;
 }
 

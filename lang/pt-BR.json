@@ -55,7 +55,40 @@
       "enableMagicPathDiceColors": {
         "name": "Cores 3D por Caminho de Magia (Dice So Nice!)",
         "hint": "Ao conjurar feitiços, aplica automaticamente a paleta 3D do Caminho Principal escolhido nos dados de magia."
+      },
+      "useCardInitiative": {
+        "name": "Iniciativa por Cartas (1–10)",
+        "hint": "Substitui a rolagem de iniciativa por um baralho de 10 cartas (estilo Vaesen / Year Zero Engine). A menor carta age primeiro."
+      },
+      "autoRedealInitiative": {
+        "name": "Redistribuir Cartas a Cada Rodada",
+        "hint": "Quando ativado, recolhe e distribui novas cartas de iniciativa automaticamente ao iniciar cada nova rodada."
       }
+    },
+    "Combat": {
+      "InitiativeDeckPreset": "Baralho de Iniciativa — Egrégora",
+      "CardLabel": "Carta",
+      "InitiativeCardDrawn": "Carta de Iniciativa Sacada",
+      "DrewInitiativeCard": "{name} sacou a Carta de Iniciativa #{card}.",
+      "DeckReshuffled": "Todas as 10 cartas foram distribuídas. O baralho de iniciativa foi reembaralhado.",
+      "DeckRemaining": "Baralho: {remaining}/{total}",
+      "DeckRemainingHint": "Cartas restantes no baralho de iniciativa (1–10).",
+      "RedealAll": "Reembaralhar",
+      "RedealAllHint": "Recolher todas as cartas, reembaralhar o baralho e distribuir novamente para todos os combatentes ativos.",
+      "CardClickSwapTooltip": "Carta #{card} — Clique para trocar iniciativa ou gerenciar carta",
+      "InitiativeSwapTitle": "Trocar Carta de Iniciativa",
+      "CurrentCard": "Carta atual: #{card}",
+      "SwapWithLabel": "Trocar carta com",
+      "SwapButton": "Trocar Carta",
+      "NoSwapTargets": "Nenhum outro combatente possui uma carta de iniciativa para trocar.",
+      "ManualCardLabel": "Definir carta manualmente (Narrador)",
+      "SetCardButton": "Definir Carta",
+      "NoActiveGMForSwap": "É necessário que o Narrador esteja conectado para trocar cartas de iniciativa.",
+      "SwappedInitiativeMsg": "<strong>{nameA}</strong> (#{cardA}) trocou sua carta de iniciativa com <strong>{nameB}</strong> (#{cardB}).",
+      "SlowActionReady": "Ação Lenta disponível (clique para marcar como usada)",
+      "SlowActionUsed": "Ação Lenta usada (clique para restaurar)",
+      "FastActionReady": "Ação Rápida disponível (clique para marcar como usada)",
+      "FastActionUsed": "Ação Rápida usada (clique para restaurar)"
     },
     "DSN": {
       "Category": "Egrégora: O Mundo Oculto",

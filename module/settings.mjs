@@ -38,6 +38,25 @@ export function registerSettings() {
     type: Boolean,
     default: true,
   });
+
+  game.settings.register(ID, "useCardInitiative", {
+    name: "EGREGORA.Settings.useCardInitiative.name",
+    hint: "EGREGORA.Settings.useCardInitiative.hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true,
+    onChange: () => ui.combat?.render?.(),
+  });
+
+  game.settings.register(ID, "autoRedealInitiative", {
+    name: "EGREGORA.Settings.autoRedealInitiative.name",
+    hint: "EGREGORA.Settings.autoRedealInitiative.hint",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
 }
 
 export function registerStatusEffects() {

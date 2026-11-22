@@ -1834,3 +1834,227 @@ button.eg-btn.eg-btn-crimson:hover,
   font-weight: 700;
   color: var(--eg-crimson);
 }
+
+/* ==========================================================================
+   Combat Tracker — Card-Based Initiative (Vaesen / Year Zero Engine)
+   ========================================================================== */
+
+.eg-combat-deck-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  margin: 2px 6px 4px;
+  border-radius: 4px;
+  background: rgba(15, 11, 10, 0.55);
+  border: 1px solid rgba(196, 154, 72, 0.35);
+  font-size: 11.5px;
+  color: #f0e4ce;
+}
+
+.eg-deck-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.eg-deck-pill i {
+  color: #d7ad5c;
+}
+
+.eg-redeal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: auto;
+  height: 22px;
+  padding: 0 8px;
+  margin: 0;
+  border-radius: 3px;
+  border: 1px solid rgba(196, 154, 72, 0.55);
+  background: linear-gradient(180deg, #6b1a1c 0%, #430f11 100%);
+  color: #f9ebd0;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.eg-redeal-btn:hover {
+  background: linear-gradient(180deg, #8a2326 0%, #581417 100%);
+  box-shadow: 0 0 6px rgba(215, 173, 92, 0.35);
+}
+
+/* Miniature Initiative Card inside .token-initiative */
+.combat-tracker .combatant .token-initiative .eg-init-card-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 42px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(215, 173, 92, 0.75);
+  border-radius: 3px;
+  overflow: hidden;
+  background: #14100f;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.55);
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.combat-tracker .combatant .token-initiative .eg-init-card-btn:hover {
+  transform: scale(1.12);
+  box-shadow: 0 0 10px rgba(215, 173, 92, 0.65);
+  z-index: 2;
+}
+
+.combat-tracker .combatant .token-initiative .eg-init-card-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  display: block;
+}
+
+.combat-tracker .combatant .token-initiative .eg-init-card-num {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  min-width: 15px;
+  height: 15px;
+  padding: 0 3px;
+  border-radius: 2px;
+  background: rgba(14, 10, 9, 0.88);
+  border: 1px solid rgba(215, 173, 92, 0.75);
+  color: #ffe3a8;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 13px;
+  text-align: center;
+}
+
+/* Fast / Slow Actions & Swap Controls */
+.combat-tracker .combatant .eg-combat-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: 4px;
+}
+
+.combat-tracker .combatant .eg-action-btn,
+.combat-tracker .combatant .eg-swap-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: #e6d6ba;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.combat-tracker .combatant .eg-action-btn:hover:not(:disabled),
+.combat-tracker .combatant .eg-swap-btn:hover {
+  color: #ffd98a;
+  background: rgba(215, 173, 92, 0.16);
+  opacity: 1;
+}
+
+.combat-tracker .combatant .eg-action-btn.is-used {
+  color: #8f2d2f;
+  opacity: 0.42;
+  text-decoration: line-through;
+}
+
+.combat-tracker .combatant .eg-action-btn:disabled {
+  cursor: default;
+}
+
+/* Initiative Card Chat Message */
+.eg-init-chat-card .eg-chat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eg-init-chat-badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 3px;
+  background: var(--eg-crimson, #7a1c1e);
+  color: #ffe7b8;
+  font-family: var(--eg-font-display);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.eg-init-chat-body {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0 2px;
+}
+
+.eg-init-chat-img {
+  max-width: 150px;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid rgba(215, 173, 92, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Swap / Manage Initiative Card Dialog */
+.eg-init-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 2px;
+}
+
+.eg-init-dialog-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 5px;
+  background: rgba(20, 14, 12, 0.08);
+  border: 1px solid var(--eg-border-soft, rgba(120, 90, 60, 0.35));
+}
+
+.eg-init-dialog-preview img {
+  width: 68px;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid rgba(215, 173, 92, 0.75);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.eg-init-dialog-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eg-init-dialog-hint {
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.8;
+  margin: 0;
+}

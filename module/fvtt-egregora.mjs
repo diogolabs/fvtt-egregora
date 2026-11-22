@@ -16,6 +16,7 @@ import {
 import { EgregoraActor } from "./documents/actor.mjs";
 import { EgregoraItem } from "./documents/item.mjs";
 import { EgregoraChatMessage } from "./documents/chat-message.mjs";
+import { EgregoraCombat, registerCombatSocket } from "./documents/combat.mjs";
 import { EgregoraChatLog } from "./applications/chat-log.mjs";
 import { EgregoraRollDialog } from "./applications/roll-dialog.mjs";
 import { EgregoraSpellDialog } from "./applications/spell-dialog.mjs";
@@ -23,6 +24,7 @@ import { EgregoraActorSheet } from "./sheets/actor-sheet.mjs";
 import { EgregoraItemSheet } from "./sheets/item-sheet.mjs";
 import { YearZeroRollManager } from "../lib/yzur.js";
 import { registerDice3D } from "./helpers/dice-so-nice.mjs";
+import { registerCombatTrackerHooks } from "./helpers/combat-tracker.mjs";
 import {
   executeEgregoraRoll,
   executeSpellCast,
@@ -38,7 +40,7 @@ import {
 
 globalThis.egregora = {
   config: EGREGORA_CONFIG,
-  documents: { EgregoraActor, EgregoraItem, EgregoraChatMessage },
+  documents: { EgregoraActor, EgregoraItem, EgregoraChatMessage, EgregoraCombat },
   applications: { EgregoraRollDialog, EgregoraSpellDialog, EgregoraActorSheet, EgregoraItemSheet },
   models: {
     EgregoraCharacterData,
@@ -131,6 +133,17 @@ Hooks.once("init", () => {
   CONFIG.ChatMessage.documentClass = EgregoraChatMessage;
   CONFIG.ui.chat = EgregoraChatLog;
 
+  CONFIG.Combat.documentClass = EgregoraCombat;
+  CONFIG.Combat.initiative = { formula: "1d10", decimals: 0 };
+  CONFIG.Cards.presets = foundry.utils.mergeObject(CONFIG.Cards.presets ?? {}, {
+    initiative: {
+      label: "EGREGORA.Combat.InitiativeDeckPreset",
+      src: `systems/${EGREGORA_CONFIG.ID}/assets/cards/initiative-deck.json`,
+      type: "deck",
+    },
+  });
+  registerCombatTrackerHooks();
+
   const DocumentSheetConfig = foundry.applications?.apps?.DocumentSheetConfig
     ?? globalThis.DocumentSheetConfig;
   const ActorDoc = foundry.documents?.Actor ?? globalThis.Actor;
@@ -173,6 +186,7 @@ Hooks.once("init", () => {
 Hooks.once("diceSoNiceReady", registerDice3D);
 
 Hooks.once("ready", () => {
+  registerCombatSocket();
   Hooks.on("hotbarDrop", (bar, data, slot) => {
     if (data.type === "Item" && data.uuid) {
       createItemMacro(data, slot);

@@ -1,0 +1,168 @@
+{
+  "name": "Baralho de Iniciativa — Egrégora",
+  "type": "deck",
+  "description": "Baralho oficial de 10 cartas de iniciativa para Egrégora: O Mundo Oculto.",
+  "img": "systems/fvtt-egregora/assets/cards/card_1.jpg",
+  "cards": [
+    {
+      "name": "1",
+      "description": "Carta de Iniciativa 1",
+      "type": "base",
+      "suit": "initiative",
+      "value": 1,
+      "faces": [
+        {
+          "name": "1",
+          "img": "systems/fvtt-egregora/assets/cards/card_1.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "2",
+      "description": "Carta de Iniciativa 2",
+      "type": "base",
+      "suit": "initiative",
+      "value": 2,
+      "faces": [
+        {
+          "name": "2",
+          "img": "systems/fvtt-egregora/assets/cards/card_2.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "3",
+      "description": "Carta de Iniciativa 3",
+      "type": "base",
+      "suit": "initiative",
+      "value": 3,
+      "faces": [
+        {
+          "name": "3",
+          "img": "systems/fvtt-egregora/assets/cards/card_3.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "4",
+      "description": "Carta de Iniciativa 4",
+      "type": "base",
+      "suit": "initiative",
+      "value": 4,
+      "faces": [
+        {
+          "name": "4",
+          "img": "systems/fvtt-egregora/assets/cards/card_4.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "5",
+      "description": "Carta de Iniciativa 5",
+      "type": "base",
+      "suit": "initiative",
+      "value": 5,
+      "faces": [
+        {
+          "name": "5",
+          "img": "systems/fvtt-egregora/assets/cards/card_5.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "6",
+      "description": "Carta de Iniciativa 6",
+      "type": "base",
+      "suit": "initiative",
+      "value": 6,
+      "faces": [
+        {
+          "name": "6",
+          "img": "systems/fvtt-egregora/assets/cards/card_6.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "7",
+      "description": "Carta de Iniciativa 7",
+      "type": "base",
+      "suit": "initiative",
+      "value": 7,
+      "faces": [
+        {
+          "name": "7",
+          "img": "systems/fvtt-egregora/assets/cards/card_7.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "8",
+      "description": "Carta de Iniciativa 8",
+      "type": "base",
+      "suit": "initiative",
+      "value": 8,
+      "faces": [
+        {
+          "name": "8",
+          "img": "systems/fvtt-egregora/assets/cards/card_8.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "9",
+      "description": "Carta de Iniciativa 9",
+      "type": "base",
+      "suit": "initiative",
+      "value": 9,
+      "faces": [
+        {
+          "name": "9",
+          "img": "systems/fvtt-egregora/assets/cards/card_9.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    },
+    {
+      "name": "10",
+      "description": "Carta de Iniciativa 10",
+      "type": "base",
+      "suit": "initiative",
+      "value": 10,
+      "faces": [
+        {
+          "name": "10",
+          "img": "systems/fvtt-egregora/assets/cards/card_10.jpg",
+          "text": ""
+        }
+      ],
+      "face": 0,
+      "drawn": false
+    }
+  ]
+}

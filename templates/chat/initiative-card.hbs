@@ -1,0 +1,15 @@
+<div class="eg-chat-card eg-init-chat-card">
+  <header class="eg-chat-card-header">
+    {{#if tokenImg}}
+      <img src="{{tokenImg}}" alt="{{combatantName}}" />
+    {{/if}}
+    <div>
+      <h3>{{combatantName}}</h3>
+      <span class="eg-chat-sub">{{localize "EGREGORA.Combat.InitiativeCardDrawn"}}</span>
+    </div>
+    <span class="eg-init-chat-badge">#{{cardValue}}</span>
+  </header>
+  <div class="eg-init-chat-body">
+    <img class="eg-init-chat-img" src="{{cardImg}}" alt="{{localize "EGREGORA.Combat.CardLabel"}} {{cardValue}}" />
+  </div>
+</div>

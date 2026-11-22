@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.0 — Combate por Cartas de Iniciativa (Estilo Vaesen / Year Zero Engine) (Foundry VTT v13 & v14)
+- **Baralho Oficial de Iniciativa de Egrégora (Cartas 1–10):**
+  - Integração das 10 artes oficiais de cartas de iniciativa (`assets/cards/card_1.jpg` a `card_10.jpg`) + preset oficial para o módulo nativo de Baralhos do Foundry (`CONFIG.Cards.presets.initiative`).
+- **Iniciativa por Cartas no Combat Encounters (`EgregoraCombat`):**
+  - Ao rolar iniciativa (individual, PNJs ou todos), o sistema saca cartas únicas de **1 a 10** sem duplicatas no baralho atual (reembaralhando automaticamente caso haja mais de 10 combatentes).
+  - Ordenação ascendente estilo Year Zero Engine / Vaesen (**menor carta age primeiro**: `1` → `10`), com card visual da carta sacada enviado ao chat.
+- **Aprimoramentos no Combat Tracker (compatível com Foundry v13 e v14):**
+  - Exibe a **miniatura da carta oficial** (com badge numérico) diretamente na coluna de iniciativa de cada combatente.
+  - **Troca de Cartas de Iniciativa:** clique na carta ou no ícone de troca (`⇄`) para trocar sua carta de iniciativa com outro combatente (com suporte via socket para jogadores quando o Narrador estiver conectado, além de ajuste manual de carta 1–10 para o Narrador).
+  - **Controle de Ação Lenta e Ação Rápida:** botões dedicados (`⏳` e `⚡`) em cada combatente que se reiniciam automaticamente a cada nova rodada.
+  - **Barra de Baralho & Reembaralhar:** contador de cartas restantes no baralho (`Baralho: X/10`) e botão **Reembaralhar** para o Narrador redistribuir novas cartas a todos os combatentes ativos em um clique.
+- **Novas Configurações do Sistema:**
+  - *Iniciativa por Cartas (1–10)* (ativada por padrão).
+  - *Redistribuir Cartas a Cada Rodada* (opcional, desativada por padrão como em Vaesen).
+
 ## 0.2.2 — Combinação de 1 a 6 Caminhos de Magia (Dados 3D Mesclados) + Correção de Conjuração e Botão Aceitar (Foundry VTT v13 & v14)
 - **Combinação livre de 1 até 6 Caminhos de Magia com Checkboxes:**
   - Tanto o diálogo **Conjurar Magia** quanto a ficha do item **Feitiço** agora exibem os **6 Caminhos** (*Matéria, Fluxo, Mente, Vida, Ecos e Abismo*) sempre visíveis em grade 3×2 com checkboxes, permitindo mesclar livremente até todos os 6 Caminhos (compatível com feitiços antigos já criados).

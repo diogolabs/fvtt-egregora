@@ -55,7 +55,40 @@
       "enableMagicPathDiceColors": {
         "name": "Magic Path 3D Dice Colors (Dice So Nice!)",
         "hint": "When casting spells, automatically colors the magic path dice according to the chosen Primary Path."
+      },
+      "useCardInitiative": {
+        "name": "Card-Based Initiative (1–10)",
+        "hint": "Replaces initiative rolls with a 10-card deck (Vaesen / Year Zero Engine style). Lowest card acts first."
+      },
+      "autoRedealInitiative": {
+        "name": "Auto-Redeal Cards Each Round",
+        "hint": "When enabled, collects and deals fresh initiative cards automatically at the start of every new round."
       }
+    },
+    "Combat": {
+      "InitiativeDeckPreset": "Egrégora Initiative Deck",
+      "CardLabel": "Card",
+      "InitiativeCardDrawn": "Initiative Card Drawn",
+      "DrewInitiativeCard": "{name} drew Initiative Card #{card}.",
+      "DeckReshuffled": "All 10 cards have been dealt. The initiative deck has been reshuffled.",
+      "DeckRemaining": "Deck: {remaining}/{total}",
+      "DeckRemainingHint": "Remaining cards in the initiative deck (1–10).",
+      "RedealAll": "Redeal",
+      "RedealAllHint": "Collect all cards, shuffle the deck, and deal new initiative cards to all active combatants.",
+      "CardClickSwapTooltip": "Card #{card} — Click to swap initiative or manage card",
+      "InitiativeSwapTitle": "Swap Initiative Card",
+      "CurrentCard": "Current card: #{card}",
+      "SwapWithLabel": "Swap card with",
+      "SwapButton": "Swap Card",
+      "NoSwapTargets": "No other combatant has an initiative card to swap with.",
+      "ManualCardLabel": "Set card manually (GM)",
+      "SetCardButton": "Set Card",
+      "NoActiveGMForSwap": "An active GM is required to swap initiative cards.",
+      "SwappedInitiativeMsg": "<strong>{nameA}</strong> (#{cardA}) swapped initiative cards with <strong>{nameB}</strong> (#{cardB}).",
+      "SlowActionReady": "Slow Action available (click to mark as used)",
+      "SlowActionUsed": "Slow Action used (click to restore)",
+      "FastActionReady": "Fast Action available (click to mark as used)",
+      "FastActionUsed": "Fast Action used (click to restore)"
     },
     "DSN": {
       "Category": "Egrégora: The Occult World",

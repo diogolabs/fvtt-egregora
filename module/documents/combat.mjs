@@ -45,8 +45,10 @@ export class EgregoraCombat extends BaseCombat {
     const used = new Set();
     for (const c of this.combatants) {
       if (excludeSet.has(c.id)) continue;
-      if (Number.isInteger(c.initiative) && c.initiative >= 1 && c.initiative <= EgregoraCombat.DECK_SIZE) {
-        used.add(c.initiative);
+      if (c.initiative === null || c.initiative === undefined || c.initiative === "") continue;
+      const val = Number(c.initiative);
+      if (Number.isInteger(val) && val >= 1 && val <= EgregoraCombat.DECK_SIZE) {
+        used.add(val);
       }
     }
     const available = [];
@@ -150,11 +152,15 @@ export class EgregoraCombat extends BaseCombat {
 
     await this.updateEmbeddedDocuments("Combatant", updates);
 
-    if (updateTurn && currentId) {
-      const turnIndex = this.turns.findIndex(t => t.id === currentId);
-      await this.update({ turn: turnIndex >= 0 ? turnIndex : 0 });
-    } else if (this.started && this.turn === null) {
-      await this.update({ turn: 0 });
+    if (game.user.isGM) {
+      if (updateTurn && currentId) {
+        const turnIndex = this.turns.findIndex(t => t.id === currentId);
+        if (turnIndex >= 0 && turnIndex !== this.turn) {
+          await this.update({ turn: turnIndex });
+        }
+      } else if (this.started && this.turn === null) {
+        await this.update({ turn: 0 });
+      }
     }
 
     if (messages.length) {
@@ -166,7 +172,7 @@ export class EgregoraCombat extends BaseCombat {
   }
 
   /**
-   * Reset all initiatives, card flags, and action states.
+   * Reset all initiatives, card flags, and action states (returns all cards to the deck).
    * @override
    */
   async resetAll() {
@@ -182,7 +188,10 @@ export class EgregoraCombat extends BaseCombat {
     if (updates.length) {
       await this.updateEmbeddedDocuments("Combatant", updates);
     }
-    return this.update({ turn: null });
+    if (game.user.isGM) {
+      await this.update({ turn: null });
+    }
+    return this;
   }
 
   /**

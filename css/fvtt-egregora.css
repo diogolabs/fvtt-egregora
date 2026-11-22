@@ -1865,22 +1865,37 @@ button.eg-btn.eg-btn-crimson:hover,
   color: #d7ad5c;
 }
 
+.eg-deck-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .eg-redeal-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   width: auto;
   height: 22px;
-  padding: 0 8px;
+  padding: 0 7px;
   margin: 0;
   border-radius: 3px;
   border: 1px solid rgba(196, 154, 72, 0.55);
   background: linear-gradient(180deg, #6b1a1c 0%, #430f11 100%);
   color: #f9ebd0;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   cursor: pointer;
   line-height: 1;
+}
+
+.eg-recall-btn {
+  background: linear-gradient(180deg, #342b26 0%, #1d1714 100%);
+}
+
+.eg-recall-btn:hover {
+  background: linear-gradient(180deg, #4b3e36 0%, #2a211d 100%);
+  box-shadow: 0 0 6px rgba(215, 173, 92, 0.35);
 }
 
 .eg-redeal-btn:hover {

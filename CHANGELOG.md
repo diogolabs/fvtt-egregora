@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.1 — Correção da Barra do Baralho de Iniciativa e Saque por Jogadores (Foundry VTT v13 & v14)
+- **Correção do contador de cartas e reembaralhamento travados entre encontros:**
+  - A barra de status do baralho (`Baralho: X/10`) agora é sempre recriada/sincronizada dentro do cabeçalho do Combat Tracker a cada atualização (`createCombat`, `deleteCombat`, `updateCombat`, `create/update/deleteCombatant`), resolvendo o problema em que as cartas sacadas pareciam continuar fora ao encerrar um encontro ou criar um novo no `ApplicationV2` (Foundry v13/v14).
+  - Os botões agora consultam sempre o encontro ativo em tempo real (`app.viewed ?? game.combat`), eliminando referências antigas.
+- **Botões separados para Recolher e Distribuir (Narrador):**
+  - **Recolher (`↺`):** devolve todas as cartas ao baralho (`10/10`) e limpa as iniciativas dos combatentes.
+  - **Distribuir (`🔀`):** recolhe, reembaralha e distribui novas cartas de 1 a 10 para todos os combatentes ativos.
+- **Correção de permissão ao jogador sacar carta:**
+  - Jogadores sem permissão de Narrador não tentam mais atualizar o turno do documento `Combat` ao sacar sua própria carta de iniciativa, garantindo que o card no chat seja sempre enviado sem erro de permissão.
+
 ## 0.3.0 — Combate por Cartas de Iniciativa (Estilo Vaesen / Year Zero Engine) (Foundry VTT v13 & v14)
 - **Baralho Oficial de Iniciativa de Egrégora (Cartas 1–10):**
   - Integração das 10 artes oficiais de cartas de iniciativa (`assets/cards/card_1.jpg` a `card_10.jpg`) + preset oficial para o módulo nativo de Baralhos do Foundry (`CONFIG.Cards.presets.initiative`).

@@ -2,10 +2,6 @@ import { EGREGORA_CONFIG } from "../config.mjs";
 
 const DICE_ASSET_BASE = `systems/${EGREGORA_CONFIG.ID}/assets/dice`;
 
-function faceArray(prefix) {
-  return [1, 2, 3, 4, 5, 6].map(n => `${DICE_ASSET_BASE}/${prefix}_${n}.png`);
-}
-
 export const EGREGORA_DSN_COLORSETS = {
   base: "egregora-base",
   skill: "egregora-skill",
@@ -22,129 +18,139 @@ export const MAGIC_PATH_COLORSETS = {
   abyss: "egregora-path-abyss",
 };
 
+export const MAGIC_PATH_SYSTEMS = {
+  matter: `${EGREGORA_CONFIG.ID}-matter`,
+  flux: `${EGREGORA_CONFIG.ID}-flux`,
+  mind: `${EGREGORA_CONFIG.ID}-mind`,
+  life: `${EGREGORA_CONFIG.ID}-life`,
+  echoes: `${EGREGORA_CONFIG.ID}-echoes`,
+  abyss: `${EGREGORA_CONFIG.ID}-abyss`,
+};
+
 /**
- * Registers Egrégora 3D dice presets, themes, roles (DSN v6 / Foundry v14),
- * and SFX triggers safely across both Foundry v13 (DSN v5) and v14 (DSN v6).
+ * Registers Egrégora rounded-corner polished-marble 3D dice models (.glb),
+ * glossy themes, DSN v6 Dice Roles, and SFX triggers across Foundry v13 (DSN v5) & v14 (DSN v6).
  */
 export async function registerDice3D(dice3d) {
   const ID = EGREGORA_CONFIG.ID;
   const category = game.i18n.localize("EGREGORA.DSN.Category");
 
-  // 1. Register System ("preferred" is supported in both DSN v5 and v6)
+  // 1. Register Primary System ("preferred" works on both DSN v5 and v6)
   dice3d.addSystem({ id: ID, name: "Egrégora: O Mundo Oculto" }, "preferred");
 
-  // 2. Register Egrégora Colorsets (Themes)
+  // 2. Register Egrégora Glossy Polished-Marble Colorsets (Themes)
+  // Using DSN's "pristine" material (clearcoat glossy finish) so standard dice also match the marble polish.
   const colorsets = [
     {
       name: EGREGORA_DSN_COLORSETS.base,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.base"),
       category,
       foreground: "#ffffff",
-      background: "#120c0c",
+      background: "#140d0f",
       outline: "#000000",
-      edge: "#360a0a",
-      texture: "none",
-      material: "stone",
+      edge: "#470e0e",
+      texture: "marble",
+      material: "pristine",
     },
     {
       name: EGREGORA_DSN_COLORSETS.skill,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.skill"),
       category,
       foreground: "#f7eac6",
-      background: "#14110d",
+      background: "#161411",
       outline: "#000000",
-      edge: "#6e5325",
-      texture: "none",
-      material: "stone",
+      edge: "#8c692a",
+      texture: "marble",
+      material: "pristine",
     },
     {
       name: EGREGORA_DSN_COLORSETS.gear,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.gear"),
       category,
-      foreground: "#e0ecf5",
-      background: "#171d22",
+      foreground: "#e4f0fa",
+      background: "#161c22",
       outline: "#000000",
-      edge: "#4a667a",
-      texture: "none",
-      material: "metal",
+      edge: "#5c809c",
+      texture: "marble",
+      material: "pristine",
     },
     {
       name: EGREGORA_DSN_COLORSETS.corruption,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.corruption"),
       category,
-      foreground: "#ffd694",
-      background: "#260505",
+      foreground: "#ffdca8",
+      background: "#2a0608",
       outline: "#000000",
-      edge: "#991515",
-      texture: "none",
-      material: "stone",
+      edge: "#b31717",
+      texture: "marble",
+      material: "pristine",
     },
-    // 6 Caminhos de Magia
+    // 6 Caminhos de Magia (todos padronizados com mármore liso polido)
     {
       name: MAGIC_PATH_COLORSETS.matter,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.pathMatter"),
       category,
-      foreground: "#ffe6b8",
-      background: "#3b2412",
-      outline: "#140a04",
-      edge: "#a66c2e",
-      texture: "stone",
-      material: "metal",
+      foreground: "#ffebbf",
+      background: "#2e1c0f",
+      outline: "#120903",
+      edge: "#b87832",
+      texture: "marble",
+      material: "pristine",
     },
     {
       name: MAGIC_PATH_COLORSETS.flux,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.pathFlux"),
       category,
-      foreground: "#e6f4ff",
-      background: "#14263d",
-      outline: "#07101c",
-      edge: "#5ca4d6",
-      texture: "astral",
-      material: "glass",
+      foreground: "#e8f6ff",
+      background: "#102036",
+      outline: "#060e1a",
+      edge: "#5caee6",
+      texture: "marble",
+      material: "pristine",
     },
     {
       name: MAGIC_PATH_COLORSETS.mind,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.pathMind"),
       category,
-      foreground: "#f2dcff",
-      background: "#2a1238",
-      outline: "#100517",
-      edge: "#8e44ad",
-      texture: "astral",
-      material: "glass",
+      foreground: "#f5e3ff",
+      background: "#241034",
+      outline: "#0e0415",
+      edge: "#9b50bd",
+      texture: "marble",
+      material: "pristine",
     },
     {
       name: MAGIC_PATH_COLORSETS.life,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.pathLife"),
       category,
-      foreground: "#e4ffd9",
-      background: "#122b18",
-      outline: "#061209",
-      edge: "#4f9454",
+      foreground: "#e8ffde",
+      background: "#0f2616",
+      outline: "#051008",
+      edge: "#4ea860",
       texture: "marble",
-      material: "stone",
+      material: "pristine",
     },
     {
       name: MAGIC_PATH_COLORSETS.echoes,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.pathEchoes"),
       category,
-      foreground: "#e8f0f2",
-      background: "#1f262b",
-      outline: "#0a0d0f",
-      edge: "#7d93a1",
-      texture: "cloudy",
-      material: "glass",
+      foreground: "#edf4f8",
+      background: "#1c2228",
+      outline: "#090c0e",
+      edge: "#8da6b8",
+      texture: "marble",
+      material: "pristine",
     },
     {
       name: MAGIC_PATH_COLORSETS.abyss,
       description: game.i18n.localize("EGREGORA.DSN.Colorset.pathAbyss"),
       category,
-      foreground: "#ffb8a6",
-      background: "#1c0305",
+      foreground: "#ffc8bc",
+      background: "#1e0408",
       outline: "#000000",
-      edge: "#b31217",
-      texture: "fire",
-      material: "stone",
+      edge: "#c41620",
+      texture: "marble",
+      material: "pristine",
     },
   ];
 
@@ -152,65 +158,66 @@ export async function registerDice3D(dice3d) {
     dice3d.addColorset(cs, cs.name === EGREGORA_DSN_COLORSETS.base ? "preferred" : "default");
   }
 
-  // 3. Register Custom 3D Dice Presets (256x256 Faces + Bump + Emissive)
-  const sharedBumps = faceArray("bump");
-  const sharedEmissives = faceArray("emissive");
-
+  // 3. Register Custom Rounded-Corner Polished-Marble 3D Models (.glb)
   // Standard d6 (used by Panic, Trauma, D66 Criticals & Mutations)
   dice3d.addDicePreset({
     type: "d6",
-    labels: faceArray("base"),
-    bumpMaps: sharedBumps,
-    emissiveMaps: sharedEmissives,
-    emissive: 0xff2814,
-    emissiveIntensity: 0.9,
-    colorset: EGREGORA_DSN_COLORSETS.base,
+    modelFile: `${DICE_ASSET_BASE}/d6_base.glb`,
     system: ID,
   }, "d6");
 
   // Base / Attribute Die (db)
   dice3d.addDicePreset({
     type: "db",
-    labels: faceArray("base"),
-    bumpMaps: sharedBumps,
-    emissiveMaps: sharedEmissives,
-    emissive: 0xff2814,
-    emissiveIntensity: 0.95,
-    colorset: EGREGORA_DSN_COLORSETS.base,
+    modelFile: `${DICE_ASSET_BASE}/d6_base.glb`,
     system: ID,
   }, "d6");
 
   // Skill Die (ds)
   dice3d.addDicePreset({
     type: "ds",
-    labels: faceArray("skill"),
-    bumpMaps: sharedBumps,
-    colorset: EGREGORA_DSN_COLORSETS.skill,
+    modelFile: `${DICE_ASSET_BASE}/d6_skill.glb`,
     system: ID,
   }, "d6");
 
   // Gear Die (dg)
   dice3d.addDicePreset({
     type: "dg",
-    labels: faceArray("gear"),
-    bumpMaps: sharedBumps,
-    colorset: EGREGORA_DSN_COLORSETS.gear,
+    modelFile: `${DICE_ASSET_BASE}/d6_gear.glb`,
     system: ID,
   }, "d6");
 
   // Corruption Die (dk)
   dice3d.addDicePreset({
     type: "dk",
-    labels: faceArray("corr"),
-    bumpMaps: sharedBumps,
-    emissiveMaps: sharedEmissives,
-    emissive: 0xff1908,
-    emissiveIntensity: 1.5,
-    colorset: EGREGORA_DSN_COLORSETS.corruption,
+    modelFile: `${DICE_ASSET_BASE}/d6_corr.glb`,
     system: ID,
   }, "d6");
 
-  // 4. DSN v6 (Foundry v14) Dice Roles — feature-detected safely
+  // 4. Register Rounded Polished-Marble 3D Variants for all 6 Magic Paths
+  const pathMeta = [
+    { key: "matter", labelKey: "EGREGORA.DSN.Colorset.pathMatter" },
+    { key: "flux", labelKey: "EGREGORA.DSN.Colorset.pathFlux" },
+    { key: "mind", labelKey: "EGREGORA.DSN.Colorset.pathMind" },
+    { key: "life", labelKey: "EGREGORA.DSN.Colorset.pathLife" },
+    { key: "echoes", labelKey: "EGREGORA.DSN.Colorset.pathEchoes" },
+    { key: "abyss", labelKey: "EGREGORA.DSN.Colorset.pathAbyss" },
+  ];
+
+  for (const p of pathMeta) {
+    const sysId = MAGIC_PATH_SYSTEMS[p.key];
+    const modelFile = `${DICE_ASSET_BASE}/d6_path_${p.key}.glb`;
+    dice3d.addSystem({ id: sysId, name: game.i18n.localize(p.labelKey) }, "default");
+    for (const dieType of ["d6", "db", "ds"]) {
+      dice3d.addDicePreset({
+        type: dieType,
+        modelFile,
+        system: sysId,
+      }, "d6");
+    }
+  }
+
+  // 5. DSN v6 (Foundry v14) Dice Roles — feature-detected safely
   if (typeof dice3d.addRole === "function") {
     const roleDefs = [
       {
@@ -252,7 +259,7 @@ export async function registerDice3D(dice3d) {
     }
   }
 
-  // 5. Custom SFX Trigger for Egrégora Outcomes (works on both DSN v5 & v6)
+  // 6. Custom SFX Trigger for Egrégora Outcomes (works on both DSN v5 & v6)
   if (typeof dice3d.addSFXTrigger === "function") {
     dice3d.addSFXTrigger("egregora-roll", game.i18n.localize("EGREGORA.DSN.SFXTrigger"), [
       { id: "success", name: game.i18n.localize("EGREGORA.DSN.SFX.success") },
@@ -262,7 +269,7 @@ export async function registerDice3D(dice3d) {
     ]);
   }
 
-  // 6. Preload presets on DSN v6 to avoid first-roll stutter
+  // 7. Preload primary presets on DSN v6 to avoid first-roll stutter
   if (typeof dice3d.preloadPresets === "function") {
     await dice3d.preloadPresets(ID);
   }
@@ -288,6 +295,9 @@ export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, con
     useMagicColors = true;
   }
 
+  const magicSystem = (useMagicColors && magicPath && MAGIC_PATH_SYSTEMS[magicPath])
+    ? MAGIC_PATH_SYSTEMS[magicPath]
+    : null;
   const magicColorset = (useMagicColors && magicPath && MAGIC_PATH_COLORSETS[magicPath])
     ? MAGIC_PATH_COLORSETS[magicPath]
     : null;
@@ -311,10 +321,10 @@ export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, con
       }
     } else if (type === "skill") {
       term.options.dsnRole = "egregora-skill";
-      if (magicColorset) {
+      if (magicSystem) {
         term.options.appearance = {
-          system: ID,
-          colorset: magicColorset,
+          system: magicSystem,
+          colorset: magicColorset || EGREGORA_DSN_COLORSETS.skill,
         };
       } else if (!hasDsnRoles) {
         term.options.appearance = {
@@ -340,10 +350,10 @@ export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, con
       }
     } else {
       // Standard d6 (Panic, Criticals, Mutations, Trauma)
-      if (magicColorset) {
+      if (magicSystem) {
         term.options.appearance = {
-          system: ID,
-          colorset: magicColorset,
+          system: magicSystem,
+          colorset: magicColorset || EGREGORA_DSN_COLORSETS.base,
         };
       } else if (!hasDsnRoles) {
         term.options.appearance = {

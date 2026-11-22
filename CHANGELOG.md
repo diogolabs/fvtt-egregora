@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 — Dados 3D com Quinas Arredondadas e Mármore Liso Brilhoso (Foundry VTT v13 & v14)
+- **Geometria 3D Arredondada (`.glb`):** todos os dados D6 de Egrégora agora usam modelos 3D glTF 2.0 dedicados com **quinas e arestas suavemente arredondadas** (em vez do cubo de quina reta padrão), perfeitamente alinhados à física e às 6 faces do Dice So Nice.
+- **Acabamento Padronizado em Mármore Liso Brilhoso:** textura de mármore polido equalizada em todas as faces e variantes, com material PBR liso (`roughness: 0.15`) + camada de polimento espelhado (`KHR_materials_clearcoat`) e brilho emissivo sutil nos veios e no Glifo da face 6 (removendo a rugosidade de pedra bruta).
+- **10 Variantes Arredondadas Polidas:** Base (`d6`/`db`), Perícia (`ds`), Equipamento (`dg`), Corrupção (`dk`) e os **6 Caminhos de Magia** (Matéria, Fluxo, Mente, Vida, Ecos e Abismo), além dos temas de cores padronizados com material `pristine` (brilho liso) para dados padrão.
+
 ## 0.2.0 — Integração Completa com Dice So Nice! 3D (Foundry VTT v13 & v14)
 - **Dados 3D Oficiais de Egrégora (`assets/dice/`):** 36 texturas `256×256` geradas a partir das artes oficiais (faces 1–5 com números estilizados + face 6 com o Glifo de Egrégora, além de **Bump Maps** de relevo 3D e **Emissive Maps** para brilho carmesim nas fendas e no Glifo!).
 - **4 Variantes Visuais Distintas na Mesa 3D:**

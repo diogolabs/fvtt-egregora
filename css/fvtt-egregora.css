@@ -209,8 +209,23 @@
 }
 
 .eg-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   line-height: 1;
+}
+
+.eg-logo-img {
+  display: block;
+  max-height: 76px;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  border: none;
+  object-fit: contain;
+  margin: 0 auto;
+  filter: drop-shadow(0 2px 4px rgba(32, 8, 6, 0.2));
 }
 
 .eg-logo-title {
@@ -558,6 +573,7 @@
   width: 174px;
   height: 174px;
   margin: -10px -8px;
+  border: none;
   object-fit: contain;
   cursor: pointer;
   filter: drop-shadow(0 3px 6px rgba(24, 6, 4, 0.45));

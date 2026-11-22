@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.7 — Correção de Feitiços e Logo/Glifo Oficiais (Foundry VTT v13 & v14)
+- Corrigido erro de validação ao criar Feitiços (`system: secondaryPath: may not be a blank string`) adicionando `blank: true` ao `StringField` de `secondaryPath` em [items.mjs](module/data/items.mjs).
+- Substituída a tipografia do cabeçalho pela logo oficial em PNG ([assets/logo.png](assets/logo.png)) e o emblema central pelo glifo oficial ([assets/glyph.png](assets/glyph.png)), preservando exatamente as dimensões e o alinhamento das divs da ficha.
+- Adicionada a pasta `imagens-egregora/` ao `.gitignore`.
+
 ## 0.1.6 — Retrato Circular 128×128 e Correção das Cores das Caixas (Foundry VTT v13 & v14)
 - Retrato do Desperto ampliado para **`128×128px`** em formato circular com colunas simétricas no cabeçalho (`136px 1fr 136px`) para manter o logo **EGRÉGORA** centralizado (e `88×88px` nas fichas compactas de PNJ e Veículo).
 - Corrigida a especificidade CSS das caixas marcadas (`.eg-sq-box.filled` e `.eg-corr-box`), restaurando o preenchimento escuro nos quadrados de **Atributos** e **Força de Vontade** e o tom/preenchimento carmesim nos quadrados de **Corrupção** (além do hover em `.eg-mini-btn` e `.eg-icon-btn`).

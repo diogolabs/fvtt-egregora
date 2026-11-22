@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6 — Retrato Circular 128×128 e Correção das Cores das Caixas (Foundry VTT v13 & v14)
+- Retrato do Desperto ampliado para **`128×128px`** em formato circular com colunas simétricas no cabeçalho (`136px 1fr 136px`) para manter o logo **EGRÉGORA** centralizado (e `88×88px` nas fichas compactas de PNJ e Veículo).
+- Corrigida a especificidade CSS das caixas marcadas (`.eg-sq-box.filled` e `.eg-corr-box`), restaurando o preenchimento escuro nos quadrados de **Atributos** e **Força de Vontade** e o tom/preenchimento carmesim nos quadrados de **Corrupção** (além do hover em `.eg-mini-btn` e `.eg-icon-btn`).
+
 ## 0.1.5 — Polimento de Focus e Retrato Circular 64×64 (Foundry VTT v13 & v14)
 - Removido o prefixo `F:` do indicador de Focus em **Caminhos de Magia**, exibindo `0/0` em linha única (`white-space: nowrap`) ao lado de um seletor de Aptidão mais compacto, mantendo o tooltip explicativo no *hover*.
 - Retrato do personagem ampliado para `64×64px` em formato circular (`border-radius: 50%`) com moldura leve dupla em carmesim e pergaminho.

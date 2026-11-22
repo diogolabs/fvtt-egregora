@@ -169,24 +169,35 @@
 
 .eg-title-banner {
   display: grid;
-  grid-template-columns: 72px 1fr 84px;
+  grid-template-columns: 136px 1fr 136px;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .eg-portrait {
-  width: 64px;
-  height: 64px;
+  width: 128px;
+  height: 128px;
   object-fit: cover;
   border-radius: 50%;
-  border: 2px solid var(--eg-crimson);
+  border: 2.5px solid var(--eg-crimson);
   box-shadow:
     0 0 0 2px rgba(243, 236, 218, 0.85),
-    0 0 0 3px rgba(46, 34, 27, 0.45),
-    0 2px 6px rgba(29, 20, 16, 0.28);
+    0 0 0 3.5px rgba(46, 34, 27, 0.45),
+    0 3px 8px rgba(29, 20, 16, 0.3);
   cursor: pointer;
   background: #1d1410;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.eg-npc-page .eg-title-banner,
+.eg-vehicle-page .eg-title-banner {
+  grid-template-columns: 96px 1fr auto;
+}
+
+.eg-npc-page .eg-portrait,
+.eg-vehicle-page .eg-portrait {
+  width: 88px;
+  height: 88px;
 }
 
 .eg-portrait:hover {
@@ -250,6 +261,7 @@
   font-size: 12px;
 }
 
+.application.egregora button.eg-mini-btn:hover,
 .eg-mini-btn:hover {
   background: var(--eg-crimson);
   color: #fff6e6;
@@ -373,6 +385,7 @@
   justify-content: center;
 }
 
+.application.egregora button.eg-icon-btn:hover,
 .eg-icon-btn:hover {
   background: var(--eg-crimson);
   color: #fff6e6;
@@ -502,26 +515,31 @@
   min-height: 18px;
 }
 
+.application.egregora button.eg-sq-box:hover,
 .eg-sq-box:hover {
   transform: scale(1.08);
   border-color: var(--eg-crimson-bright);
 }
 
+.application.egregora button.eg-sq-box.filled,
 .eg-sq-box.filled {
   background: #241812;
   box-shadow: inset 0 0 0 2px rgba(243, 236, 218, 0.25);
 }
 
+.application.egregora button.eg-sq-box.eg-corr-box,
 .eg-corr-box {
   background: rgba(155, 36, 36, 0.26);
   border-color: #5c1919;
 }
 
+.application.egregora button.eg-sq-box.eg-corr-box.milestone,
 .eg-corr-box.milestone {
   border-width: 2px;
   border-color: var(--eg-crimson-bright);
 }
 
+.application.egregora button.eg-sq-box.eg-corr-box.filled,
 .eg-corr-box.filled {
   background: linear-gradient(135deg, #a61b1b 0%, #5e0c0c 100%);
   border-color: #2c0404;

@@ -1,17 +1,20 @@
 import { EGREGORA_CONFIG } from "../config.mjs";
-import { executeSpellCast } from "../helpers/rolls.mjs";
+import { executeSpellCast, normalizeMagicPaths } from "../helpers/rolls.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
 export class EgregoraSpellDialog extends HandlebarsApplicationMixin(ApplicationV2) {
-  constructor({ actor, spell = null, primaryPath = null } = {}, options = {}) {
+  constructor({ actor, spell = null, primaryPath = null, paths = null } = {}, options = {}) {
     super(options);
     this.actor = actor;
     this.spell = spell;
     this.spellName = spell?.name || "";
     this.attribute = spell?.system?.defaultAttribute || "intelligence";
-    this.primaryPath = primaryPath || spell?.system?.primaryPath || "echoes";
-    this.secondaryPath = spell?.system?.secondaryPath || "";
+    this.selectedPaths = normalizeMagicPaths(
+      paths ?? spell?.system?.selectedPaths,
+      primaryPath || spell?.system?.primaryPath || "echoes",
+      spell?.system?.secondaryPath || ""
+    );
     this.costPool = "willpower";
     const baseCost = spell ? Number(spell.system.willpowerCost) || 1 : 1;
     this.costAmount = spell?.system?.inGrimoire ? Math.max(1, baseCost - 1) : baseCost;
@@ -25,7 +28,7 @@ export class EgregoraSpellDialog extends HandlebarsApplicationMixin(ApplicationV
 
   static DEFAULT_OPTIONS = {
     classes: ["egregora", "egregora-dialog", "egregora-spell-dialog"],
-    position: { width: 470 },
+    position: { width: 490 },
     window: {
       title: "EGREGORA.Magic.Cast",
       icon: "fa-solid fa-wand-sparkles",
@@ -51,10 +54,23 @@ export class EgregoraSpellDialog extends HandlebarsApplicationMixin(ApplicationV
       el.addEventListener("change", ev => {
         const { name, type, checked, value } = ev.currentTarget;
         if (!name) return;
-        if (name === "spellName") this.spellName = value;
+        if (name === "magicPath" && type === "checkbox") {
+          const pathKey = value;
+          const next = new Set(this.selectedPaths);
+          if (checked) {
+            next.add(pathKey);
+          } else {
+            if (next.size <= 1) {
+              // Keep at least 1 Magic Path selected
+              ev.currentTarget.checked = true;
+              ui.notifications.warn(game.i18n.localize("EGREGORA.Magic.MinOnePath"));
+              return;
+            }
+            next.delete(pathKey);
+          }
+          this.selectedPaths = normalizeMagicPaths([...next]);
+        } else if (name === "spellName") this.spellName = value;
         else if (name === "attribute") this.attribute = value;
-        else if (name === "primaryPath") this.primaryPath = value;
-        else if (name === "secondaryPath") this.secondaryPath = value;
         else if (name === "costPool") this.costPool = value;
         else if (name === "costAmount") this.costAmount = Math.max(1, Number(value) || 1);
         else if (name === "fetishBonus") this.fetishBonus = Math.max(0, Number(value) || 0);
@@ -68,10 +84,22 @@ export class EgregoraSpellDialog extends HandlebarsApplicationMixin(ApplicationV
 
   async _prepareContext() {
     const attrVal = Number(this.actor?.system?.attributes?.[this.attribute]?.value) || 0;
-    const p1 = Number(this.actor?.system?.magic?.paths?.[this.primaryPath]) || 0;
-    const p2 = this.secondaryPath ? (Number(this.actor?.system?.magic?.paths?.[this.secondaryPath]) || 0) : null;
-    const effectivePath = p2 !== null ? Math.min(p1, p2) : p1;
+    const pathOptions = Object.entries(EGREGORA_CONFIG.magicPaths).map(([key, labelKey]) => ({
+      key,
+      label: game.i18n.localize(labelKey),
+      focus: Number(this.actor?.system?.magic?.paths?.[key]) || 0,
+      checked: this.selectedPaths.includes(key),
+    }));
+
+    const selectedValues = this.selectedPaths.map(
+      key => Number(this.actor?.system?.magic?.paths?.[key]) || 0
+    );
+    const effectivePath = selectedValues.length ? Math.min(...selectedValues) : 0;
+    const highestPath = selectedValues.length ? Math.max(...selectedValues) : 0;
     const totalDice = Math.max(0, attrVal + effectivePath + this.fetishBonus + this.modifier) + this.corruptionDice;
+    const selectedPathsDisplay = this.selectedPaths
+      .map(key => game.i18n.localize(EGREGORA_CONFIG.magicPaths[key]))
+      .join(" + ");
 
     return {
       actor: this.actor,
@@ -80,9 +108,12 @@ export class EgregoraSpellDialog extends HandlebarsApplicationMixin(ApplicationV
       spellName: this.spellName,
       attribute: this.attribute,
       attrVal,
-      primaryPath: this.primaryPath,
-      secondaryPath: this.secondaryPath,
+      pathOptions,
+      selectedPaths: this.selectedPaths,
+      selectedPathsCount: this.selectedPaths.length,
+      selectedPathsDisplay,
       effectivePath,
+      highestPath,
       costPool: this.costPool,
       costAmount: this.costAmount,
       fetishBonus: this.fetishBonus,
@@ -101,8 +132,9 @@ export class EgregoraSpellDialog extends HandlebarsApplicationMixin(ApplicationV
       spell: this.spell,
       spellName: this.spellName,
       attribute: this.attribute,
-      primaryPath: this.primaryPath,
-      secondaryPath: this.secondaryPath,
+      paths: this.selectedPaths,
+      primaryPath: this.selectedPaths[0] || "echoes",
+      secondaryPath: this.selectedPaths[1] || "",
       costPool: this.costPool,
       costAmount: this.costAmount,
       fetishBonus: this.fetishBonus,

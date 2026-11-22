@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.2 — Combinação de 1 a 6 Caminhos de Magia (Dados 3D Mesclados) + Correção de Conjuração e Botão Aceitar (Foundry VTT v13 & v14)
+- **Combinação livre de 1 até 6 Caminhos de Magia com Checkboxes:**
+  - Tanto o diálogo **Conjurar Magia** quanto a ficha do item **Feitiço** agora exibem os **6 Caminhos** (*Matéria, Fluxo, Mente, Vida, Ecos e Abismo*) sempre visíveis em grade 3×2 com checkboxes, permitindo mesclar livremente até todos os 6 Caminhos (compatível com feitiços antigos já criados).
+  - Calcula automaticamente o **menor Foco** entre os Caminhos marcados para a parada de dados e o **maior Foco** para o Dano Base de Magias de Dano Direto.
+- **Dados 3D Mesclados por Caminho:** ao combinar múltiplos Caminhos na conjuração, os dados de Caminho (`ds`) são distribuídos entre os Caminhos marcados, rolando na mesa com os modelos 3D arredondados de mármore polido correspondentes a cada Caminho (e identificando cada Caminho no tooltip do chat).
+- **Correção da Conjuração que ficava oculta no chat:**
+  - Precarregamento de todos os 6 sistemas 3D dos Caminhos de Magia + inclusão explícita de `systemSettings: {}` + verificação defensiva de sistemas registrados no Dice So Nice, além de rede de segurança pós-animação (`waitForDice3DSafe`) que impede qualquer mensagem de ficar presa com `.dsn-hide`.
+  - A parada de dados agora é validada **antes** de descontar Força de Vontade / PM / PV ou Corrupção.
+- **Correção do botão Aceitar e Forçar (Push):**
+  - Clicar em **Aceitar** agora atualiza instantaneamente o card no chat (tanto em rolagens normais quanto em Conjurações de Magia) sem precisar dar `F5`, revelando botões de Aplicar Dano / Crítico quando aplicável.
+  - Clicar em **Forçar (Push)** em uma Conjuração agora preserva o card completo de magia com a nova Qualidade e Dano recalculados e os dados 3D mesclados.
+
 ## 0.2.1 — Dados 3D com Quinas Arredondadas e Mármore Liso Brilhoso (Foundry VTT v13 & v14)
 - **Geometria 3D Arredondada (`.glb`):** todos os dados D6 de Egrégora agora usam modelos 3D glTF 2.0 dedicados com **quinas e arestas suavemente arredondadas** (em vez do cubo de quina reta padrão), perfeitamente alinhados à física e às 6 faces do Dice So Nice.
 - **Acabamento Padronizado em Mármore Liso Brilhoso:** textura de mármore polido equalizada em todas as faces e variantes, com material PBR liso (`roughness: 0.15`) + camada de polimento espelhado (`KHR_materials_clearcoat`) e brilho emissivo sutil nos veios e no Glifo da face 6 (removendo a rugosidade de pedra bruta).

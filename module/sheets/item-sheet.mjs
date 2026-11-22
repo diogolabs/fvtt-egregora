@@ -9,7 +9,7 @@ export class EgregoraItemSheet extends api.HandlebarsApplicationMixin(sheets.Ite
     classes: ["egregora", "sheet", "item"],
     position: {
       width: 500,
-      height: 540,
+      height: 560,
     },
     window: {
       resizable: true,
@@ -31,6 +31,36 @@ export class EgregoraItemSheet extends api.HandlebarsApplicationMixin(sheets.Ite
     },
   };
 
+  _onRender(context, options) {
+    super._onRender(context, options);
+    if (this.document.type === "spell") {
+      this.element.querySelectorAll("input[data-spell-path]").forEach(cb => {
+        cb.addEventListener("change", async ev => {
+          ev.stopPropagation();
+          const pathKey = ev.currentTarget.dataset.spellPath;
+          const validOrder = Object.keys(EGREGORA_CONFIG.magicPaths);
+          const next = new Set(this.document.system.selectedPaths);
+          if (ev.currentTarget.checked) {
+            next.add(pathKey);
+          } else {
+            if (next.size <= 1) {
+              ev.currentTarget.checked = true;
+              ui.notifications.warn(game.i18n.localize("EGREGORA.Magic.MinOnePath"));
+              return;
+            }
+            next.delete(pathKey);
+          }
+          const ordered = validOrder.filter(k => next.has(k));
+          await this.document.update({
+            "system.paths": ordered,
+            "system.primaryPath": ordered[0] || "echoes",
+            "system.secondaryPath": ordered[1] || "",
+          });
+        });
+      });
+    }
+  }
+
   async _prepareContext(options) {
     const item = this.document;
     const enrichedDescription = item.system.description
@@ -40,10 +70,21 @@ export class EgregoraItemSheet extends api.HandlebarsApplicationMixin(sheets.Ite
         })
       : "";
 
+    let spellPathOptions = [];
+    if (item.type === "spell") {
+      const selected = item.system.selectedPaths ?? [item.system.primaryPath || "echoes"];
+      spellPathOptions = Object.entries(EGREGORA_CONFIG.magicPaths).map(([key, labelKey]) => ({
+        key,
+        label: game.i18n.localize(labelKey),
+        checked: selected.includes(key),
+      }));
+    }
+
     return {
       item,
       system: item.system,
       config: EGREGORA_CONFIG,
+      spellPathOptions,
       editable: this.isEditable,
       owner: item.isOwner,
       enrichedDescription,

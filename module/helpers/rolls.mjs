@@ -47,6 +47,89 @@ export function buildToMessageOptions(mode, create = true) {
 }
 
 /**
+ * Aguarda a animação 3D do Dice So Nice com proteção contra travamentos/erros
+ * e garante que a mensagem nunca fique presa com a classe .dsn-hide no chat.
+ */
+async function waitForDice3DSafe(messageId, timeoutMs = 6000) {
+  if (!messageId) return;
+  try {
+    if (game.dice3d && typeof game.dice3d.waitFor3DAnimationByMessageID === "function") {
+      await Promise.race([
+        game.dice3d.waitFor3DAnimationByMessageID(messageId),
+        new Promise(resolve => setTimeout(resolve, timeoutMs)),
+      ]);
+    }
+  } catch (err) {
+    console.warn("fvtt-egregora | Dice So Nice animation wait error:", err);
+  }
+
+  // Rede de segurança: se o DSN deixou a mensagem oculta após erro/timeout, revela no chat
+  try {
+    const selectors = [
+      `.message[data-message-id="${messageId}"]`,
+      `#chat-notifications .message[data-message-id="${messageId}"]`,
+    ];
+    for (const sel of selectors) {
+      document.querySelectorAll(sel).forEach(el => {
+        if (el.classList.contains("dsn-hide")) {
+          el.classList.remove("dsn-hide");
+        }
+        el.querySelectorAll(".dsn-hide").forEach(sub => sub.classList.remove("dsn-hide"));
+      });
+    }
+  } catch {
+    // ignore DOM fallback errors
+  }
+}
+
+/**
+ * Normaliza a lista de Caminhos de Magia selecionados (1 a 6) na ordem oficial.
+ */
+export function normalizeMagicPaths(paths = null, primaryPath = "echoes", secondaryPath = "") {
+  const validOrder = Object.keys(EGREGORA_CONFIG.magicPaths);
+  const raw = Array.isArray(paths) && paths.length
+    ? paths
+    : [primaryPath, secondaryPath].filter(Boolean);
+  const cleaned = validOrder.filter(k => raw.includes(k));
+  if (cleaned.length) return cleaned;
+  return validOrder.includes(primaryPath) ? [primaryPath] : ["echoes"];
+}
+
+/**
+ * Renderiza o conteúdo HTML do card de Conjuração Mágica (usado no cast inicial, Push e Aceitar).
+ */
+async function renderSpellCardContent(roll, cardData) {
+  const successes = roll.successCount;
+  const banes = roll.attributeTrauma;
+  const qualityEntry = successes > 0
+    ? EGREGORA_CONFIG.magicSuccessQuality.find(q => successes >= q.min && successes <= q.max)
+    : null;
+  const qualityTitle = qualityEntry ? game.i18n.localize(`EGREGORA.Magic.Quality.${qualityEntry.key}.title`) : "";
+  const qualityDesc = qualityEntry ? game.i18n.localize(`EGREGORA.Magic.Quality.${qualityEntry.key}.desc`) : "";
+  const highestPathVal = Number(cardData.highestPathVal) || 0;
+  const calculatedDamage = cardData.directDamage && successes > 0
+    ? Math.max(1, highestPathVal) + (successes - 1)
+    : 0;
+
+  const renderTemplate = getRenderTemplate();
+  return renderTemplate("systems/fvtt-egregora/templates/chat/spell-cast.hbs", {
+    spellImg: cardData.spellImg || "systems/fvtt-egregora/assets/icons/spell.svg",
+    spellTitle: cardData.spellTitle,
+    attributeLabel: cardData.attributeLabel,
+    pathsDisplay: cardData.pathsDisplay,
+    costPoolLabel: cardData.costPoolLabel,
+    totalCost: cardData.totalCost,
+    successes,
+    banes,
+    qualityTitle,
+    qualityDesc,
+    calculatedDamage,
+    contaminationTriggered: Boolean(cardData.contaminationTriggered),
+    rollHtml: await roll.render(),
+  });
+}
+
+/**
  * Calcula a pilha de dados D6 (Atributo + Perícia + Equipamento + Modificadores).
  * Penalidades removem primeiro de Perícia, depois Equipamento, depois Atributo.
  */
@@ -158,7 +241,7 @@ export async function executeEgregoraRoll(actor, {
     buildToMessageOptions(rollOptions.rollMode)
   );
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 
@@ -184,6 +267,7 @@ export async function pushEgregoraRoll(event) {
   decorateEgregoraRoll(roll, {
     actor,
     magicPath: flags.magicPath || null,
+    magicPaths: flags.magicPaths || null,
     contaminationTriggered: Boolean(roll.options?.contaminationTriggered),
   });
 
@@ -232,38 +316,83 @@ export async function pushEgregoraRoll(event) {
     roll.options.pushCostSummary = pushSummary.join(" | ");
   }
 
-  const newMessage = await roll.toMessage(
-    {
+  let newMessage;
+  if (flags.rollType === "spell" && flags.spellCardData) {
+    const content = await renderSpellCardContent(roll, flags.spellCardData);
+    const chatData = {
       speaker: message.speaker,
       flavor: message.flavor,
+      content,
+      rolls: [roll],
       flags: message.flags,
-    },
-    buildToMessageOptions(roll.options.rollMode)
-  );
-  await game.dice3d?.waitFor3DAnimationByMessageID(newMessage.id);
+    };
+    if (typeof ChatMessage.applyRollMode === "function") {
+      ChatMessage.applyRollMode(chatData, normalizeRollMode(roll.options.rollMode));
+    }
+    newMessage = await ChatMessage.create(chatData);
+  } else {
+    newMessage = await roll.toMessage(
+      {
+        speaker: message.speaker,
+        flavor: message.flavor,
+        flags: message.flags,
+      },
+      buildToMessageOptions(roll.options.rollMode)
+    );
+  }
+
+  await waitForDice3DSafe(newMessage.id);
   return newMessage;
 }
 
 export async function acceptEgregoraRoll(event) {
-  const messageId = event.target.closest("[data-message-id]")?.dataset?.messageId;
+  const messageEl = event.target.closest("[data-message-id]");
+  const messageId = messageEl?.dataset?.messageId;
   const message = game.messages.get(messageId);
   if (!message || !message.rolls?.length) return null;
 
   const roll = message.rolls[0].duplicate();
   roll.maxPush = 0;
-  await message.update({ rolls: [roll.toJSON()] });
+  roll.options.maxPush = 0;
+
+  const flags = message.flags?.[EGREGORA_CONFIG.ID] ?? {};
+  const updateData = { rolls: [roll.toJSON()] };
+
+  if (flags.rollType === "spell" && flags.spellCardData) {
+    updateData.content = await renderSpellCardContent(roll, flags.spellCardData);
+  }
+
+  // Immediate visual feedback in the DOM before async round-trip completes
+  messageEl?.querySelectorAll(".dice-button.push, .dice-button.accept").forEach(btn => {
+    const row = btn.closest(".dice-buttons");
+    btn.remove();
+    if (row && !row.children.length) row.remove();
+  });
+
+  await message.update(updateData);
+
+  // Force ChatLog re-render on both Foundry v13 & v14 so damage/crit buttons appear immediately without F5
+  try {
+    if (typeof ui.chat?.updateMessage === "function") {
+      await ui.chat.updateMessage(message);
+    }
+  } catch (err) {
+    console.warn("fvtt-egregora | Chat updateMessage refresh warning:", err);
+  }
+
   return message;
 }
 
 /**
  * Conjuração Mágica de Egrégora:
- * Atributo + menor Caminho utilizado + Bônus de Foco/Fetiche + Dados de Corrupção.
- * Colore os dados de Caminho com o tema 3D correspondente ao Caminho Principal!
+ * Atributo + menor Foco entre 1 a 6 Caminhos combinados + Bônus de Fetiche + Dados de Corrupção.
+ * Mescla os dados 3D de Caminho (ds) nas cores dos Caminhos combinados!
  */
 export async function executeSpellCast(actor, {
   spell = null,
   spellName = "",
   attribute = "intelligence",
+  paths = null,
   primaryPath = "echoes",
   secondaryPath = "",
   costPool = "willpower",
@@ -273,11 +402,47 @@ export async function executeSpellCast(actor, {
   modifier = 0,
   directDamage = false,
 } = {}) {
+  const selectedPaths = normalizeMagicPaths(
+    paths ?? spell?.system?.selectedPaths,
+    primaryPath || spell?.system?.primaryPath || "echoes",
+    secondaryPath || spell?.system?.secondaryPath || ""
+  );
+
   const attrVal = Number(actor?.system?.attributes?.[attribute]?.value) || 0;
-  const path1Val = Number(actor?.system?.magic?.paths?.[primaryPath]) || 0;
-  const path2Val = secondaryPath ? (Number(actor?.system?.magic?.paths?.[secondaryPath]) || 0) : null;
-  const effectivePathVal = path2Val !== null ? Math.min(path1Val, path2Val) : path1Val;
-  const highestPathVal = path2Val !== null ? Math.max(path1Val, path2Val) : path1Val;
+  const pathVals = selectedPaths.map(p => Number(actor?.system?.magic?.paths?.[p]) || 0);
+  const effectivePathVal = Math.min(...pathVals);
+  const highestPathVal = Math.max(...pathVals);
+
+  const corrDice = Math.max(0, Number(corruptionDice) || 0);
+  const pool = computeDicePool(attrVal, effectivePathVal, fetishBonus, modifier);
+
+  // Distribute skill (Magic Path) dice across all selected paths for blended 3D dice!
+  const pathAllocations = [];
+  if (pool.skill > 0) {
+    const counts = new Array(selectedPaths.length).fill(0);
+    for (let i = 0; i < pool.skill; i++) {
+      counts[i % selectedPaths.length]++;
+    }
+    for (let i = 0; i < selectedPaths.length; i++) {
+      if (counts[i] > 0) {
+        pathAllocations.push({ path: selectedPaths[i], count: counts[i] });
+      }
+    }
+  }
+
+  const formulaParts = [];
+  if (pool.base > 0) formulaParts.push(`${pool.base}db`);
+  for (const alloc of pathAllocations) {
+    formulaParts.push(`${alloc.count}ds`);
+  }
+  if (pool.gear > 0) formulaParts.push(`${pool.gear}dg`);
+  if (corrDice > 0) formulaParts.push(`${corrDice}dk`);
+
+  // Validate dice pool BEFORE spending Willpower / Health / Mental / Corruption!
+  if (!formulaParts.length) {
+    ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.NoDiceToRoll"));
+    return null;
+  }
 
   const totalCost = Math.max(1, Number(costAmount) || 1);
   if (actor?.type === "character") {
@@ -294,7 +459,6 @@ export async function executeSpellCast(actor, {
     }
   }
 
-  const corrDice = Math.max(0, Number(corruptionDice) || 0);
   let contaminationTriggered = false;
   if (corrDice > 0 && actor?.system?.corruption) {
     const prevPc = Number(actor.system.corruption.value) || 0;
@@ -302,74 +466,76 @@ export async function executeSpellCast(actor, {
     if (corrDice >= 2 || prevPc >= 4) contaminationTriggered = true;
   }
 
-  const pool = computeDicePool(attrVal, effectivePathVal, fetishBonus, modifier);
-  const formulaParts = [];
-  if (pool.base > 0) formulaParts.push(`${pool.base}db`);
-  if (pool.skill > 0) formulaParts.push(`${pool.skill}ds`);
-  if (pool.gear > 0) formulaParts.push(`${pool.gear}dg`);
-  if (corrDice > 0) formulaParts.push(`${corrDice}dk`);
-
-  if (!formulaParts.length) {
-    ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.NoDiceToRoll"));
-    return null;
-  }
-
-  const roll = await new YearZeroRoll(formulaParts.join(" + "), { maxPush: 1 }, {
+  const rollMode = normalizeRollMode();
+  const roll = new YearZeroRoll(formulaParts.join(" + "), { maxPush: 1 }, {
     game: "egregora",
     maxPush: 1,
     rollType: "spell",
+    rollMode,
     attribute,
     contaminationTriggered,
-  }).evaluate();
-  decorateEgregoraRoll(roll, { actor, magicPath: primaryPath, contaminationTriggered });
+  });
 
-  const successes = roll.successCount;
-  const banes = roll.attributeTrauma;
-  const qualityEntry = successes > 0
-    ? EGREGORA_CONFIG.magicSuccessQuality.find(q => successes >= q.min && successes <= q.max)
-    : null;
-  const qualityTitle = qualityEntry ? game.i18n.localize(`EGREGORA.Magic.Quality.${qualityEntry.key}.title`) : "";
-  const qualityDesc = qualityEntry ? game.i18n.localize(`EGREGORA.Magic.Quality.${qualityEntry.key}.desc`) : "";
-  const calculatedDamage = directDamage && successes > 0 ? Math.max(1, highestPathVal) + (successes - 1) : 0;
+  // Tag each blended skill term with its exact Magic Path key & localized flavor
+  let allocIdx = 0;
+  for (const term of roll.dice) {
+    if (term.type === "skill" && pathAllocations[allocIdx]) {
+      const pathKey = pathAllocations[allocIdx].path;
+      term.options ??= {};
+      term.options.dsnPath = pathKey;
+      term.options.flavor = game.i18n.localize(EGREGORA_CONFIG.magicPaths[pathKey]);
+      allocIdx++;
+    }
+  }
 
-  const pathLabel1 = game.i18n.localize(EGREGORA_CONFIG.magicPaths[primaryPath]);
-  const pathLabel2 = secondaryPath ? game.i18n.localize(EGREGORA_CONFIG.magicPaths[secondaryPath]) : "";
-  const pathsDisplay = pathLabel2 ? `${pathLabel1} + ${pathLabel2}` : pathLabel1;
-
-  const renderTemplate = getRenderTemplate();
-  const content = await renderTemplate("systems/fvtt-egregora/templates/chat/spell-cast.hbs", {
+  await roll.evaluate();
+  decorateEgregoraRoll(roll, {
     actor,
-    spell,
+    magicPath: selectedPaths[0],
+    magicPaths: selectedPaths,
+    contaminationTriggered,
+  });
+
+  const pathsDisplay = selectedPaths
+    .map(p => game.i18n.localize(EGREGORA_CONFIG.magicPaths[p]))
+    .join(" + ");
+
+  const spellCardData = {
+    spellImg: spell?.img || "systems/fvtt-egregora/assets/icons/spell.svg",
     spellTitle: spell?.name || spellName || pathsDisplay,
     attributeLabel: game.i18n.localize(EGREGORA_CONFIG.attributes[attribute]),
     pathsDisplay,
     costPoolLabel: game.i18n.localize(`EGREGORA.Magic.CostPool.${costPool}`),
     totalCost,
-    successes,
-    banes,
-    qualityTitle,
-    qualityDesc,
-    calculatedDamage,
+    directDamage: Boolean(directDamage),
+    highestPathVal,
     contaminationTriggered,
-    rollHtml: await roll.render(),
-  });
+  };
 
-  const message = await ChatMessage.create({
+  const content = await renderSpellCardContent(roll, spellCardData);
+  const chatData = {
     speaker: ChatMessage.getSpeaker({ actor }),
-    flavor: `${game.i18n.localize("EGREGORA.Magic.Cast")}: ${spell?.name || spellName || pathsDisplay}`,
+    flavor: `${game.i18n.localize("EGREGORA.Magic.Cast")}: ${spellCardData.spellTitle}`,
     content,
     rolls: [roll],
     flags: {
       [EGREGORA_CONFIG.ID]: {
         actorUuid: actor?.uuid ?? "",
         attribute,
-        magicPath: primaryPath,
+        magicPath: selectedPaths[0],
+        magicPaths: selectedPaths,
         rollType: "spell",
+        spellCardData,
       },
     },
-  });
+  };
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  if (typeof ChatMessage.applyRollMode === "function") {
+    ChatMessage.applyRollMode(chatData, rollMode);
+  }
+
+  const message = await ChatMessage.create(chatData);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 
@@ -411,7 +577,7 @@ export async function rollContaminationTest(actor) {
     rolls: [roll],
   });
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 
@@ -471,7 +637,7 @@ export async function rollPanicTable(actor) {
     rolls: [dieRoll],
   });
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 
@@ -508,7 +674,7 @@ export async function rollPermanentTraumaCheck(actor) {
     rolls: [dieRoll],
   });
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 
@@ -579,7 +745,7 @@ export async function rollMutationTable(actor, tier = "minor", addToActor = true
     rolls: [roll],
   });
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 
@@ -633,7 +799,7 @@ export async function rollCriticalTable(actor, addToActor = true) {
     rolls: [roll],
   });
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 
@@ -663,7 +829,7 @@ export async function rollVehicleCritTable(actor) {
     rolls: [roll],
   });
 
-  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  await waitForDice3DSafe(message.id);
   return message;
 }
 

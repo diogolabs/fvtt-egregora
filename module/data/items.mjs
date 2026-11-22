@@ -130,6 +130,7 @@ export class EgregoraArmorData extends foundry.abstract.TypeDataModel {
 export class EgregoraSpellData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
+      paths: new fields.ArrayField(new fields.StringField(), { initial: [] }),
       primaryPath: new fields.StringField({
         required: true,
         initial: "echoes",
@@ -150,6 +151,21 @@ export class EgregoraSpellData extends foundry.abstract.TypeDataModel {
       directDamage: new fields.BooleanField({ initial: false }),
       description: new fields.HTMLField({ initial: "" }),
     };
+  }
+
+  get selectedPaths() {
+    const validOrder = ["matter", "flux", "mind", "life", "echoes", "abyss"];
+    const raw = Array.isArray(this.paths) && this.paths.length
+      ? this.paths
+      : [this.primaryPath, this.secondaryPath].filter(Boolean);
+    const cleaned = validOrder.filter(k => raw.includes(k));
+    return cleaned.length ? cleaned : [this.primaryPath || "echoes"];
+  }
+
+  get pathsDisplay() {
+    return this.selectedPaths
+      .map(k => game.i18n.localize(`EGREGORA.Magic.Path.${k}`))
+      .join(" + ");
   }
 }
 

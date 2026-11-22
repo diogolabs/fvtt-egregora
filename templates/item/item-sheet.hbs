@@ -228,23 +228,17 @@
 
       {{#if (eq item.type "spell")}}
       <div class="eg-form-grid-2">
-        <label class="eg-field">
-          <span>{{localize "EGREGORA.Magic.PrimaryPath"}}</span>
-          <select name="system.primaryPath">
-            {{#each config.magicPaths as |labelKey key|}}
-              <option value="{{key}}" {{#if (eq ../system.primaryPath key)}}selected{{/if}}>{{localize labelKey}}</option>
+        <div class="eg-field eg-span-2">
+          <span>{{localize "EGREGORA.Magic.Paths"}} — {{localize "EGREGORA.Magic.PathsHint"}}</span>
+          <div class="eg-path-picker-grid">
+            {{#each spellPathOptions as |p|}}
+            <label class="eg-path-chip {{#if p.checked}}checked{{/if}}" data-path="{{p.key}}">
+              <input type="checkbox" data-spell-path="{{p.key}}" {{checked p.checked}} />
+              <span class="eg-path-chip-name">{{p.label}}</span>
+            </label>
             {{/each}}
-          </select>
-        </label>
-        <label class="eg-field">
-          <span>{{localize "EGREGORA.Magic.SecondaryPath"}}</span>
-          <select name="system.secondaryPath">
-            <option value="">—</option>
-            {{#each config.magicPaths as |labelKey key|}}
-              <option value="{{key}}" {{#if (eq ../system.secondaryPath key)}}selected{{/if}}>{{localize labelKey}}</option>
-            {{/each}}
-          </select>
-        </label>
+          </div>
+        </div>
         <label class="eg-field">
           <span>{{localize "EGREGORA.Attribute.Label"}}</span>
           <select name="system.defaultAttribute">

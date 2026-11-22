@@ -1,7 +1,12 @@
 <div class="eg-dialog-body">
   <div class="eg-roll-preview">
-    <span class="eg-preview-label">{{localize "EGREGORA.Magic.TotalDice"}}</span>
-    <strong class="eg-preview-formula">{{totalDice}}D6 ({{localize (lookup config.attributes attribute)}} {{attrVal}} + {{localize "EGREGORA.Magic.EffectivePath"}} {{effectivePath}})</strong>
+    <span class="eg-preview-label">{{selectedPathsDisplay}}</span>
+    <strong class="eg-preview-formula">
+      {{totalDice}}D6 ({{localize (lookup config.attributes attribute)}} {{attrVal}} + {{localize "EGREGORA.Magic.EffectivePath"}} {{effectivePath}})
+    </strong>
+    {{#if directDamage}}
+      <span class="eg-preview-sub">{{localize "EGREGORA.Magic.BaseDamagePreview"}}: {{highestPath}}</span>
+    {{/if}}
   </div>
 
   <div class="eg-form-grid-2">
@@ -10,30 +15,24 @@
       <input type="text" name="spellName" value="{{spellName}}" placeholder="{{localize 'EGREGORA.Magic.FreeformPlaceholder'}}" />
     </label>
 
+    <div class="eg-field eg-span-2">
+      <span>{{localize "EGREGORA.Magic.Paths"}} ({{selectedPathsCount}}/6) — {{localize "EGREGORA.Magic.PathsHint"}}</span>
+      <div class="eg-path-picker-grid">
+        {{#each pathOptions as |p|}}
+        <label class="eg-path-chip {{#if p.checked}}checked{{/if}}" data-path="{{p.key}}">
+          <input type="checkbox" name="magicPath" value="{{p.key}}" {{checked p.checked}} />
+          <span class="eg-path-chip-name">{{p.label}}</span>
+          <span class="eg-path-chip-val">{{p.focus}}</span>
+        </label>
+        {{/each}}
+      </div>
+    </div>
+
     <label class="eg-field">
       <span>{{localize "EGREGORA.Attribute.Label"}}</span>
       <select name="attribute">
         {{#each config.attributes as |labelKey key|}}
           <option value="{{key}}" {{#if (eq ../attribute key)}}selected{{/if}}>{{localize labelKey}}</option>
-        {{/each}}
-      </select>
-    </label>
-
-    <label class="eg-field">
-      <span>{{localize "EGREGORA.Magic.PrimaryPath"}}</span>
-      <select name="primaryPath">
-        {{#each config.magicPaths as |labelKey key|}}
-          <option value="{{key}}" {{#if (eq ../primaryPath key)}}selected{{/if}}>{{localize labelKey}}</option>
-        {{/each}}
-      </select>
-    </label>
-
-    <label class="eg-field">
-      <span>{{localize "EGREGORA.Magic.SecondaryPath"}}</span>
-      <select name="secondaryPath">
-        <option value="">—</option>
-        {{#each config.magicPaths as |labelKey key|}}
-          <option value="{{key}}" {{#if (eq ../secondaryPath key)}}selected{{/if}}>{{localize labelKey}}</option>
         {{/each}}
       </select>
     </label>

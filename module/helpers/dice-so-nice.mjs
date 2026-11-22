@@ -39,7 +39,6 @@ export async function registerDice3D(dice3d) {
   dice3d.addSystem({ id: ID, name: "Egrégora: O Mundo Oculto" }, "preferred");
 
   // 2. Register Egrégora Glossy Polished-Marble Colorsets (Themes)
-  // Using DSN's "pristine" material (clearcoat glossy finish) so standard dice also match the marble polish.
   const colorsets = [
     {
       name: EGREGORA_DSN_COLORSETS.base,
@@ -159,35 +158,30 @@ export async function registerDice3D(dice3d) {
   }
 
   // 3. Register Custom Rounded-Corner Polished-Marble 3D Models (.glb)
-  // Standard d6 (used by Panic, Trauma, D66 Criticals & Mutations)
   dice3d.addDicePreset({
     type: "d6",
     modelFile: `${DICE_ASSET_BASE}/d6_base.glb`,
     system: ID,
   }, "d6");
 
-  // Base / Attribute Die (db)
   dice3d.addDicePreset({
     type: "db",
     modelFile: `${DICE_ASSET_BASE}/d6_base.glb`,
     system: ID,
   }, "d6");
 
-  // Skill Die (ds)
   dice3d.addDicePreset({
     type: "ds",
     modelFile: `${DICE_ASSET_BASE}/d6_skill.glb`,
     system: ID,
   }, "d6");
 
-  // Gear Die (dg)
   dice3d.addDicePreset({
     type: "dg",
     modelFile: `${DICE_ASSET_BASE}/d6_gear.glb`,
     system: ID,
   }, "d6");
 
-  // Corruption Die (dk)
   dice3d.addDicePreset({
     type: "dk",
     modelFile: `${DICE_ASSET_BASE}/d6_corr.glb`,
@@ -269,17 +263,47 @@ export async function registerDice3D(dice3d) {
     ]);
   }
 
-  // 7. Preload primary presets on DSN v6 to avoid first-roll stutter
+  // 7. Preload primary system AND all 6 Magic Path systems so spell casting never stalls
+  const allSystemIds = [ID, ...Object.values(MAGIC_PATH_SYSTEMS)];
   if (typeof dice3d.preloadPresets === "function") {
-    await dice3d.preloadPresets(ID);
+    await Promise.allSettled(allSystemIds.map(sysId => dice3d.preloadPresets(sysId)));
+  } else if (dice3d.DiceFactory?.systems && dice3d.DiceFactory?.loaderGLTF) {
+    // DSN v5 (Foundry v13) gentle background preload for custom GLB presets
+    for (const sysId of allSystemIds) {
+      const sys = dice3d.DiceFactory.systems.get(sysId);
+      if (!sys?.dice) continue;
+      for (const preset of sys.dice.values()) {
+        if (preset?.modelFile && !preset.modelLoaded && typeof preset.loadModel === "function") {
+          try {
+            preset.loadModel(dice3d.DiceFactory.loaderGLTF);
+          } catch (err) {
+            console.warn(`fvtt-egregora | DSN v5 preload skipped for ${sysId}:`, err);
+          }
+        }
+      }
+    }
   }
 }
 
 /**
- * Decorates a YearZeroRoll's terms with per-term Dice So Nice appearance,
- * roles, actorId, and custom SFX triggers.
+ * Checks whether Dice So Nice has a given system registered safely.
  */
-export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, contaminationTriggered = false } = {}) {
+function hasRegisteredDsnSystem(systemId) {
+  if (!systemId) return false;
+  const systems = game.dice3d?.DiceFactory?.systems;
+  if (!systems) return false;
+  if (typeof systems.has === "function") return systems.has(systemId);
+  return Boolean(systems[systemId]);
+}
+
+/**
+ * Decorates a YearZeroRoll's terms with per-term Dice So Nice appearance,
+ * roles, actorId, blended Magic Path 3D models, and custom SFX triggers.
+ */
+export function decorateEgregoraRoll(
+  roll,
+  { actor = null, magicPath = null, magicPaths = null, contaminationTriggered = false } = {}
+) {
   if (!roll) return roll;
 
   const ID = EGREGORA_CONFIG.ID;
@@ -295,17 +319,16 @@ export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, con
     useMagicColors = true;
   }
 
-  const magicSystem = (useMagicColors && magicPath && MAGIC_PATH_SYSTEMS[magicPath])
-    ? MAGIC_PATH_SYSTEMS[magicPath]
-    : null;
-  const magicColorset = (useMagicColors && magicPath && MAGIC_PATH_COLORSETS[magicPath])
-    ? MAGIC_PATH_COLORSETS[magicPath]
-    : null;
+  const normalizedPaths = Array.isArray(magicPaths) && magicPaths.length
+    ? magicPaths.filter(p => Boolean(MAGIC_PATH_SYSTEMS[p]))
+    : (magicPath && MAGIC_PATH_SYSTEMS[magicPath] ? [magicPath] : []);
 
   // On DSN v6 (Foundry v14), registered Dice Roles provide the default system & colorset
   // while still letting players customize each role in DSN settings.
   // On DSN v5 (Foundry v13), Roles do not exist, so we apply per-term appearance directly.
   const hasDsnRoles = typeof game.dice3d?.addRole === "function";
+
+  let skillTermIdx = 0;
 
   for (const term of roll.dice ?? []) {
     const type = term.type;
@@ -317,19 +340,34 @@ export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, con
         term.options.appearance = {
           system: ID,
           colorset: EGREGORA_DSN_COLORSETS.base,
+          systemSettings: {},
         };
       }
     } else if (type === "skill") {
       term.options.dsnRole = "egregora-skill";
-      if (magicSystem) {
+      const termPath = useMagicColors
+        ? (term.options.dsnPath && MAGIC_PATH_SYSTEMS[term.options.dsnPath]
+            ? term.options.dsnPath
+            : normalizedPaths.length
+              ? normalizedPaths[skillTermIdx % normalizedPaths.length]
+              : null)
+        : null;
+      skillTermIdx++;
+
+      if (termPath) {
+        const pathSystem = MAGIC_PATH_SYSTEMS[termPath];
+        const pathColorset = MAGIC_PATH_COLORSETS[termPath] || EGREGORA_DSN_COLORSETS.skill;
+        const resolvedSystem = hasRegisteredDsnSystem(pathSystem) ? pathSystem : ID;
         term.options.appearance = {
-          system: magicSystem,
-          colorset: magicColorset || EGREGORA_DSN_COLORSETS.skill,
+          system: resolvedSystem,
+          colorset: pathColorset,
+          systemSettings: {},
         };
       } else if (!hasDsnRoles) {
         term.options.appearance = {
           system: ID,
           colorset: EGREGORA_DSN_COLORSETS.skill,
+          systemSettings: {},
         };
       }
     } else if (type === "gear") {
@@ -338,6 +376,7 @@ export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, con
         term.options.appearance = {
           system: ID,
           colorset: EGREGORA_DSN_COLORSETS.gear,
+          systemSettings: {},
         };
       }
     } else if (type === "corruption") {
@@ -346,19 +385,25 @@ export function decorateEgregoraRoll(roll, { actor = null, magicPath = null, con
         term.options.appearance = {
           system: ID,
           colorset: EGREGORA_DSN_COLORSETS.corruption,
+          systemSettings: {},
         };
       }
     } else {
       // Standard d6 (Panic, Criticals, Mutations, Trauma)
-      if (magicSystem) {
+      const firstPath = useMagicColors && normalizedPaths.length ? normalizedPaths[0] : null;
+      if (firstPath) {
+        const pathSystem = MAGIC_PATH_SYSTEMS[firstPath];
+        const resolvedSystem = hasRegisteredDsnSystem(pathSystem) ? pathSystem : ID;
         term.options.appearance = {
-          system: magicSystem,
-          colorset: magicColorset || EGREGORA_DSN_COLORSETS.base,
+          system: resolvedSystem,
+          colorset: MAGIC_PATH_COLORSETS[firstPath] || EGREGORA_DSN_COLORSETS.base,
+          systemSettings: {},
         };
       } else if (!hasDsnRoles) {
         term.options.appearance = {
           system: ID,
           colorset: EGREGORA_DSN_COLORSETS.base,
+          systemSettings: {},
         };
       }
     }

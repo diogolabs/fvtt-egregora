@@ -1,6 +1,6 @@
 <div class="eg-chat-card eg-spell-card">
   <header class="eg-chat-card-header">
-    <img src="{{#if spell}}{{spell.img}}{{else}}systems/fvtt-egregora/assets/icons/spell.svg{{/if}}" alt="{{spellTitle}}" />
+    <img src="{{#if spellImg}}{{spellImg}}{{else if spell}}{{spell.img}}{{else}}systems/fvtt-egregora/assets/icons/spell.svg{{/if}}" alt="{{spellTitle}}" />
     <div>
       <h3>{{spellTitle}}</h3>
       <span class="eg-chat-sub">{{pathsDisplay}} • {{attributeLabel}} • {{costPoolLabel}}: −{{totalCost}}</span>

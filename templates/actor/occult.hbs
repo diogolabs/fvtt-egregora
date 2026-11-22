@@ -45,7 +45,7 @@
         <button type="button" class="eg-row-label" data-action="rollItem">
           <strong>{{sp.name}}</strong>
           <span class="eg-inline-meta">
-            [{{localize (lookup ../config.magicPaths sp.system.primaryPath)}}{{#if sp.system.secondaryPath}} + {{localize (lookup ../config.magicPaths sp.system.secondaryPath)}}{{/if}} | Foco {{sp.system.requiredFocus}}]
+            [{{sp.system.pathsDisplay}} | Foco {{sp.system.requiredFocus}}]
           </span>
         </button>
         <span class="eg-row-controls">

@@ -55,6 +55,14 @@
 .application.egregora button {
   cursor: pointer;
   font-family: var(--eg-font-display);
+  height: auto;
+  min-height: 0;
+  line-height: 1.25;
+  box-shadow: none;
+}
+
+.application.egregora button i {
+  flex: 0 0 auto;
 }
 
 /* ---------- Navegação Discreta no Topo ---------- */
@@ -76,7 +84,11 @@
   font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 4px 10px;
+  padding: 5px 10px;
+  height: auto;
+  min-height: 28px;
+  line-height: 1.2;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -350,8 +362,15 @@
 }
 
 .eg-mini-text-btn {
-  padding: 2px 7px;
-  height: 22px;
+  padding: 3px 8px;
+  height: auto;
+  min-height: 22px;
+  line-height: 1.2;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   border: 1px solid var(--eg-border);
   border-radius: 2px;
   background: rgba(243, 236, 218, 0.8);
@@ -1056,12 +1075,21 @@
 /* ---------- Formulários, Abas Secundárias, NPC, Veículo e Item Sheet ---------- */
 .eg-action-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  align-items: stretch;
 }
 
+button.eg-btn,
 .eg-btn {
-  padding: 6px 10px;
+  padding: 7px 10px;
+  height: auto;
+  min-height: 36px;
+  line-height: 1.25;
+  white-space: normal;
+  text-align: center;
+  word-break: break-word;
+  box-sizing: border-box;
   border: 1.5px solid var(--eg-border);
   border-radius: 3px;
   background: rgba(243, 236, 218, 0.85);
@@ -1075,6 +1103,11 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
+}
+
+button.eg-btn i,
+.eg-btn i {
+  flex: 0 0 auto;
 }
 
 .eg-btn:hover {
@@ -1445,9 +1478,15 @@
   margin-top: 6px;
 }
 
+.eg-chat-roll button.eg-btn,
+.eg-chat-card button.eg-btn,
 .eg-btn-row .eg-btn {
   flex: 1 1 auto;
-  padding: 4px 8px;
+  height: auto;
+  min-height: 28px;
+  line-height: 1.25;
+  white-space: normal;
+  padding: 5px 8px;
   font-size: 11px;
 }
 

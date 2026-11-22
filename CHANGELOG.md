@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 — Correção de Layout de Botões (Foundry VTT v13 & v14)
+- Corrigido vazamento vertical de texto em botões com múltiplas linhas (como a grade de ações em *Oculto & Magia*, botões de diálogo e cartões de chat) ao sobrescrever a altura fixa padrão (`--button-size`) do Foundry VTT com `height: auto`, `line-height: 1.25` e `white-space: normal`.
+- Ajustado `.eg-action-grid` para colunas mais confortáveis (`minmax(180px, 1fr)`) e altura uniforme (`align-items: stretch`).
+
 ## 0.1.0 — Base Inicial (Foundry VTT v13 & v14)
 - Estrutura inicial do sistema **Egrégora: O Mundo Oculto (YZE)** compatível diretamente com **Foundry VTT v13 e v14** (`minimum: "13"`, `verified: "14"`).
 - Ficha do Desperto (`character`) construída com `ActorSheetV2` seguindo fielmente o layout, paleta (pergaminho envelhecido, carmesim, molduras ornamentais, emblema arcano central e silhueta gótica) e organização em duas colunas da ficha oficial de Egrégora.

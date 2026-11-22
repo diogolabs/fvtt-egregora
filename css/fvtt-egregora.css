@@ -169,20 +169,32 @@
 
 .eg-title-banner {
   display: grid;
-  grid-template-columns: 58px 1fr 84px;
+  grid-template-columns: 72px 1fr 84px;
   align-items: center;
   gap: 8px;
 }
 
 .eg-portrait {
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
-  border-radius: 4px;
-  border: 2px solid var(--eg-border);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  border: 2px solid var(--eg-crimson);
+  box-shadow:
+    0 0 0 2px rgba(243, 236, 218, 0.85),
+    0 0 0 3px rgba(46, 34, 27, 0.45),
+    0 2px 6px rgba(29, 20, 16, 0.28);
   cursor: pointer;
   background: #1d1410;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.eg-portrait:hover {
+  transform: scale(1.03);
+  box-shadow:
+    0 0 0 2px rgba(243, 236, 218, 0.92),
+    0 0 0 3.5px var(--eg-crimson-bright),
+    0 3px 8px rgba(139, 24, 24, 0.35);
 }
 
 .eg-logo-wrap {
@@ -924,26 +936,39 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
+  flex-wrap: nowrap;
+  gap: 5px;
   font-size: 11px;
   font-weight: 700;
-  padding-bottom: 3px;
+  padding-bottom: 4px;
   border-bottom: 1px solid var(--eg-border-soft);
 }
 
+.eg-aptitude-line > span:first-child {
+  white-space: nowrap;
+}
+
 .eg-aptitude-line select {
-  height: 20px;
+  width: auto;
+  min-width: 54px;
+  max-width: 72px;
+  height: 22px;
   font-size: 11px;
-  padding: 0 3px;
-  background: rgba(255, 251, 240, 0.8);
+  padding: 0 4px;
+  background: rgba(255, 251, 240, 0.85);
   border: 1px solid var(--eg-border-soft);
 }
 
 .eg-focus-pill {
   font-family: var(--eg-font-ui);
-  font-size: 10.5px;
-  padding: 1px 5px;
-  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(139, 24, 24, 0.32);
   background: rgba(139, 24, 24, 0.14);
   color: var(--eg-crimson-dark);
 }

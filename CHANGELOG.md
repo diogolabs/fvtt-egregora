@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5 — Polimento de Focus e Retrato Circular 64×64 (Foundry VTT v13 & v14)
+- Removido o prefixo `F:` do indicador de Focus em **Caminhos de Magia**, exibindo `0/0` em linha única (`white-space: nowrap`) ao lado de um seletor de Aptidão mais compacto, mantendo o tooltip explicativo no *hover*.
+- Retrato do personagem ampliado para `64×64px` em formato circular (`border-radius: 50%`) com moldura leve dupla em carmesim e pergaminho.
+
 ## 0.1.4 — Restauração dos Quadrados de Atributos, Vontade e Corrupção (Foundry VTT v13 & v14)
 - Removido `height: auto` do seletor global `.application.egregora button` que achatava os quadrados clicáveis (`.eg-sq-box`) de Atributos, Força de Vontade e Corrupção.
 - Protegidas explicitamente as dimensões fixas de `.eg-sq-box` (`18×18px`), `.eg-mini-btn` (`26×26px`) e `.eg-icon-btn` (`22×22px`), mantendo os botões de ação em **Oculto & Magia** com altura `50px` e hover carmesim.

@@ -51,6 +51,38 @@
       "doomPoints": {
         "name": "Pontos de Perdição Atuais",
         "hint": "Reserva atual de Pontos de Perdição do Narrador."
+      },
+      "enableMagicPathDiceColors": {
+        "name": "Cores 3D por Caminho de Magia (Dice So Nice!)",
+        "hint": "Ao conjurar feitiços, aplica automaticamente a paleta 3D do Caminho Principal escolhido nos dados de magia."
+      }
+    },
+    "DSN": {
+      "Category": "Egrégora: O Mundo Oculto",
+      "SFXTrigger": "Egrégora: Resultado da Rolagem",
+      "Colorset": {
+        "base": "Obsidiana & Carmesim (Base)",
+        "skill": "Obsidiana & Ouro (Perícia)",
+        "gear": "Aço Sombrio (Equipamento)",
+        "corruption": "Sangue do Abismo (Corrupção)",
+        "pathMatter": "Caminho: Matéria",
+        "pathFlux": "Caminho: Fluxo",
+        "pathMind": "Caminho: Mente",
+        "pathLife": "Caminho: Vida",
+        "pathEchoes": "Caminho: Ecos",
+        "pathAbyss": "Caminho: Abismo"
+      },
+      "Role": {
+        "base": "Dado Base (Atributo)",
+        "skill": "Dado de Perícia",
+        "gear": "Dado de Equipamento",
+        "corruption": "Dado de Corrupção"
+      },
+      "SFX": {
+        "success": "Sucesso (6)",
+        "multiSuccess": "Sucesso Múltiplo (3+)",
+        "criticalFailure": "Falha Crítica",
+        "contamination": "Contaminação Ativada"
       }
     },
     "Status": {

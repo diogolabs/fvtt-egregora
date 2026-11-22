@@ -22,10 +22,10 @@ import { EgregoraSpellDialog } from "./applications/spell-dialog.mjs";
 import { EgregoraActorSheet } from "./sheets/actor-sheet.mjs";
 import { EgregoraItemSheet } from "./sheets/item-sheet.mjs";
 import { YearZeroRollManager } from "../lib/yzur.js";
+import { registerDice3D } from "./helpers/dice-so-nice.mjs";
 import {
   executeEgregoraRoll,
   executeSpellCast,
-  registerDice3D,
   rollContaminationTest,
   rollCriticalTable,
   rollFearTest,

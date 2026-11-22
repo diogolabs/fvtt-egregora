@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0 — Integração Completa com Dice So Nice! 3D (Foundry VTT v13 & v14)
+- **Dados 3D Oficiais de Egrégora (`assets/dice/`):** 36 texturas `256×256` geradas a partir das artes oficiais (faces 1–5 com números estilizados + face 6 com o Glifo de Egrégora, além de **Bump Maps** de relevo 3D e **Emissive Maps** para brilho carmesim nas fendas e no Glifo!).
+- **4 Variantes Visuais Distintas na Mesa 3D:**
+  - **Dado Base / Atributo (`db` e `d6`):** Obsidiana & Carmesim com brilho emissivo.
+  - **Dado de Perícia (`ds`):** Obsidiana & Ouro para distinção imediata na rolagem.
+  - **Dado de Equipamento (`dg`):** Aço Sombrio metálico.
+  - **Dado de Corrupção (`dk`):** Sangue do Abismo com brilho carmesim intenso (denominação migrada de `dc` para `dk` para evitar conflito com a moeda nativa do Foundry).
+- **Compatibilidade v13 (DSN v5) e v14 (DSN v6):** integração modular em [dice-so-nice.mjs](module/helpers/dice-so-nice.mjs) via `diceSoNiceReady`, com suporte a **Dice Roles** e **Preload** na v6 (v14) e *fallback* automático na v5 (v13).
+- **Temas Dinâmicos por Caminho de Magia:** 6 temas 3D (Matéria, Fluxo, Mente, Vida, Ecos, Abismo) aplicados automaticamente em conjurações mágicas (configurável nas opções do cliente).
+- **Gatilhos de SFX Customizados:** `egregora-roll` para *Sucesso (6)*, *Sucesso Múltiplo (3+)*, *Falha Crítica* e *Contaminação*.
+- **Tabelas em 3D:** Pânico (`1D6`), Trauma Mental Permanente (`1D6`), Mutações (`D66`), Ferimentos Críticos (`D66`) e Danos Críticos em Veículos (`D66`) agora rolam dados 3D reais na mesa antes de revelar o resultado no chat.
+
 ## 0.1.8 — Correção da Borda dos Atributos, Remoção da Aba Efeitos e Validação de Feitiços (Foundry VTT v13 & v14)
 - Removido o `clip-path` que cortava o lado esquerdo dos cartões de **Atributos** (`.eg-attr-card`), aplicando borda completa nos 4 lados com filete carmesim à esquerda.
 - Removida a aba **Efeitos** da ficha do Desperto (`sheet-nav.hbs`, `actor-sheet.mjs` e `effects.hbs`), mantendo apenas **Ficha**, **Oculto & Magia** e **Biografia**.

@@ -1,5 +1,6 @@
 import { YearZeroRoll } from "../../lib/yzur.js";
 import { EGREGORA_CONFIG } from "../config.mjs";
+import { decorateEgregoraRoll } from "./dice-so-nice.mjs";
 
 const getRenderTemplate = () =>
   foundry.applications?.handlebars?.renderTemplate ?? globalThis.renderTemplate;
@@ -45,51 +46,6 @@ export function buildToMessageOptions(mode, create = true) {
   return { rollMode: normalized, create };
 }
 
-export function registerDice3D(dice3d) {
-  const ID = EGREGORA_CONFIG.ID;
-  dice3d.addSystem({ id: ID, name: "Egrégora: O Mundo Oculto" }, "preferred");
-
-  dice3d.addColorset({
-    name: "EgregoraBase",
-    description: "Egrégora — Dados Base (Pergaminho)",
-    category: "Egrégora",
-    foreground: ["#1d1410"],
-    background: ["#dfd2b5"],
-    outline: "#8c7656",
-    texture: "none",
-  }, "preferred");
-
-  dice3d.addColorset({
-    name: "EgregoraSkill",
-    description: "Egrégora — Dados de Perícia (Carvão)",
-    category: "Egrégora",
-    foreground: ["#f0e4cc"],
-    background: ["#29201c"],
-    outline: "#120d0b",
-    texture: "none",
-  }, "preferred");
-
-  dice3d.addColorset({
-    name: "EgregoraGear",
-    description: "Egrégora — Dados de Equipamento (Bronze)",
-    category: "Egrégora",
-    foreground: ["#fff4dd"],
-    background: ["#6b4d2b"],
-    outline: "#3d2a16",
-    texture: "none",
-  }, "preferred");
-
-  dice3d.addColorset({
-    name: "EgregoraCorruption",
-    description: "Egrégora — Dados de Corrupção (Carmesim)",
-    category: "Egrégora",
-    foreground: ["#ffd580"],
-    background: ["#8b1616"],
-    outline: "#3b0606",
-    texture: "none",
-  }, "preferred");
-}
-
 /**
  * Calcula a pilha de dados D6 (Atributo + Perícia + Equipamento + Modificadores).
  * Penalidades removem primeiro de Perícia, depois Equipamento, depois Atributo.
@@ -120,7 +76,7 @@ export function computeDicePool(attrDice = 0, skillDice = 0, gearDice = 0, total
 }
 
 /**
- * Executa uma rolagem D6 Pool de Egrégora (com suporte a Dados de Corrupção e Orgulho).
+ * Executa uma rolagem D6 Pool de Egrégora (com suporte a Dados de Corrupção, Orgulho e Dice So Nice 3D).
  */
 export async function executeEgregoraRoll(actor, {
   attribute = "",
@@ -146,14 +102,13 @@ export async function executeEgregoraRoll(actor, {
   if (pool.base > 0) formulaParts.push(`${pool.base}db`);
   if (pool.skill > 0) formulaParts.push(`${pool.skill}ds`);
   if (pool.gear > 0) formulaParts.push(`${pool.gear}dg`);
-  if (corrDice > 0) formulaParts.push(`${corrDice}dc`);
+  if (corrDice > 0) formulaParts.push(`${corrDice}dk`);
 
   if (!formulaParts.length) {
     ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.NoDiceToRoll"));
     return null;
   }
 
-  // Se o jogador assumiu Dados de Corrupção, soma PC imediatamente e verifica gatilho de Contaminação
   let contaminationTriggered = false;
   if (corrDice > 0 && actor?.system?.corruption !== undefined) {
     const prevPc = Number(actor.system.corruption.value) || 0;
@@ -178,6 +133,7 @@ export async function executeEgregoraRoll(actor, {
   };
 
   const roll = await new YearZeroRoll(formulaParts.join(" + "), { maxPush }, rollOptions).evaluate();
+  decorateEgregoraRoll(roll, { actor, contaminationTriggered });
 
   if (usePride && actor?.system?.traits?.pride) {
     await actor.update({ "system.traits.pride.used": true });
@@ -225,6 +181,11 @@ export async function pushEgregoraRoll(event) {
   const roll = message.rolls[0].duplicate();
   await message.delete();
   await roll.push();
+  decorateEgregoraRoll(roll, {
+    actor,
+    magicPath: flags.magicPath || null,
+    contaminationTriggered: Boolean(roll.options?.contaminationTriggered),
+  });
 
   const trauma = roll.attributeTrauma || 0;
   const gearDmg = roll.gearDamage || 0;
@@ -296,7 +257,8 @@ export async function acceptEgregoraRoll(event) {
 
 /**
  * Conjuração Mágica de Egrégora:
- * Atributo + menor Caminho utilizado + Bônus de Foco/Fetiche + Poder Mágico extra.
+ * Atributo + menor Caminho utilizado + Bônus de Foco/Fetiche + Dados de Corrupção.
+ * Colore os dados de Caminho com o tema 3D correspondente ao Caminho Principal!
  */
 export async function executeSpellCast(actor, {
   spell = null,
@@ -345,7 +307,7 @@ export async function executeSpellCast(actor, {
   if (pool.base > 0) formulaParts.push(`${pool.base}db`);
   if (pool.skill > 0) formulaParts.push(`${pool.skill}ds`);
   if (pool.gear > 0) formulaParts.push(`${pool.gear}dg`);
-  if (corrDice > 0) formulaParts.push(`${corrDice}dc`);
+  if (corrDice > 0) formulaParts.push(`${corrDice}dk`);
 
   if (!formulaParts.length) {
     ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.NoDiceToRoll"));
@@ -359,6 +321,7 @@ export async function executeSpellCast(actor, {
     attribute,
     contaminationTriggered,
   }).evaluate();
+  decorateEgregoraRoll(roll, { actor, magicPath: primaryPath, contaminationTriggered });
 
   const successes = roll.successCount;
   const banes = roll.attributeTrauma;
@@ -391,7 +354,7 @@ export async function executeSpellCast(actor, {
     rollHtml: await roll.render(),
   });
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor: `${game.i18n.localize("EGREGORA.Magic.Cast")}: ${spell?.name || spellName || pathsDisplay}`,
     content,
@@ -400,14 +363,18 @@ export async function executeSpellCast(actor, {
       [EGREGORA_CONFIG.ID]: {
         actorUuid: actor?.uuid ?? "",
         attribute,
+        magicPath: primaryPath,
         rollType: "spell",
       },
     },
   });
+
+  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  return message;
 }
 
 /**
- * Teste de Contaminação (rola dados = nível atual de Corrupção; 6 = efeito colateral imediato).
+ * Teste de Contaminação (rola dados de Corrupção = nível atual de PC; 6 = efeito colateral imediato).
  */
 export async function rollContaminationTest(actor) {
   const pc = Number(actor?.system?.corruption?.value) || 0;
@@ -416,13 +383,15 @@ export async function rollContaminationTest(actor) {
     return null;
   }
 
-  const roll = await new YearZeroRoll(`${pc}dc`, { maxPush: 0 }, {
+  const roll = await new YearZeroRoll(`${pc}dk`, { maxPush: 0 }, {
     game: "egregora",
     maxPush: 0,
     rollType: "contamination",
   }).evaluate();
 
   const triggered = roll.successCount > 0;
+  decorateEgregoraRoll(roll, { actor, contaminationTriggered: triggered });
+
   const renderTemplate = getRenderTemplate();
   const content = await renderTemplate("systems/fvtt-egregora/templates/chat/table-result.hbs", {
     tableTitle: game.i18n.localize("EGREGORA.Corruption.ContaminationTest"),
@@ -436,11 +405,14 @@ export async function rollContaminationTest(actor) {
     isAlert: triggered,
   });
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
     rolls: [roll],
   });
+
+  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  return message;
 }
 
 /**
@@ -461,12 +433,24 @@ export async function rollFearTest(actor, attribute = "intelligence", allies = 0
 }
 
 /**
- * Tabela de Pânico de Egrégora (1D6 + Corrupção).
+ * Helper para rolar D66 real via Foundry Roll (anima os 2D6 em 3D no Dice So Nice!).
+ */
+async function evaluateD66Roll(actor) {
+  const roll = await new Roll("1d6 + 1d6", {}, { isTableRoll: true }).evaluate();
+  decorateEgregoraRoll(roll, { actor });
+  const tens = roll.dice[0]?.total ?? 1;
+  const ones = roll.dice[1]?.total ?? 1;
+  return { roll, d66: tens * 10 + ones };
+}
+
+/**
+ * Tabela de Pânico de Egrégora (1D6 + Corrupção) com animação 3D.
  */
 export async function rollPanicTable(actor) {
   const pc = Number(actor?.system?.corruption?.value) || 0;
   const dieRoll = await new Roll("1d6", {}, { isTableRoll: true }).evaluate();
-  const dieVal = dieRoll.dice[0]?.total ?? Math.ceil(Math.random() * 6);
+  decorateEgregoraRoll(dieRoll, { actor });
+  const dieVal = dieRoll.dice[0]?.total ?? 1;
   const total = dieVal + pc;
 
   const entry = EGREGORA_CONFIG.panicTable.find(e => total >= e.min && total <= e.max)
@@ -481,18 +465,23 @@ export async function rollPanicTable(actor) {
     isAlert: total >= 7,
   });
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
+    rolls: [dieRoll],
   });
+
+  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  return message;
 }
 
 /**
- * Verificação de Trauma Mental Permanente (rola 1D6; em 1, reduz PM máximo em 1).
+ * Verificação de Trauma Mental Permanente (rola 1D6 em 3D; em 1, reduz PM máximo em 1).
  */
 export async function rollPermanentTraumaCheck(actor) {
   const dieRoll = await new Roll("1d6", {}, { isTableRoll: true }).evaluate();
-  const dieVal = dieRoll.dice[0]?.total ?? Math.ceil(Math.random() * 6);
+  decorateEgregoraRoll(dieRoll, { actor });
+  const dieVal = dieRoll.dice[0]?.total ?? 1;
   const suffered = dieVal === 1;
 
   if (suffered && actor?.system?.mental) {
@@ -513,10 +502,14 @@ export async function rollPermanentTraumaCheck(actor) {
     isAlert: suffered,
   });
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
+    rolls: [dieRoll],
   });
+
+  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  return message;
 }
 
 /**
@@ -541,12 +534,10 @@ export async function rollHibernationTest(actor, modifier = 0) {
 }
 
 /**
- * Tabela D66 de Mutações da Corrupção (Leves, Notáveis, Aberrantes).
+ * Tabela D66 de Mutações da Corrupção (Leves, Notáveis, Aberrantes) com animação 3D.
  */
 export async function rollMutationTable(actor, tier = "minor", addToActor = true) {
-  const tens = Math.floor(Math.random() * 6) + 1;
-  const ones = Math.floor(Math.random() * 6) + 1;
-  const d66 = tens * 10 + ones;
+  const { roll, d66 } = await evaluateD66Roll(actor);
 
   const table = EGREGORA_CONFIG.mutationsTable[tier] || EGREGORA_CONFIG.mutationsTable.minor;
   const entry = table.find(e => d66 >= e.min && d66 <= e.max) || table[0];
@@ -582,19 +573,21 @@ export async function rollMutationTable(actor, tier = "minor", addToActor = true
     isAlert: true,
   });
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
+    rolls: [roll],
   });
+
+  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  return message;
 }
 
 /**
- * Tabela D66 de Ferimentos Críticos oficial de Egrégora.
+ * Tabela D66 de Ferimentos Críticos oficial de Egrégora com animação 3D.
  */
 export async function rollCriticalTable(actor, addToActor = true) {
-  const tens = Math.floor(Math.random() * 6) + 1;
-  const ones = Math.floor(Math.random() * 6) + 1;
-  const d66 = tens * 10 + ones;
+  const { roll, d66 } = await evaluateD66Roll(actor);
 
   const entry = EGREGORA_CONFIG.criticalInjuriesTable.find(e => d66 >= e.min && d66 <= e.max)
     || EGREGORA_CONFIG.criticalInjuriesTable[0];
@@ -634,19 +627,21 @@ export async function rollCriticalTable(actor, addToActor = true) {
     isAlert: true,
   });
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
+    rolls: [roll],
   });
+
+  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  return message;
 }
 
 /**
- * Tabela D66 de Danos Críticos em Veículos.
+ * Tabela D66 de Danos Críticos em Veículos com animação 3D.
  */
 export async function rollVehicleCritTable(actor) {
-  const tens = Math.floor(Math.random() * 6) + 1;
-  const ones = Math.floor(Math.random() * 6) + 1;
-  const d66 = tens * 10 + ones;
+  const { roll, d66 } = await evaluateD66Roll(actor);
 
   const entry = EGREGORA_CONFIG.vehicleCritTable.find(e => d66 >= e.min && d66 <= e.max)
     || EGREGORA_CONFIG.vehicleCritTable[0];
@@ -662,10 +657,14 @@ export async function rollVehicleCritTable(actor) {
     isAlert: true,
   });
 
-  return ChatMessage.create({
+  const message = await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
+    rolls: [roll],
   });
+
+  await game.dice3d?.waitFor3DAnimationByMessageID(message.id);
+  return message;
 }
 
 /**

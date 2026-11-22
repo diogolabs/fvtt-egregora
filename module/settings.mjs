@@ -29,6 +29,15 @@ export function registerSettings() {
     type: Number,
     default: 0,
   });
+
+  game.settings.register(ID, "enableMagicPathDiceColors", {
+    name: "EGREGORA.Settings.enableMagicPathDiceColors.name",
+    hint: "EGREGORA.Settings.enableMagicPathDiceColors.hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: true,
+  });
 }
 
 export function registerStatusEffects() {

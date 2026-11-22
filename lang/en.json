@@ -51,6 +51,38 @@
       "doomPoints": {
         "name": "Current Doom Points",
         "hint": "Current Narrator Doom Points pool."
+      },
+      "enableMagicPathDiceColors": {
+        "name": "Magic Path 3D Dice Colors (Dice So Nice!)",
+        "hint": "When casting spells, automatically colors the magic path dice according to the chosen Primary Path."
+      }
+    },
+    "DSN": {
+      "Category": "Egrégora: The Occult World",
+      "SFXTrigger": "Egrégora: Roll Outcome",
+      "Colorset": {
+        "base": "Obsidian & Crimson (Base)",
+        "skill": "Obsidian & Gold (Skill)",
+        "gear": "Dark Steel (Gear)",
+        "corruption": "Blood of the Abyss (Corruption)",
+        "pathMatter": "Path: Matter",
+        "pathFlux": "Path: Flux",
+        "pathMind": "Path: Mind",
+        "pathLife": "Path: Life",
+        "pathEchoes": "Path: Echoes",
+        "pathAbyss": "Path: Abyss"
+      },
+      "Role": {
+        "base": "Base Die (Attribute)",
+        "skill": "Skill Die",
+        "gear": "Gear Die",
+        "corruption": "Corruption Die"
+      },
+      "SFX": {
+        "success": "Success (6)",
+        "multiSuccess": "Multiple Successes (3+)",
+        "criticalFailure": "Critical Failure",
+        "contamination": "Contamination Triggered"
       }
     },
     "Status": {

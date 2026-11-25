@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.3 — Dano por Target Isolado por Jogador (via Socket) + Botão de Dano em Magias de Dano Direto (Foundry VTT v13 & v14)
+- **Correção da marcação de alvos (Target) ao aplicar dano:**
+  - `applyTargetDamage` (e o botão de Ferimento Crítico no chat) agora utilizam exclusivamente os tokens marcados como **Target** (`game.user.targets` / tecla `T`) pelo **autor da rolagem**, e nunca mais os tokens selecionados pela ferramenta de seleção (`canvas.tokens.controlled`).
+  - Os alvos marcados pelo autor no momento da rolagem são salvos no card do chat (exibindo `🎯 Alvo: ...`) e preservados após **Forçar (Push)** e **Aceitar**.
+  - Apenas o autor da rolagem ou o Narrador veem e podem acionar os botões de ação do card, impedindo que outros jogadores utilizem alvos alheios.
+- **Aplicação de dano por jogadores via Socket:** quando um jogador aplica dano em um alvo que não controla (ex.: PNJs/criaturas do Narrador), a atualização de PV/Casco é executada com segurança pelo Narrador ativo via socket, publicando um resumo de dano no chat (com indicação de *Quebrado* / *Destroçado*).
+- **Botão de Dano em Magias de Dano Direto:** magias marcadas como *Magia de Dano Direto* agora sincronizam `roll.options.damage` com o dano calculado da magia, exibindo imediatamente os botões **Aplicar Dano** e **Ferimento Crítico** após **Aceitar** ou **Forçar (Push)**.
+
 ## 0.3.2 — Blindagem contra Combates Excluídos + Alinhamento dos Controles no Combat Tracker (Foundry VTT v13 & v14)
 - **Blindagem contra `Combat does not exist in combats`:** validação explícita via `game.combats.get(id)` antes de qualquer ação nos botões do Combat Tracker (Recolher, Distribuir, Trocar Carta e Ações Rápida/Lenta), impedindo erros mesmo em transições rápidas ao encerrar ou alternar encontros.
 - **Alinhamento horizontal no Combat Tracker:** corrigido o empilhamento vertical dos ícones de **Ação Lenta (`⏳`)**, **Ação Rápida (`⚡`)** e **Trocar Carta (`⇄`)** na linha de cada combatente, além do espaçamento responsivo da barra do baralho no cabeçalho.

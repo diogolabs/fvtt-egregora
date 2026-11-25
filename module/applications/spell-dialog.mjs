@@ -127,20 +127,25 @@ export class EgregoraSpellDialog extends HandlebarsApplicationMixin(ApplicationV
     };
   }
 
-  static async #onSubmit() {
+  static async #onSubmit(event, form, formData) {
+    const raw = formData?.object ?? {};
+    const directDamage = form?.querySelector("input[name='directDamage']")
+      ? Boolean(form.querySelector("input[name='directDamage']").checked)
+      : (raw.directDamage !== undefined ? Boolean(raw.directDamage) : this.directDamage);
+
     await executeSpellCast(this.actor, {
       spell: this.spell,
-      spellName: this.spellName,
-      attribute: this.attribute,
+      spellName: raw.spellName ?? this.spellName,
+      attribute: raw.attribute || this.attribute,
       paths: this.selectedPaths,
       primaryPath: this.selectedPaths[0] || "echoes",
       secondaryPath: this.selectedPaths[1] || "",
-      costPool: this.costPool,
-      costAmount: this.costAmount,
-      fetishBonus: this.fetishBonus,
-      corruptionDice: this.corruptionDice,
-      modifier: this.modifier,
-      directDamage: this.directDamage,
+      costPool: raw.costPool || this.costPool,
+      costAmount: raw.costAmount !== undefined ? Math.max(1, Number(raw.costAmount) || 1) : this.costAmount,
+      fetishBonus: raw.fetishBonus !== undefined ? Math.max(0, Number(raw.fetishBonus) || 0) : this.fetishBonus,
+      corruptionDice: raw.corruptionDice !== undefined ? Math.max(0, Number(raw.corruptionDice) || 0) : this.corruptionDice,
+      modifier: raw.modifier !== undefined ? (Number(raw.modifier) || 0) : this.modifier,
+      directDamage,
     });
   }
 }

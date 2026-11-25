@@ -1,4 +1,11 @@
 <div class="eg-dice-infos">
+  {{#if roll.options.targetsLabel}}
+  <div class="eg-info-row eg-target-row">
+    <span class="label"><i class="fa-solid fa-crosshairs"></i> {{localize "EGREGORA.Chat.Target"}}:</span>
+    <span class="value"><strong>{{roll.options.targetsLabel}}</strong></span>
+  </div>
+  {{/if}}
+
   {{#if (gt roll.attackDamage 0)}}
   <div class="eg-info-row">
     <span class="label">{{localize "EGREGORA.Damage"}}:</span>

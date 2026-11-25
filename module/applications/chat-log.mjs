@@ -1,3 +1,4 @@
+import { EGREGORA_CONFIG } from "../config.mjs";
 import {
   acceptEgregoraRoll,
   applyTargetDamage,
@@ -48,9 +49,21 @@ export class EgregoraChatLog extends foundry.applications.sidebar.tabs.ChatLog {
   static async #rollCritTable(event) {
     const messageId = event.target.closest("[data-message-id]")?.dataset?.messageId;
     const message = game.messages.get(messageId);
-    const actor = canvas?.tokens?.controlled?.[0]?.actor
-      || game.actors.get(message?.speaker?.actor)
-      || game.user.character;
+    const flags = message?.flags?.[EGREGORA_CONFIG.ID] ?? {};
+
+    let actor = null;
+    const savedTargetUuid = flags.targets?.[0]?.tokenUuid;
+    if (savedTargetUuid) {
+      const doc = await fromUuid(savedTargetUuid);
+      actor = doc?.actor ?? null;
+    }
+    if (!actor) {
+      const firstTarget = Array.from(game.user?.targets ?? [])[0];
+      actor = firstTarget?.actor ?? null;
+    }
+    if (!actor) {
+      actor = game.actors.get(message?.speaker?.actor) || game.user.character;
+    }
     await rollCriticalTable(actor, false);
   }
 }

@@ -96,6 +96,22 @@ export function normalizeMagicPaths(paths = null, primaryPath = "echoes", second
 }
 
 /**
+ * Captura um snapshot dos tokens atualmente marcados como alvo (Target) pelo usuário atual.
+ * Garante que apenas os alvos marcados por quem fez a rolagem sejam associados à mensagem.
+ */
+export function captureUserTargets() {
+  const targets = Array.from(game.user?.targets ?? []);
+  return targets
+    .filter(t => t?.document?.uuid && t?.actor)
+    .map(t => ({
+      tokenUuid: t.document.uuid,
+      actorUuid: t.actor.uuid,
+      name: t.name || t.actor.name || "—",
+      img: t.document.texture?.src || t.actor.img || "icons/svg/mystery-man.svg",
+    }));
+}
+
+/**
  * Renderiza o conteúdo HTML do card de Conjuração Mágica (usado no cast inicial, Push e Aceitar).
  */
 async function renderSpellCardContent(roll, cardData) {
@@ -110,6 +126,12 @@ async function renderSpellCardContent(roll, cardData) {
   const calculatedDamage = cardData.directDamage && successes > 0
     ? Math.max(1, highestPathVal) + (successes - 1)
     : 0;
+
+  // Garante que o YearZeroRoll tenha options.damage sincronizado com directDamage
+  // para que o botão Aplicar Dano de roll.hbs apareça automaticamente após Aceitar/Push
+  if (cardData.directDamage && !roll.options.damage) {
+    roll.options.damage = Math.max(1, highestPathVal);
+  }
 
   const renderTemplate = getRenderTemplate();
   return renderTemplate("systems/fvtt-egregora/templates/chat/spell-cast.hbs", {
@@ -202,6 +224,11 @@ export async function executeEgregoraRoll(actor, {
     }
   }
 
+  const targetSnapshots = (damage > 0 || rollType === "weapon" || rollType === "vehicle-ram")
+    ? captureUserTargets()
+    : [];
+  const targetsLabel = targetSnapshots.map(t => t.name).join(", ");
+
   const rollOptions = {
     game: "egregora",
     maxPush,
@@ -213,6 +240,8 @@ export async function executeEgregoraRoll(actor, {
     prideBonus: usePride ? 1 : 0,
     corruptionAdded: corrDice,
     contaminationTriggered,
+    targets: targetSnapshots,
+    targetsLabel,
   };
 
   const roll = await new YearZeroRoll(formulaParts.join(" + "), { maxPush }, rollOptions).evaluate();
@@ -230,11 +259,13 @@ export async function executeEgregoraRoll(actor, {
       flags: {
         [EGREGORA_CONFIG.ID]: {
           actorUuid: actor?.uuid ?? "",
+          rollerUserId: game.user?.id ?? "",
           attribute,
           skillUuid: skill?.uuid ?? "",
           gearUuid: gear?.uuid ?? "",
           rollType,
           prideBonus: usePride ? 1 : 0,
+          targets: targetSnapshots,
         },
       },
     },
@@ -356,11 +387,12 @@ export async function acceptEgregoraRoll(event) {
   roll.options.maxPush = 0;
 
   const flags = message.flags?.[EGREGORA_CONFIG.ID] ?? {};
-  const updateData = { rolls: [roll.toJSON()] };
+  const updateData = {};
 
   if (flags.rollType === "spell" && flags.spellCardData) {
     updateData.content = await renderSpellCardContent(roll, flags.spellCardData);
   }
+  updateData.rolls = [roll.toJSON()];
 
   // Immediate visual feedback in the DOM before async round-trip completes
   messageEl?.querySelectorAll(".dice-button.push, .dice-button.accept").forEach(btn => {
@@ -466,14 +498,21 @@ export async function executeSpellCast(actor, {
     if (corrDice >= 2 || prevPc >= 4) contaminationTriggered = true;
   }
 
+  const targetSnapshots = captureUserTargets();
+  const targetsLabel = targetSnapshots.map(t => t.name).join(", ");
+  const spellBaseDamage = directDamage ? Math.max(1, highestPathVal) : undefined;
+
   const rollMode = normalizeRollMode();
   const roll = new YearZeroRoll(formulaParts.join(" + "), { maxPush: 1 }, {
     game: "egregora",
     maxPush: 1,
+    damage: spellBaseDamage,
     rollType: "spell",
     rollMode,
     attribute,
     contaminationTriggered,
+    targets: targetSnapshots,
+    targetsLabel,
   });
 
   // Tag each blended skill term with its exact Magic Path key & localized flavor
@@ -510,6 +549,7 @@ export async function executeSpellCast(actor, {
     directDamage: Boolean(directDamage),
     highestPathVal,
     contaminationTriggered,
+    targets: targetSnapshots,
   };
 
   const content = await renderSpellCardContent(roll, spellCardData);
@@ -521,11 +561,13 @@ export async function executeSpellCast(actor, {
     flags: {
       [EGREGORA_CONFIG.ID]: {
         actorUuid: actor?.uuid ?? "",
+        rollerUserId: game.user?.id ?? "",
         attribute,
         magicPath: selectedPaths[0],
         magicPaths: selectedPaths,
         rollType: "spell",
         spellCardData,
+        targets: targetSnapshots,
       },
     },
   };
@@ -834,34 +876,170 @@ export async function rollVehicleCritTable(actor) {
 }
 
 /**
- * Aplica dano de ataque nos tokens atualmente selecionados.
+ * Aplica dano diretamente aos TokenDocuments informados (executado pelo dono do ator ou pelo GM via socket).
+ * @param {string[]} tokenUuids
+ * @param {number} dmg
+ * @returns {Promise<Array<{name: string, prev: number, next: number, broken: boolean, isVehicle: boolean}>>}
+ */
+async function executeDamageOnTokens(tokenUuids, dmg) {
+  const results = [];
+  for (const uuid of tokenUuids) {
+    const doc = await fromUuid(uuid);
+    const targetActor = doc?.actor ?? (doc instanceof Actor ? doc : null);
+    if (!targetActor) continue;
+    const displayName = doc?.name || targetActor.name || "—";
+
+    if (targetActor.type === "vehicle") {
+      const prev = Number(targetActor.system.hull?.value) || 0;
+      const next = Math.max(0, prev - dmg);
+      await targetActor.update({
+        "system.hull.value": next,
+        "system.wrecked": next === 0,
+      });
+      results.push({ name: displayName, prev, next, broken: next === 0, isVehicle: true });
+    } else if (targetActor.system.health) {
+      const prev = Number(targetActor.system.health.value) || 0;
+      const next = Math.max(0, prev - dmg);
+      await targetActor.update({ "system.health.value": next });
+      results.push({ name: displayName, prev, next, broken: next === 0, isVehicle: false });
+    }
+  }
+  return results;
+}
+
+/**
+ * Publica um resumo curto no chat confirmando o dano aplicado em cada alvo.
+ */
+async function postDamageAppliedSummary(results, dmg, sourceMessage) {
+  if (!results.length) return;
+  const lines = results.map(r => {
+    const unit = r.isVehicle
+      ? game.i18n.localize("EGREGORA.Vehicle.Hull")
+      : game.i18n.localize("EGREGORA.HealthShort");
+    const statusTag = r.broken
+      ? ` <span class="eg-dmg-broken">(${game.i18n.localize(r.isVehicle ? "EGREGORA.Vehicle.Wrecked" : "EGREGORA.Status.broken")})</span>`
+      : "";
+    return `<li><strong>${foundry.utils.escapeHTML(r.name)}</strong>: −${dmg} ${unit} (${r.prev} → ${r.next})${statusTag}</li>`;
+  });
+
+  const ChatMessageCls = ChatMessage.implementation ?? ChatMessage;
+  await ChatMessageCls.create({
+    speaker: sourceMessage?.speaker ?? ChatMessage.getSpeaker(),
+    content: `<div class="eg-chat-card eg-damage-summary">
+      <div class="eg-damage-summary-title"><i class="fa-solid fa-crosshairs"></i> ${game.i18n.localize("EGREGORA.Chat.DamageAppliedTitle")}</div>
+      <ul>${lines.join("")}</ul>
+    </div>`,
+  });
+}
+
+/**
+ * Aplica dano de ataque/magia exclusivamente aos tokens marcados como alvo (Target) pelo autor da rolagem.
+ * Nunca utiliza `canvas.tokens.controlled` (ferramenta de seleção).
+ * Quando um jogador aplica dano em alvos controlados pelo Narrador, delega com segurança via socket.
  */
 export async function applyTargetDamage(event) {
+  const btn = event.target.closest("[data-action='applyTargetDamage']");
   const messageId = event.target.closest("[data-message-id]")?.dataset?.messageId;
   const message = game.messages.get(messageId);
-  const roll = message?.rolls?.[0];
-  if (!roll || !roll.attackDamage) return;
+  if (!message) return;
 
-  const controlled = canvas?.tokens?.controlled ?? [];
-  if (!controlled.length) {
+  const flags = message.flags?.[EGREGORA_CONFIG.ID] ?? {};
+  const rollerUserId = flags.rollerUserId || message.author?.id || "";
+
+  // Apenas o autor da rolagem ou o Narrador podem aplicar o dano desta rolagem
+  if (!game.user.isGM && rollerUserId && game.user.id !== rollerUserId) {
+    ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.OnlyRollerCanApplyDamage"));
+    return;
+  }
+
+  const roll = message.rolls?.[0];
+  const explicitDmg = Number(btn?.dataset?.damage);
+  const dmg = Number.isFinite(explicitDmg) && explicitDmg > 0
+    ? explicitDmg
+    : (Number(roll?.attackDamage) || 0);
+  if (dmg <= 0) return;
+
+  // 1. Prioriza os alvos marcados (Target) pelo autor no momento da rolagem
+  let targetUuids = Array.isArray(flags.targets)
+    ? flags.targets.map(t => t.tokenUuid).filter(Boolean)
+    : [];
+
+  // 2. Fallback: se nenhum alvo estava marcado no momento da rolagem, usa os Targets atuais
+  //    exclusivamente do próprio autor da rolagem (ou do Narrador)
+  if (!targetUuids.length && (game.user.isGM || !rollerUserId || game.user.id === rollerUserId)) {
+    targetUuids = captureUserTargets().map(t => t.tokenUuid);
+  }
+
+  if (!targetUuids.length) {
     ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.SelectTargetToken"));
     return;
   }
 
-  const dmg = Number(roll.attackDamage) || 0;
-  for (const token of controlled) {
-    const targetActor = token.actor;
+  // Separa alvos que o usuário atual pode editar diretamente vs. alvos que exigem o Narrador via socket
+  const directUuids = [];
+  const gmUuids = [];
+  for (const uuid of targetUuids) {
+    const doc = await fromUuid(uuid);
+    const targetActor = doc?.actor ?? (doc instanceof Actor ? doc : null);
     if (!targetActor) continue;
-    if (targetActor.type === "vehicle") {
-      const nextHull = Math.max(0, targetActor.system.hull.value - dmg);
-      await targetActor.update({
-        "system.hull.value": nextHull,
-        "system.wrecked": nextHull === 0,
-      });
-    } else if (targetActor.system.health) {
-      const nextHp = Math.max(0, targetActor.system.health.value - dmg);
-      await targetActor.update({ "system.health.value": nextHp });
+    if (game.user.isGM || targetActor.isOwner) {
+      directUuids.push(uuid);
+    } else {
+      gmUuids.push(uuid);
     }
   }
-  ui.notifications.info(game.i18n.format("EGREGORA.Notifications.AppliedDamage", { dmg }));
+
+  if (!directUuids.length && !gmUuids.length) {
+    ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.SelectTargetToken"));
+    return;
+  }
+
+  if (directUuids.length) {
+    const results = await executeDamageOnTokens(directUuids, dmg);
+    await postDamageAppliedSummary(results, dmg, message);
+    ui.notifications.info(game.i18n.format("EGREGORA.Notifications.AppliedDamage", { dmg }));
+  }
+
+  if (gmUuids.length) {
+    const activeGM = game.users.activeGM ?? game.users.find(u => u.isGM && u.active);
+    if (!activeGM) {
+      ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.NoGMForDamage"));
+      return;
+    }
+    game.socket.emit(`system.${EGREGORA_CONFIG.ID}`, {
+      action: "applyTargetDamage",
+      messageId: message.id,
+      tokenUuids: gmUuids,
+      damage: dmg,
+      requesterId: game.user.id,
+    });
+    ui.notifications.info(game.i18n.format("EGREGORA.Notifications.AppliedDamage", { dmg }));
+  }
+}
+
+/**
+ * Registra o listener de socket no Narrador para aplicar dano em alvos marcados por jogadores.
+ */
+export function registerRollSocket() {
+  const ID = EGREGORA_CONFIG.ID;
+  game.socket.on(`system.${ID}`, async payload => {
+    if (!payload || payload.action !== "applyTargetDamage") return;
+    const primaryGM = game.users.activeGM ?? game.users.find(u => u.isGM && u.active);
+    if (!game.user.isGM || (primaryGM && primaryGM.id !== game.user.id)) return;
+
+    const message = game.messages.get(payload.messageId);
+    if (!message) return;
+    const flags = message.flags?.[ID] ?? {};
+    const rollerUserId = flags.rollerUserId || message.author?.id || "";
+
+    // Garante que apenas o autor da rolagem possa solicitar a aplicação de dano via socket
+    if (rollerUserId && payload.requesterId !== rollerUserId) return;
+
+    const dmg = Number(payload.damage) || 0;
+    const uuids = Array.isArray(payload.tokenUuids) ? payload.tokenUuids.filter(Boolean) : [];
+    if (dmg <= 0 || !uuids.length) return;
+
+    const results = await executeDamageOnTokens(uuids, dmg);
+    await postDamageAppliedSummary(results, dmg, message);
+  });
 }

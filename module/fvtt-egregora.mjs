@@ -28,6 +28,7 @@ import { registerCombatTrackerHooks } from "./helpers/combat-tracker.mjs";
 import {
   executeEgregoraRoll,
   executeSpellCast,
+  registerRollSocket,
   rollContaminationTest,
   rollCriticalTable,
   rollFearTest,
@@ -187,6 +188,7 @@ Hooks.once("diceSoNiceReady", registerDice3D);
 
 Hooks.once("ready", () => {
   registerCombatSocket();
+  registerRollSocket();
   Hooks.on("hotbarDrop", (bar, data, slot) => {
     if (data.type === "Item" && data.uuid) {
       createItemMacro(data, slot);

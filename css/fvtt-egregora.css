@@ -1597,6 +1597,42 @@ button.eg-btn.eg-btn-crimson:hover,
   font-weight: 700;
 }
 
+.eg-info-row.eg-target-row {
+  background: rgba(139, 24, 24, 0.1);
+  border-left: 3px solid var(--eg-crimson);
+  color: var(--eg-ink);
+  margin-bottom: 4px;
+  gap: 8px;
+}
+
+.eg-info-row.eg-target-row .label {
+  color: var(--eg-crimson-dark);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.eg-damage-summary {
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.eg-damage-summary-title {
+  font-family: var(--eg-font-display);
+  font-weight: 800;
+  color: var(--eg-crimson-dark);
+  margin-bottom: 4px;
+}
+
+.eg-damage-summary ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.eg-damage-summary .eg-dmg-broken {
+  color: var(--eg-crimson-dark);
+  font-weight: 800;
+}
+
 .eg-btn-row {
   display: flex;
   gap: 6px;

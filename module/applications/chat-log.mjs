@@ -1,4 +1,5 @@
 import { EGREGORA_CONFIG } from "../config.mjs";
+import { canUserActOnChatMessage } from "../documents/chat-message.mjs";
 import {
   acceptEgregoraRoll,
   applyTargetDamage,
@@ -35,6 +36,7 @@ export class EgregoraChatLog extends foundry.applications.sidebar.tabs.ChatLog {
   static async #rollContamination(event) {
     const messageId = event.target.closest("[data-message-id]")?.dataset?.messageId;
     const message = game.messages.get(messageId);
+    if (message && !canUserActOnChatMessage(message)) return;
     const actor = game.actors.get(message?.speaker?.actor) || game.user.character;
     if (actor) await rollContaminationTest(actor);
   }
@@ -42,6 +44,7 @@ export class EgregoraChatLog extends foundry.applications.sidebar.tabs.ChatLog {
   static async #rollPanic(event) {
     const messageId = event.target.closest("[data-message-id]")?.dataset?.messageId;
     const message = game.messages.get(messageId);
+    if (message && !canUserActOnChatMessage(message)) return;
     const actor = game.actors.get(message?.speaker?.actor) || game.user.character;
     await rollPanicTable(actor);
   }
@@ -49,6 +52,7 @@ export class EgregoraChatLog extends foundry.applications.sidebar.tabs.ChatLog {
   static async #rollCritTable(event) {
     const messageId = event.target.closest("[data-message-id]")?.dataset?.messageId;
     const message = game.messages.get(messageId);
+    if (message && !canUserActOnChatMessage(message)) return;
     const flags = message?.flags?.[EGREGORA_CONFIG.ID] ?? {};
 
     let actor = null;

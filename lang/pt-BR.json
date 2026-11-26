@@ -146,9 +146,9 @@
       "empathy": "EMP"
     },
     "StatusAndConditions": "Status & Condições",
-    "Health": "Saúde Física",
+    "Health": "Saúde",
     "HealthShort": "PV",
-    "Mental": "Poder Mental",
+    "Mental": "Sanidade",
     "MentalShort": "PM",
     "Willpower": "Força de Vontade",
     "WillpowerShort": "FV",
@@ -379,8 +379,8 @@
       "TotalDice": "Pilha de Conjuração",
       "CostPool": {
         "willpower": "Força de Vontade (FV)",
-        "mental": "Poder Mental (PM)",
-        "health": "Saúde Física (PV)"
+        "mental": "Sanidade (PM)",
+        "health": "Saúde (PV)"
       },
       "Aptitude": {
         "0": "Sem Aptidão",
@@ -424,9 +424,9 @@
       "TraumaCheckTitle": "Teste de Trauma Mental Permanente",
       "TraumaCheckShort": "Trauma Permanente",
       "TraumaSufferedTitle": "Trauma Permanente Sofrido!",
-      "TraumaSufferedText": "Resultado 1: seu Poder Mental máximo foi reduzido permanentemente em 1. Se chegar a 0, o personagem sucumbe à Loucura.",
+      "TraumaSufferedText": "Resultado 1: sua Sanidade máxima foi reduzida permanentemente em 1. Se chegar a 0, o personagem sucumbe à Loucura.",
       "TraumaAvoidedTitle": "Mente Preservada",
-      "TraumaAvoidedText": "Você sobrevive ao colapso sem reduzir seu Poder Mental máximo."
+      "TraumaAvoidedText": "Você sobrevive ao colapso sem reduzir sua Sanidade máxima."
     },
     "Panic": {
       "TableTitle": "Tabela de Pânico"

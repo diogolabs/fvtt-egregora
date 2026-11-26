@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.4 — Nomenclatura (Saúde / Sanidade) + Visibilidade Unificada dos Botões Pós-Rolagem no Chat (Foundry VTT v13 & v14)
+- **Renomeação de recursos na interface:**
+  - **Saúde Física** renomeada para **Saúde** (`Health` em inglês).
+  - **Poder Mental** renomeado para **Sanidade** (`Sanity` em inglês), incluindo custos de conjuração e mensagens de Trauma Permanente.
+- **Visibilidade unificada de Forçar, Aceitar, Aplicar Dano e demais botões no chat:**
+  - Centralizada a regra de permissão (`canUserActOnChatMessage` / `enforceChatButtonVisibility`) aplicada tanto em `EgregoraChatMessage#renderHTML` quanto no hook `renderChatMessageHTML`, garantindo que **Forçar Teste**, **Aceitar**, **Aplicar Dano**, **Ferimento Crítico** e **Contaminação** tenham exatamente a mesma visibilidade (apenas para o autor da rolagem e o Narrador) em todos os locais do chat (ChatLog, notificações e popouts) no Foundry v13 e v14.
+  - Adicionadas guardas de permissão nos handlers de `Forçar`, `Aceitar`, `Contaminação`, `Pânico` e `Ferimento Crítico`, e equalizado o estilo visual de `.dice-button` no chat.
+
 ## 0.3.3 — Dano por Target Isolado por Jogador (via Socket) + Botão de Dano em Magias de Dano Direto (Foundry VTT v13 & v14)
 - **Correção da marcação de alvos (Target) ao aplicar dano:**
   - `applyTargetDamage` (e o botão de Ferimento Crítico no chat) agora utilizam exclusivamente os tokens marcados como **Target** (`game.user.targets` / tecla `T`) pelo **autor da rolagem**, e nunca mais os tokens selecionados pela ferramenta de seleção (`canvas.tokens.controlled`).

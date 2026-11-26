@@ -146,9 +146,9 @@
       "empathy": "EMP"
     },
     "StatusAndConditions": "Status & Conditions",
-    "Health": "Physical Health",
+    "Health": "Health",
     "HealthShort": "HP",
-    "Mental": "Mental Power",
+    "Mental": "Sanity",
     "MentalShort": "MP",
     "Willpower": "Willpower",
     "WillpowerShort": "WP",
@@ -379,8 +379,8 @@
       "TotalDice": "Casting Dice Pool",
       "CostPool": {
         "willpower": "Willpower (WP)",
-        "mental": "Mental Power (MP)",
-        "health": "Physical Health (HP)"
+        "mental": "Sanity (MP)",
+        "health": "Health (HP)"
       },
       "Aptitude": {
         "0": "No Aptitude",
@@ -424,9 +424,9 @@
       "TraumaCheckTitle": "Permanent Mental Trauma Check",
       "TraumaCheckShort": "Permanent Trauma",
       "TraumaSufferedTitle": "Permanent Trauma Suffered!",
-      "TraumaSufferedText": "Rolled 1: your maximum Mental Power is permanently reduced by 1. At 0 max MP, the character succumbs to madness.",
+      "TraumaSufferedText": "Rolled 1: your maximum Sanity is permanently reduced by 1. At 0 max MP, the character succumbs to madness.",
       "TraumaAvoidedTitle": "Mind Intact",
-      "TraumaAvoidedText": "You endure the breakdown without losing maximum Mental Power."
+      "TraumaAvoidedText": "You endure the breakdown without losing maximum Sanity."
     },
     "Panic": {
       "TableTitle": "Panic Table"

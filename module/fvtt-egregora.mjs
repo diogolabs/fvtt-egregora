@@ -15,7 +15,7 @@ import {
 } from "./data/items.mjs";
 import { EgregoraActor } from "./documents/actor.mjs";
 import { EgregoraItem } from "./documents/item.mjs";
-import { EgregoraChatMessage } from "./documents/chat-message.mjs";
+import { EgregoraChatMessage, enforceChatButtonVisibility } from "./documents/chat-message.mjs";
 import { EgregoraCombat, registerCombatSocket } from "./documents/combat.mjs";
 import { EgregoraChatLog } from "./applications/chat-log.mjs";
 import { EgregoraRollDialog } from "./applications/roll-dialog.mjs";
@@ -189,6 +189,9 @@ Hooks.once("diceSoNiceReady", registerDice3D);
 Hooks.once("ready", () => {
   registerCombatSocket();
   registerRollSocket();
+  Hooks.on("renderChatMessageHTML", (message, html) => {
+    enforceChatButtonVisibility(message, html);
+  });
   Hooks.on("hotbarDrop", (bar, data, slot) => {
     if (data.type === "Item" && data.uuid) {
       createItemMacro(data, slot);

@@ -1,5 +1,6 @@
 import { YearZeroRoll } from "../../lib/yzur.js";
 import { EGREGORA_CONFIG } from "../config.mjs";
+import { canUserActOnChatMessage } from "../documents/chat-message.mjs";
 import { decorateEgregoraRoll } from "./dice-so-nice.mjs";
 
 const getRenderTemplate = () =>
@@ -286,6 +287,7 @@ export async function pushEgregoraRoll(event) {
   const messageId = event.target.closest("[data-message-id]")?.dataset?.messageId;
   const message = game.messages.get(messageId);
   if (!message || !message.rolls?.length) return null;
+  if (!canUserActOnChatMessage(message)) return null;
 
   const flags = message.flags?.[EGREGORA_CONFIG.ID] ?? {};
   const actor = flags.actorUuid ? await fromUuid(flags.actorUuid) : game.actors.get(message.speaker?.actor);
@@ -381,6 +383,7 @@ export async function acceptEgregoraRoll(event) {
   const messageId = messageEl?.dataset?.messageId;
   const message = game.messages.get(messageId);
   if (!message || !message.rolls?.length) return null;
+  if (!canUserActOnChatMessage(message)) return null;
 
   const roll = message.rolls[0].duplicate();
   roll.maxPush = 0;

@@ -1640,7 +1640,9 @@ button.eg-btn.eg-btn-crimson:hover,
 }
 
 .eg-chat-roll button.eg-btn,
+.eg-chat-roll button.dice-button,
 .eg-chat-card button.eg-btn,
+.eg-chat-card button.dice-button,
 .eg-btn-row .eg-btn {
   flex: 1 1 auto;
   height: auto !important;
@@ -1650,6 +1652,7 @@ button.eg-btn.eg-btn-crimson:hover,
   white-space: normal !important;
   padding: 5px 8px !important;
   font-size: 11px;
+  opacity: 1 !important;
 }
 
 /* Dados individuais no tooltip */

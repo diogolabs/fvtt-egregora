@@ -6,6 +6,11 @@
       <span class="eg-item-type-tag">{{localize (concat "TYPES.Item." item.type)}}</span>
     </div>
     <div class="eg-item-header-actions">
+      {{#if canRepair}}
+      <button type="button" class="eg-mini-btn eg-repair-btn" data-action="repairItem" title="{{localize 'EGREGORA.RepairGear'}}">
+        <i class="fa-solid fa-wrench"></i>
+      </button>
+      {{/if}}
       {{#if item.actor}}
       <button type="button" class="eg-mini-btn" data-action="rollItem" title="{{localize 'EGREGORA.Roll'}}">
         <i class="fa-solid fa-dice-d6"></i>
@@ -111,7 +116,11 @@
       <div class="eg-form-grid-2">
         <label class="eg-field">
           <span>{{localize "EGREGORA.Bonus"}}</span>
-          <input type="number" name="system.bonus" value="{{system.bonus}}" min="0" />
+          <div class="eg-inline-input-btn">
+            <input type="number" name="system.bonus" value="{{system.bonus}}" min="0" />
+            <span>/</span>
+            <input type="number" name="system.maxBonus" value="{{system.maxBonus}}" min="0" />
+          </div>
         </label>
         <label class="eg-field">
           <span>{{localize "EGREGORA.Durability"}} (DUR)</span>
@@ -156,7 +165,11 @@
         </label>
         <label class="eg-field">
           <span>{{localize "EGREGORA.Bonus"}}</span>
-          <input type="number" name="system.bonus" value="{{system.bonus}}" min="0" />
+          <div class="eg-inline-input-btn">
+            <input type="number" name="system.bonus" value="{{system.bonus}}" min="0" />
+            <span>/</span>
+            <input type="number" name="system.maxBonus" value="{{system.maxBonus}}" min="0" />
+          </div>
         </label>
         <label class="eg-field">
           <span>{{localize "EGREGORA.Attribute.Label"}}</span>
@@ -180,7 +193,11 @@
         </label>
         <label class="eg-field">
           <span>{{localize "EGREGORA.Durability"}} (DUR)</span>
-          <input type="number" name="system.durability" value="{{system.durability}}" min="0" />
+          <div class="eg-inline-input-btn">
+            <input type="number" name="system.durability" value="{{system.durability}}" min="0" />
+            <span>/</span>
+            <input type="number" name="system.maxDurability" value="{{system.maxDurability}}" min="0" />
+          </div>
         </label>
         <label class="eg-field">
           <span>{{localize "EGREGORA.Ammo"}}</span>
@@ -205,7 +222,11 @@
       <div class="eg-form-grid-2">
         <label class="eg-field">
           <span>{{localize "EGREGORA.Armor.Protection"}}</span>
-          <input type="number" name="system.protection" value="{{system.protection}}" min="0" />
+          <div class="eg-inline-input-btn">
+            <input type="number" name="system.protection" value="{{system.protection}}" min="0" />
+            <span>/</span>
+            <input type="number" name="system.maxProtection" value="{{system.maxProtection}}" min="0" />
+          </div>
         </label>
         <label class="eg-field">
           <span>{{localize "EGREGORA.Armor.Penalty"}}</span>

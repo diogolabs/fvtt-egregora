@@ -1633,6 +1633,31 @@ button.eg-btn.eg-btn-crimson:hover,
   font-weight: 800;
 }
 
+.eg-armor-prompt.eg-resolved {
+  opacity: 0.88;
+}
+
+.eg-info-row.eg-resolved-banner {
+  background: rgba(35, 56, 34, 0.14);
+  border-left: 3px solid #233822;
+  color: #1c311b;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.eg-info-row.eg-armor-blocked {
+  background: rgba(35, 56, 34, 0.18);
+  border-left: 3px solid #233822;
+  color: #1c311b;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.eg-repair-btn {
+  color: #233822 !important;
+  border-color: #233822 !important;
+}
+
 .eg-btn-row {
   display: flex;
   gap: 6px;

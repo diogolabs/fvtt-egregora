@@ -195,6 +195,8 @@
     "AgiShort": "Agi",
     "Durability": "Durabilidade",
     "DurabilityShort": "DUR",
+    "GearBroken": "Quebrado",
+    "RepairGear": "Reparar Equipamento",
     "Value": "Valor",
     "Quantity": "Quantidade",
     "Usage": "Uso",
@@ -332,9 +334,18 @@
       "formidable": "Formidável"
     },
     "Armor": {
+      "Label": "Armadura",
       "Protection": "Proteção",
       "Penalty": "Penalidade de Agilidade",
-      "Roll": "Rolagem de Proteção"
+      "Roll": "Rolagem de Proteção",
+      "IncomingDamageTitle": "Dano Recebido — Absorção de Armadura",
+      "RollAbsorption": "Rolar Armadura",
+      "AcceptFullDamage": "Aceitar Dano",
+      "AcceptedFullDamage": "Dano integral aceito",
+      "Absorbed": "Absorvido",
+      "NetDamage": "Dano Final",
+      "FullyAbsorbed": "Dano totalmente absorvido pela armadura!",
+      "Degraded": "Armadura degradada"
     },
     "Corruption": {
       "Label": "Corrupção",
@@ -504,8 +515,13 @@
       "NoCorruption": "Este personagem possui 0 Pontos de Corrupção.",
       "SelectTargetToken": "Marque ao menos um token como alvo (Target / tecla T) na mesa.",
       "OnlyRollerCanApplyDamage": "Apenas o autor da rolagem ou o Narrador pode aplicar o dano deste ataque.",
+      "OnlyTargetOwnerCanAbsorb": "Apenas o dono do alvo ou o Narrador pode rolar a absorção de armadura.",
+      "ArmorPromptSent": "Solicitação de absorção de armadura enviada no chat para {count} alvo(s).",
       "NoGMForDamage": "É necessário um Narrador conectado para aplicar dano em alvos não controlados por você.",
       "AppliedDamage": "Dano aplicado: {dmg}.",
+      "GearBroke": "{name} sofreu desgaste total e quebrou!",
+      "GearBroken": "{name} está quebrado e precisa ser reparado antes de ser usado.",
+      "GearRepaired": "{name} foi reparado com sucesso.",
       "MacroOwnedItemsOnly": "Apenas itens pertencentes a um personagem podem virar macro.",
       "CorruptionMutationMilestone": "Corrupção atingiu {pc} PC! Role uma Mutação da Corrupção.",
       "ShadowBeastReached": "10 PC — BESTA DAS SOMBRAS! O personagem foi completamente consumido pela Corrupção."

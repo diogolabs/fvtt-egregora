@@ -195,6 +195,8 @@
     "AgiShort": "Agi",
     "Durability": "Durability",
     "DurabilityShort": "DUR",
+    "GearBroken": "Broken",
+    "RepairGear": "Repair Gear",
     "Value": "Value",
     "Quantity": "Quantity",
     "Usage": "Usage",
@@ -332,9 +334,18 @@
       "formidable": "Formidable"
     },
     "Armor": {
+      "Label": "Armor",
       "Protection": "Protection",
       "Penalty": "Agility Penalty",
-      "Roll": "Armor Protection Roll"
+      "Roll": "Armor Protection Roll",
+      "IncomingDamageTitle": "Incoming Damage — Armor Absorption",
+      "RollAbsorption": "Roll Armor",
+      "AcceptFullDamage": "Accept Damage",
+      "AcceptedFullDamage": "Accepted full damage",
+      "Absorbed": "Absorbed",
+      "NetDamage": "Net Damage",
+      "FullyAbsorbed": "Damage fully absorbed by armor!",
+      "Degraded": "Armor degraded"
     },
     "Corruption": {
       "Label": "Corruption",
@@ -504,8 +515,13 @@
       "NoCorruption": "This character has 0 Corruption Points.",
       "SelectTargetToken": "Target at least one token on the canvas (Target tool / T key).",
       "OnlyRollerCanApplyDamage": "Only the roll author or the GM can apply damage from this attack.",
+      "OnlyTargetOwnerCanAbsorb": "Only the target owner or the GM can roll armor absorption.",
+      "ArmorPromptSent": "Armor absorption prompt sent in chat for {count} target(s).",
       "NoGMForDamage": "An active GM must be connected to apply damage to targets you do not own.",
       "AppliedDamage": "Applied damage: {dmg}.",
+      "GearBroke": "{name} suffered full wear and broke!",
+      "GearBroken": "{name} is broken and must be repaired before use.",
+      "GearRepaired": "{name} has been repaired.",
       "MacroOwnedItemsOnly": "Only owned items can be turned into hotbar macros.",
       "CorruptionMutationMilestone": "Corruption reached {pc} PC! Roll a Corruption Mutation.",
       "ShadowBeastReached": "10 PC — SHADOW BEAST! The character has been completely consumed by Corruption."

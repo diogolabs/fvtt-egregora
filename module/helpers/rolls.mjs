@@ -330,10 +330,41 @@ export async function pushEgregoraRoll(event) {
     }
   }
 
-  if (gear && gearDmg > 0 && gear.system.durability !== undefined) {
-    const nextDur = Math.max(0, (gear.system.durability || 0) - gearDmg);
-    await gear.update({ "system.durability": nextDur });
-    pushSummary.push(`${gear.name}: −${gearDmg} ${game.i18n.localize("EGREGORA.DurabilityShort")}`);
+  if (gear && gearDmg > 0) {
+    const gearUpdates = {};
+    const wearParts = [];
+    let isBrokenNow = false;
+
+    if (gear.system.durability !== undefined) {
+      const prevDur = Number(gear.system.durability) || 0;
+      const nextDur = Math.max(0, prevDur - gearDmg);
+      gearUpdates["system.durability"] = nextDur;
+      if (gear.system.maxDurability !== undefined && (Number(gear.system.maxDurability) || 0) < prevDur) {
+        gearUpdates["system.maxDurability"] = prevDur;
+      }
+      wearParts.push(`−${gearDmg} ${game.i18n.localize("EGREGORA.DurabilityShort")} (${prevDur}→${nextDur})`);
+      if (nextDur === 0) isBrokenNow = true;
+    }
+
+    if (gear.system.bonus !== undefined && (Number(gear.system.bonus) || 0) > 0) {
+      const prevBonus = Number(gear.system.bonus) || 0;
+      const nextBonus = Math.max(0, prevBonus - gearDmg);
+      gearUpdates["system.bonus"] = nextBonus;
+      if (gear.system.maxBonus !== undefined && (Number(gear.system.maxBonus) || 0) < prevBonus) {
+        gearUpdates["system.maxBonus"] = prevBonus;
+      }
+      wearParts.push(`−${gearDmg} ${game.i18n.localize("EGREGORA.Bonus")} (${prevBonus}→${nextBonus})`);
+      if (nextBonus === 0) isBrokenNow = true;
+    }
+
+    if (Object.keys(gearUpdates).length) {
+      await gear.update(gearUpdates);
+      const brokenTag = isBrokenNow ? ` [${game.i18n.localize("EGREGORA.GearBroken")}]` : "";
+      pushSummary.push(`${gear.name}: ${wearParts.join(", ")}${brokenTag}`);
+      if (isBrokenNow) {
+        ui.notifications.warn(game.i18n.format("EGREGORA.Notifications.GearBroke", { name: gear.name }));
+      }
+    }
   }
 
   const enableDoom = game.settings.get(EGREGORA_CONFIG.ID, "enableDoomPoints");
@@ -936,9 +967,302 @@ async function postDamageAppliedSummary(results, dmg, sourceMessage) {
 }
 
 /**
+ * Resolve a proteção de armadura ativa de um ator alvo (Character, NPC ou Veículo).
+ * @param {Actor} targetActor
+ * @returns {{ rating: number, mode: "items"|"npcRating"|"vehicleArmor"|"none", items: Item[], label: string }}
+ */
+export function resolveTargetArmor(targetActor) {
+  if (!targetActor) return { rating: 0, mode: "none", items: [], label: "" };
+
+  if (targetActor.type === "vehicle") {
+    const rating = Math.max(0, Number(targetActor.system?.armor) || 0);
+    return {
+      rating,
+      mode: rating > 0 ? "vehicleArmor" : "none",
+      items: [],
+      label: game.i18n.localize("EGREGORA.Vehicle.Armor"),
+    };
+  }
+
+  const equippedArmors = (targetActor.items ?? []).filter(
+    i => i.type === "armor" && i.system?.equipped && (Number(i.system?.protection) || 0) > 0
+  );
+  if (equippedArmors.length) {
+    const rating = equippedArmors.reduce((acc, a) => acc + (Number(a.system.protection) || 0), 0);
+    const label = equippedArmors.map(a => a.name).join(" + ");
+    return { rating, mode: "items", items: equippedArmors, label };
+  }
+
+  if (targetActor.type === "npc") {
+    const rating = Math.max(0, Number(targetActor.system?.armorRating) || 0);
+    return {
+      rating,
+      mode: rating > 0 ? "npcRating" : "none",
+      items: [],
+      label: game.i18n.localize("EGREGORA.Armor.Label"),
+    };
+  }
+
+  return { rating: 0, mode: "none", items: [], label: "" };
+}
+
+/**
+ * Aplica degradação (desgaste) na armadura de um ator alvo quando dano penetra a proteção.
+ * @param {Actor} targetActor
+ * @param {ReturnType<typeof resolveTargetArmor>} armorInfo
+ * @param {number} wearAmount
+ * @returns {Promise<Array<{name: string, prev: number, next: number}>>}
+ */
+async function applyArmorDegradation(targetActor, armorInfo, wearAmount) {
+  const degraded = [];
+  let remaining = Math.max(0, Number(wearAmount) || 0);
+  if (!targetActor || remaining <= 0 || armorInfo.rating <= 0) return degraded;
+
+  if (armorInfo.mode === "items") {
+    const sorted = [...armorInfo.items].sort(
+      (a, b) => (Number(b.system.protection) || 0) - (Number(a.system.protection) || 0)
+    );
+    for (const item of sorted) {
+      if (remaining <= 0) break;
+      const prev = Number(item.system.protection) || 0;
+      if (prev <= 0) continue;
+      const drop = Math.min(prev, remaining);
+      const next = prev - drop;
+      remaining -= drop;
+      const updates = { "system.protection": next };
+      if ((Number(item.system.maxProtection) || 0) < prev) {
+        updates["system.maxProtection"] = prev;
+      }
+      await item.update(updates);
+      degraded.push({ name: item.name, prev, next });
+    }
+  } else if (armorInfo.mode === "npcRating") {
+    const prev = Number(targetActor.system.armorRating) || 0;
+    const next = Math.max(0, prev - remaining);
+    await targetActor.update({ "system.armorRating": next });
+    degraded.push({ name: armorInfo.label, prev, next });
+  } else if (armorInfo.mode === "vehicleArmor") {
+    const prev = Number(targetActor.system.armor) || 0;
+    const next = Math.max(0, prev - remaining);
+    await targetActor.update({ "system.armor": next });
+    degraded.push({ name: armorInfo.label, prev, next });
+  }
+
+  return degraded;
+}
+
+/**
+ * Cria um card no chat de Dano Recebido / Absorção de Armadura, visível e acionável
+ * exclusivamente pelo dono do alvo e pelo Narrador.
+ */
+async function postArmorAbsorptionPrompt(doc, targetActor, incomingDamage, armorInfo, sourceMessage) {
+  const targetName = doc?.name || targetActor.name || "—";
+  const targetImg = doc?.texture?.src || targetActor.img || "icons/svg/mystery-man.svg";
+  const targetOwnerIds = game.users
+    .filter(u => !u.isGM && targetActor.testUserPermission(u, "OWNER"))
+    .map(u => u.id);
+
+  const promptData = {
+    promptType: "armorAbsorption",
+    targetTokenUuid: doc?.uuid ?? "",
+    targetActorUuid: targetActor.uuid,
+    targetActorId: targetActor.id,
+    targetOwnerIds,
+    targetName,
+    targetImg,
+    incomingDamage,
+    armorRating: armorInfo.rating,
+    armorLabel: armorInfo.label,
+    resolved: false,
+    resolvedSummary: "",
+    sourceMessageId: sourceMessage?.id ?? "",
+  };
+
+  const renderTemplate = getRenderTemplate();
+  const content = await renderTemplate("systems/fvtt-egregora/templates/chat/armor-absorption.hbs", promptData);
+  const ChatMessageCls = ChatMessage.implementation ?? ChatMessage;
+
+  return ChatMessageCls.create({
+    speaker: ChatMessage.getSpeaker({ actor: targetActor }),
+    content,
+    flags: {
+      [EGREGORA_CONFIG.ID]: promptData,
+    },
+  });
+}
+
+/**
+ * Marca um card de Dano Pendente / Absorção de Armadura como resolvido (direto ou via socket).
+ */
+async function resolveArmorPromptMessage(message, resolvedSummary, messageEl = null) {
+  const ID = EGREGORA_CONFIG.ID;
+  const flags = message?.flags?.[ID];
+  if (!flags || flags.promptType !== "armorAbsorption") return;
+
+  // Remoção imediata dos botões no DOM local
+  messageEl?.querySelectorAll(".dice-buttons").forEach(el => el.remove());
+
+  const updatedData = {
+    ...flags,
+    resolved: true,
+    resolvedSummary,
+  };
+  const renderTemplate = getRenderTemplate();
+  const content = await renderTemplate("systems/fvtt-egregora/templates/chat/armor-absorption.hbs", updatedData);
+
+  if (game.user.isGM || message.isAuthor) {
+    await message.update({
+      content,
+      [`flags.${ID}.resolved`]: true,
+      [`flags.${ID}.resolvedSummary`]: resolvedSummary,
+    });
+    try {
+      await ui.chat?.updateMessage?.(message);
+    } catch {
+      // ignore refresh warning
+    }
+  } else {
+    game.socket.emit(`system.${ID}`, {
+      action: "resolveDamagePrompt",
+      messageId: message.id,
+      resolvedSummary,
+      requesterId: game.user.id,
+    });
+  }
+}
+
+/**
+ * Ação do alvo: rola a Armadura (dados de equipamento `dg`, sem forçar), subtrai sucessos do dano,
+ * degrada a armadura se algum dano passar e saírem 1s, e aplica o dano líquido.
+ */
+export async function rollArmorAbsorption(event) {
+  const messageEl = event.target.closest("[data-message-id]");
+  const messageId = messageEl?.dataset?.messageId;
+  const message = game.messages.get(messageId);
+  if (!message) return null;
+
+  const ID = EGREGORA_CONFIG.ID;
+  const flags = message.flags?.[ID] ?? {};
+  if (flags.promptType !== "armorAbsorption" || flags.resolved) return null;
+
+  if (!canUserActOnChatMessage(message)) {
+    ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.OnlyTargetOwnerCanAbsorb"));
+    return null;
+  }
+
+  const doc = flags.targetTokenUuid ? await fromUuid(flags.targetTokenUuid) : null;
+  const targetActor = doc?.actor ?? (flags.targetActorUuid ? await fromUuid(flags.targetActorUuid) : null);
+  if (!targetActor) return null;
+
+  const incomingDamage = Math.max(0, Number(flags.incomingDamage) || 0);
+  const armorInfo = resolveTargetArmor(targetActor);
+  const diceCount = armorInfo.rating > 0 ? armorInfo.rating : (Number(flags.armorRating) || 0);
+  if (diceCount <= 0) {
+    return acceptIncomingDamage(event);
+  }
+
+  const roll = await new YearZeroRoll(`${diceCount}dg`, { maxPush: 0 }, {
+    game: "egregora",
+    maxPush: 0,
+    rollType: "armor",
+  }).evaluate();
+  decorateEgregoraRoll(roll, { actor: targetActor });
+
+  const absorbed = roll.successCount || 0;
+  const netDamage = Math.max(0, incomingDamage - absorbed);
+  const wear = netDamage > 0 ? (roll.gearDamage || 0) : 0;
+
+  // Aplica dano líquido no alvo
+  let dmgResult = null;
+  if (netDamage > 0) {
+    const results = await executeDamageOnTokens([flags.targetTokenUuid || targetActor.uuid], netDamage);
+    dmgResult = results[0] ?? null;
+  }
+
+  // Degrada armadura apenas se algum dano penetrou e saíram 1s nos dados de equipamento
+  const degraded = wear > 0 ? await applyArmorDegradation(targetActor, armorInfo, wear) : [];
+
+  const summaryParts = [
+    `${game.i18n.localize("EGREGORA.Armor.Absorbed")}: ${absorbed}/${incomingDamage}`,
+    `${game.i18n.localize("EGREGORA.Armor.NetDamage")}: ${netDamage}`,
+  ];
+  if (degraded.length) {
+    const wearTxt = degraded.map(d => `${d.name} (${d.prev}→${d.next})`).join(", ");
+    summaryParts.push(`${game.i18n.localize("EGREGORA.Armor.Degraded")}: ${wearTxt}`);
+  }
+  const resolvedSummary = summaryParts.join(" • ");
+
+  await resolveArmorPromptMessage(message, resolvedSummary, messageEl);
+
+  const rollHtml = await roll.render();
+  const unit = dmgResult?.isVehicle
+    ? game.i18n.localize("EGREGORA.Vehicle.Hull")
+    : game.i18n.localize("EGREGORA.HealthShort");
+  const hpLine = dmgResult
+    ? `<div class="eg-info-row eg-alert"><span class="label">${game.i18n.localize("EGREGORA.Armor.NetDamage")}:</span><span class="value"><strong>−${netDamage} ${unit} (${dmgResult.prev} → ${dmgResult.next})</strong>${dmgResult.broken ? ` <span class="eg-dmg-broken">(${game.i18n.localize(dmgResult.isVehicle ? "EGREGORA.Vehicle.Wrecked" : "EGREGORA.Status.broken")})</span>` : ""}</span></div>`
+    : `<div class="eg-info-row eg-armor-blocked"><span class="label"><i class="fa-solid fa-shield"></i> ${game.i18n.localize("EGREGORA.Armor.FullyAbsorbed")}</span><span class="value"><strong>0</strong></span></div>`;
+  const wearLine = degraded.length
+    ? `<div class="eg-info-row eg-alert"><span class="label"><i class="fa-solid fa-burst"></i> ${game.i18n.localize("EGREGORA.Armor.Degraded")}:</span><span class="value">${degraded.map(d => `${foundry.utils.escapeHTML(d.name)} (${d.prev} → ${d.next})`).join(", ")}</span></div>`
+    : "";
+
+  const ChatMessageCls = ChatMessage.implementation ?? ChatMessage;
+  const resultMsg = await ChatMessageCls.create({
+    speaker: ChatMessage.getSpeaker({ actor: targetActor }),
+    flavor: `${game.i18n.localize("EGREGORA.Armor.Roll")}: ${armorInfo.label || flags.armorLabel}`,
+    content: `<div class="eg-chat-card eg-armor-result">
+      ${rollHtml}
+      ${hpLine}
+      ${wearLine}
+    </div>`,
+    rolls: [roll],
+    flags: {
+      [ID]: {
+        actorUuid: targetActor.uuid,
+        rollerUserId: game.user.id,
+        rollType: "armor",
+      },
+    },
+  });
+
+  await waitForDice3DSafe(resultMsg.id);
+  return resultMsg;
+}
+
+/**
+ * Ação do alvo: aceita receber o dano integral sem rolar armadura.
+ */
+export async function acceptIncomingDamage(event) {
+  const messageEl = event.target.closest("[data-message-id]");
+  const messageId = messageEl?.dataset?.messageId;
+  const message = game.messages.get(messageId);
+  if (!message) return null;
+
+  const ID = EGREGORA_CONFIG.ID;
+  const flags = message.flags?.[ID] ?? {};
+  if (flags.promptType !== "armorAbsorption" || flags.resolved) return null;
+
+  if (!canUserActOnChatMessage(message)) {
+    ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.OnlyTargetOwnerCanAbsorb"));
+    return null;
+  }
+
+  const incomingDamage = Math.max(0, Number(flags.incomingDamage) || 0);
+  const targetUuid = flags.targetTokenUuid || flags.targetActorUuid;
+  if (!targetUuid || incomingDamage <= 0) return null;
+
+  const results = await executeDamageOnTokens([targetUuid], incomingDamage);
+  const summary = `${game.i18n.localize("EGREGORA.Armor.AcceptedFullDamage")}: −${incomingDamage}`;
+  await resolveArmorPromptMessage(message, summary, messageEl);
+  await postDamageAppliedSummary(results, incomingDamage, message);
+  return results;
+}
+
+/**
  * Aplica dano de ataque/magia exclusivamente aos tokens marcados como alvo (Target) pelo autor da rolagem.
  * Nunca utiliza `canvas.tokens.controlled` (ferramenta de seleção).
- * Quando um jogador aplica dano em alvos controlados pelo Narrador, delega com segurança via socket.
+ * - Se o ataque não ignora armadura e o alvo possui armadura > 0, envia um card de Absorção de Armadura
+ *   exclusivamente para o dono do alvo (e Narrador).
+ * - Caso contrário, aplica o dano imediatamente (diretamente ou via socket no Narrador).
  */
 export async function applyTargetDamage(event) {
   const btn = event.target.closest("[data-action='applyTargetDamage']");
@@ -962,6 +1286,8 @@ export async function applyTargetDamage(event) {
     : (Number(roll?.attackDamage) || 0);
   if (dmg <= 0) return;
 
+  const ignoresArmor = flags.rollType === "spell" && Boolean(flags.spellCardData?.directDamage);
+
   // 1. Prioriza os alvos marcados (Target) pelo autor no momento da rolagem
   let targetUuids = Array.isArray(flags.targets)
     ? flags.targets.map(t => t.tokenUuid).filter(Boolean)
@@ -978,13 +1304,22 @@ export async function applyTargetDamage(event) {
     return;
   }
 
-  // Separa alvos que o usuário atual pode editar diretamente vs. alvos que exigem o Narrador via socket
   const directUuids = [];
   const gmUuids = [];
+  let armorPromptsCreated = 0;
+
   for (const uuid of targetUuids) {
     const doc = await fromUuid(uuid);
     const targetActor = doc?.actor ?? (doc instanceof Actor ? doc : null);
     if (!targetActor) continue;
+
+    const armorInfo = !ignoresArmor ? resolveTargetArmor(targetActor) : { rating: 0 };
+    if (armorInfo.rating > 0) {
+      await postArmorAbsorptionPrompt(doc, targetActor, dmg, armorInfo, message);
+      armorPromptsCreated++;
+      continue;
+    }
+
     if (game.user.isGM || targetActor.isOwner) {
       directUuids.push(uuid);
     } else {
@@ -992,9 +1327,13 @@ export async function applyTargetDamage(event) {
     }
   }
 
-  if (!directUuids.length && !gmUuids.length) {
+  if (!directUuids.length && !gmUuids.length && !armorPromptsCreated) {
     ui.notifications.warn(game.i18n.localize("EGREGORA.Notifications.SelectTargetToken"));
     return;
+  }
+
+  if (armorPromptsCreated > 0) {
+    ui.notifications.info(game.i18n.format("EGREGORA.Notifications.ArmorPromptSent", { count: armorPromptsCreated }));
   }
 
   if (directUuids.length) {
@@ -1021,28 +1360,58 @@ export async function applyTargetDamage(event) {
 }
 
 /**
- * Registra o listener de socket no Narrador para aplicar dano em alvos marcados por jogadores.
+ * Registra o listener de socket no Narrador para:
+ * - aplicar dano em alvos marcados por jogadores (`applyTargetDamage`)
+ * - marcar cards de Absorção de Armadura como resolvidos quando acionados pelo jogador alvo (`resolveDamagePrompt`)
  */
 export function registerRollSocket() {
   const ID = EGREGORA_CONFIG.ID;
   game.socket.on(`system.${ID}`, async payload => {
-    if (!payload || payload.action !== "applyTargetDamage") return;
+    if (!payload) return;
     const primaryGM = game.users.activeGM ?? game.users.find(u => u.isGM && u.active);
     if (!game.user.isGM || (primaryGM && primaryGM.id !== game.user.id)) return;
 
-    const message = game.messages.get(payload.messageId);
-    if (!message) return;
-    const flags = message.flags?.[ID] ?? {};
-    const rollerUserId = flags.rollerUserId || message.author?.id || "";
+    if (payload.action === "applyTargetDamage") {
+      const message = game.messages.get(payload.messageId);
+      if (!message) return;
+      const flags = message.flags?.[ID] ?? {};
+      const rollerUserId = flags.rollerUserId || message.author?.id || "";
 
-    // Garante que apenas o autor da rolagem possa solicitar a aplicação de dano via socket
-    if (rollerUserId && payload.requesterId !== rollerUserId) return;
+      // Garante que apenas o autor da rolagem possa solicitar a aplicação de dano via socket
+      if (rollerUserId && payload.requesterId !== rollerUserId) return;
 
-    const dmg = Number(payload.damage) || 0;
-    const uuids = Array.isArray(payload.tokenUuids) ? payload.tokenUuids.filter(Boolean) : [];
-    if (dmg <= 0 || !uuids.length) return;
+      const dmg = Number(payload.damage) || 0;
+      const uuids = Array.isArray(payload.tokenUuids) ? payload.tokenUuids.filter(Boolean) : [];
+      if (dmg <= 0 || !uuids.length) return;
 
-    const results = await executeDamageOnTokens(uuids, dmg);
-    await postDamageAppliedSummary(results, dmg, message);
+      const results = await executeDamageOnTokens(uuids, dmg);
+      await postDamageAppliedSummary(results, dmg, message);
+    } else if (payload.action === "resolveDamagePrompt") {
+      const message = game.messages.get(payload.messageId);
+      if (!message) return;
+      const flags = message.flags?.[ID] ?? {};
+      if (flags.promptType !== "armorAbsorption" || flags.resolved) return;
+
+      // Garante que quem solicitou é de fato um dono do ator alvo
+      const requester = game.users.get(payload.requesterId);
+      const targetActor = flags.targetActorUuid ? await fromUuid(flags.targetActorUuid) : null;
+      const resolvedActor = targetActor?.actor ?? targetActor;
+      if (!requester || (!requester.isGM && resolvedActor && !resolvedActor.testUserPermission(requester, "OWNER"))) {
+        return;
+      }
+
+      const updatedData = {
+        ...flags,
+        resolved: true,
+        resolvedSummary: String(payload.resolvedSummary || ""),
+      };
+      const renderTemplate = getRenderTemplate();
+      const content = await renderTemplate("systems/fvtt-egregora/templates/chat/armor-absorption.hbs", updatedData);
+      await message.update({
+        content,
+        [`flags.${ID}.resolved`]: true,
+        [`flags.${ID}.resolvedSummary`]: updatedData.resolvedSummary,
+      });
+    }
   });
 }

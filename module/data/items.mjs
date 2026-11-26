@@ -71,6 +71,7 @@ export class EgregoraGearData extends foundry.abstract.TypeDataModel {
     return {
       usage: new fields.StringField({ initial: "" }),
       bonus: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0, max: 10 }),
+      maxBonus: new fields.NumberField({ required: true, integer: true, initial: 0, min: 0, max: 10 }),
       durability: new fields.NumberField({ required: true, integer: true, initial: 3, min: 0, max: 10 }),
       maxDurability: new fields.NumberField({ required: true, integer: true, initial: 3, min: 0, max: 10 }),
       value: new fields.NumberField({ required: true, integer: true, initial: 1, min: 0, max: 10 }),

@@ -2,8 +2,10 @@ import { EGREGORA_CONFIG } from "../config.mjs";
 import { canUserActOnChatMessage } from "../documents/chat-message.mjs";
 import {
   acceptEgregoraRoll,
+  acceptIncomingDamage,
   applyTargetDamage,
   pushEgregoraRoll,
+  rollArmorAbsorption,
   rollContaminationTest,
   rollCriticalTable,
   rollPanicTable,
@@ -15,6 +17,8 @@ export class EgregoraChatLog extends foundry.applications.sidebar.tabs.ChatLog {
       pushRoll: EgregoraChatLog.#pushRoll,
       acceptRoll: EgregoraChatLog.#acceptRoll,
       applyTargetDamage: EgregoraChatLog.#applyTargetDamage,
+      rollArmorAbsorption: EgregoraChatLog.#rollArmorAbsorption,
+      acceptIncomingDamage: EgregoraChatLog.#acceptIncomingDamage,
       rollContamination: EgregoraChatLog.#rollContamination,
       rollPanic: EgregoraChatLog.#rollPanic,
       rollCritTable: EgregoraChatLog.#rollCritTable,
@@ -31,6 +35,14 @@ export class EgregoraChatLog extends foundry.applications.sidebar.tabs.ChatLog {
 
   static async #applyTargetDamage(event) {
     await applyTargetDamage(event);
+  }
+
+  static async #rollArmorAbsorption(event) {
+    await rollArmorAbsorption(event);
+  }
+
+  static async #acceptIncomingDamage(event) {
+    await acceptIncomingDamage(event);
   }
 
   static async #rollContamination(event) {

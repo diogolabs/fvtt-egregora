@@ -21,6 +21,7 @@ export class EgregoraItemSheet extends api.HandlebarsApplicationMixin(sheets.Ite
       editImage: EgregoraItemSheet.#onEditImage,
       rollItem: EgregoraItemSheet.#onRollItem,
       chatItem: EgregoraItemSheet.#onChatItem,
+      repairItem: EgregoraItemSheet.#onRepairItem,
     },
   };
 
@@ -85,6 +86,7 @@ export class EgregoraItemSheet extends api.HandlebarsApplicationMixin(sheets.Ite
       system: item.system,
       config: EGREGORA_CONFIG,
       spellPathOptions,
+      canRepair: Boolean(item.canRepair),
       editable: this.isEditable,
       owner: item.isOwner,
       enrichedDescription,
@@ -108,5 +110,9 @@ export class EgregoraItemSheet extends api.HandlebarsApplicationMixin(sheets.Ite
 
   static async #onChatItem() {
     await this.document.sendToChat();
+  }
+
+  static async #onRepairItem() {
+    await this.document.repair();
   }
 }

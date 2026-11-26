@@ -1,0 +1,29 @@
+<div class="eg-chat-card eg-armor-prompt {{#if resolved}}eg-resolved{{/if}}">
+  <header class="eg-chat-card-header">
+    <img src="{{targetImg}}" alt="{{targetName}}" />
+    <div>
+      <h3>{{localize "EGREGORA.Armor.IncomingDamageTitle"}}</h3>
+      <span class="eg-chat-sub"><strong>{{targetName}}</strong> • {{localize "EGREGORA.Damage"}}: <strong>{{incomingDamage}}</strong></span>
+    </div>
+  </header>
+
+  <div class="eg-info-row">
+    <span class="label"><i class="fa-solid fa-shield-halved"></i> {{armorLabel}}</span>
+    <span class="value"><strong>{{armorRating}}D6</strong></span>
+  </div>
+
+  {{#if resolved}}
+  <div class="eg-info-row eg-resolved-banner">
+    <span class="label"><i class="fa-solid fa-check"></i> {{resolvedSummary}}</span>
+  </div>
+  {{else}}
+  <div class="dice-buttons eg-btn-row">
+    <button type="button" class="eg-btn eg-btn-crimson" data-action="rollArmorAbsorption">
+      <i class="fa-solid fa-shield-halved"></i> {{localize "EGREGORA.Armor.RollAbsorption"}} ({{armorRating}}D6)
+    </button>
+    <button type="button" class="eg-btn" data-action="acceptIncomingDamage">
+      <i class="fa-solid fa-heart-crack"></i> {{localize "EGREGORA.Armor.AcceptFullDamage"}} ({{incomingDamage}})
+    </button>
+  </div>
+  {{/if}}
+</div>

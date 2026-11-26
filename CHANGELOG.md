@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — Absorção de Armadura no Chat + Desgaste e Reparo de Equipamentos (Foundry VTT v13 & v14)
+- **Fluxo interativo de Absorção de Armadura no chat (isolado por alvo):**
+  - Ao aplicar dano de um ataque físico em um alvo que possua Armadura equipada (ou `armorRating` em PNJ / `armor` em Veículo), o sistema envia um card de **Dano Recebido — Absorção de Armadura** no chat.
+  - **Visibilidade estrita:** apenas o **dono do alvo** e o **Narrador** veem e podem clicar nos botões **Rolar Armadura (`X`D6)** ou **Aceitar Dano (`Y`)** (outros jogadores e o próprio atacante não podem agir pelo alvo).
+  - Ao rolar a armadura (em 3D via Dice So Nice, sem poder forçar), cada `6` reduz o dano em `1` e aplica apenas o dano líquido no alvo. Se algum dano penetrar a armadura (`dano final > 0`), cada `1` nos dados de armadura reduz automaticamente a proteção da armadura (regra oficial YZE/Egrégora); se todo o dano for absorvido, a armadura não sofre desgaste.
+  - Sincronização via socket para marcar o card pendente como resolvido quando o jogador alvo conclui a absorção.
+  - **Magias de Dano Direto** continuam ignorando armadura e aplicando dano diretamente.
+- **Desgaste e Reparo de Equipamentos (`gear`, `weapon`, `armor`):**
+  - Ao **Forçar (Push)** uma rolagem com arma ou equipamento, cada `1` nos dados de equipamento (`dg`) reduz tanto a **Durabilidade (`DUR`)** quanto o **Bônus** do item (preservando `maxDurability` / `maxBonus`), alertando no chat e via notificação caso o item quebre.
+  - Itens quebrados (`durability === 0` ou armadura com `protection === 0`) avisam e bloqueiam o uso até serem reparados.
+  - Novo botão **Reparar (`🔧`)** e campos `atual / máx` na ficha de Armas, Equipamentos e Armaduras para restaurar durabilidade, bônus e proteção.
+
 ## 0.3.4 — Nomenclatura (Saúde / Sanidade) + Visibilidade Unificada dos Botões Pós-Rolagem no Chat (Foundry VTT v13 & v14)
 - **Renomeação de recursos na interface:**
   - **Saúde Física** renomeada para **Saúde** (`Health` em inglês).
